@@ -23,6 +23,16 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'oauth_provider',
+        'oauth_id',
+        'avatar',
+        'bio',
+        'github_username',
+        'gitlab_username',
+        'reputation_points',
+        'trust_level',
+        'preferred_locale',
+        'newsletter_subscribed',
     ];
 
     /**
@@ -47,6 +57,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'newsletter_subscribed' => 'boolean',
+            'reputation_points' => 'integer',
         ];
     }
 

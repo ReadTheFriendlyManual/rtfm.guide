@@ -28,8 +28,8 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden items-center gap-6 md:flex">
-                    <a href="#" class="text-sm text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Guides</a>
-                    <a href="#" class="text-sm text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Categories</a>
+                    <a href="{{ route('guides.index') }}" class="text-sm text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Guides</a>
+                    <a href="{{ route('categories.index') }}" class="text-sm text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Categories</a>
                     <a href="#" class="text-sm text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">API</a>
                 </div>
 
