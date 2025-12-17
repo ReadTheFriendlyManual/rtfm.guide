@@ -12,7 +12,10 @@
             localStorage.setItem('rtfm_theme', this.theme);
         }
     }"
-    x-init="$watch('theme', value => document.documentElement.classList.toggle('dark', value === 'dark'))"
+    x-init="
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+        $watch('theme', value => document.documentElement.classList.toggle('dark', value === 'dark'))
+    "
     :class="theme === 'dark' ? 'bg-black text-white' : 'bg-white text-slate-900'"
     class="font-sans antialiased"
 >
@@ -83,12 +86,12 @@
                                 <span class="font-medium">You're on the list! We'll be in touch.</span>
                             </div>
                         @else
-                            <form wire:submit="subscribe" class="mx-auto flex max-w-2xl flex-col gap-4 sm:flex-row">
+                            <form wire:submit="subscribe" class="mx-auto flex max-w-2xl items-center gap-3">
                                  <div class="relative flex-1">
-                                    <flux:input wire:model="email" type="email" placeholder="your.email@example.com" class="w-full rounded-xl bg-slate-50 px-6 py-4 text-base text-slate-900 placeholder-slate-500 shadow-sm ring-1 ring-slate-900/5 transition-all hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 dark:bg-white/10 dark:text-white dark:ring-white/20 dark:placeholder-slate-400 dark:hover:bg-white/15 dark:focus:bg-white/15 dark:focus:ring-sky-400" />
+                                    <flux:input wire:model="email" type="email" placeholder="your.email@example.com" class="w-full rounded-xl bg-slate-50 px-6 py-3.5 text-base text-slate-900 placeholder-slate-500 shadow-sm ring-1 ring-slate-900/5 transition-all hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 dark:bg-white/10 dark:text-white dark:ring-white/20 dark:placeholder-slate-400 dark:hover:bg-white/15 dark:focus:bg-white/15 dark:focus:ring-sky-400" />
                                     @error('email') <p class="mt-2 text-sm text-red-400">{{ $message }}</p> @enderror
                                 </div>
-                                <flux:button type="submit" class="whitespace-nowrap rounded-xl bg-sky-500 px-8 py-4 text-base font-semibold text-white shadow-lg transition-all hover:bg-sky-400 hover:shadow-xl">
+                                <flux:button type="submit" class="h-[52px] whitespace-nowrap rounded-xl bg-gradient-to-r from-sky-500 to-sky-600 px-8 text-base font-semibold text-white shadow-lg shadow-sky-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-sky-500/40">
                                     Get Early Access
                                 </flux:button>
                             </form>
@@ -105,16 +108,16 @@
                         <div class="mb-12">
                             <h2 class="text-5xl font-extrabold tracking-tighter text-slate-900 dark:text-white sm:text-6xl md:text-7xl">
                                 <span x-show="mode === 'sfw'">We Read The Manual So You Don't Have To</span>
-                                <span x-show="mode === 'nsfw'" x-cloak>You Could've RTFM'd, But Here We F***ing Are</span>
+                                <span x-show="mode === 'nsfw'" x-cloak>You Should've RTFM'd, But You're Too Lazy So Here's The F***ing Answer</span>
                             </h2>
                             <p class="mt-6 text-balance text-xl font-medium text-slate-700 dark:text-slate-300 sm:text-2xl">
                                 <span x-show="mode === 'sfw'">Friendly guides that actually make sense</span>
-                                <span x-show="mode === 'nsfw'" x-cloak>Straight-talk guides for people who hate bullsh*t</span>
+                                <span x-show="mode === 'nsfw'" x-cloak>Brutally honest guides for developers who don't have time for corporate bullsh*t</span>
                             </p>
                         </div>
                         <p class="text-lg leading-relaxed text-slate-600 dark:text-slate-400">
                             <span x-show="mode === 'sfw'">Clear, helpful documentation with a smile. We've done the reading so you can get back to building.</span>
-                            <span x-show="mode === 'nsfw'" x-cloak>No corporate fluff. No ass-kissing corporate speak. Just the damn solution that actually works.</span>
+                            <span x-show="mode === 'nsfw'" x-cloak>Zero fluff. Zero hand-holding. Just the f***ing solution that works, because we know you've already wasted 3 hours Googling this sh*t.</span>
                         </p>
                     </div>
                     <div class="mt-16 flow-root">
@@ -133,7 +136,7 @@
                                         <span class="text-lg">💡</span>
                                         <span>Quick Answer (TL;DR)</span>
                                     </h4>
-                                    <p class="mt-2 text-sky-900 dark:text-sky-200">To gracefully restart Nginx without dropping connections, use <code class="rounded bg-sky-100 px-1.5 py-0.5 font-semibold dark:bg-sky-400/20">sudo systemctl reload nginx</code>.</p>
+                                    <p class="mt-2 text-sky-900 dark:text-sky-200">To gracefully restart Nginx without dropping connections, use <code class="rounded bg-sky-100 px-2 py-1 font-semibold text-sky-900 dark:bg-sky-900 dark:text-sky-100">sudo systemctl reload nginx</code>.</p>
                                 </div>
 
                                 <div class="mt-8">
@@ -141,7 +144,7 @@
                                     <ul class="mt-4 list-disc space-y-2 pl-5 text-slate-700 dark:text-slate-200">
                                         <li>A server running Ubuntu 22.04.</li>
                                         <li>Nginx installed and configured.</li>
-                                        <li>You're logged in as a user with <code class="rounded bg-slate-100 px-1.5 py-0.5 font-semibold dark:bg-white/10">sudo</code> privileges.</li>
+                                        <li>You're logged in as a user with <code class="rounded bg-slate-100 px-2 py-1 font-semibold text-slate-900 dark:bg-slate-700 dark:text-slate-100">sudo</code> privileges.</li>
                                     </ul>
                                 </div>
 
@@ -166,7 +169,7 @@
                                 </div>
 
                                 <div class="mt-6 max-w-none text-slate-700 dark:text-slate-200">
-                                    <p>If you really need to force a full restart (which will drop connections), you can use <code class="rounded bg-slate-100 px-1.5 py-0.5 font-semibold dark:bg-white/10">restart</code> instead of <code class="rounded bg-slate-100 px-1.5 py-0.5 font-semibold dark:bg-white/10">reload</code>.</p>
+                                    <p>If you really need to force a full restart (which will drop connections), you can use <code class="rounded bg-slate-100 px-2 py-1 font-semibold text-slate-900 dark:bg-slate-700 dark:text-slate-100">restart</code> instead of <code class="rounded bg-slate-100 px-2 py-1 font-semibold text-slate-900 dark:bg-slate-700 dark:text-slate-100">reload</code>.</p>
                                 </div>
                             </div>
                         </div>
@@ -175,8 +178,8 @@
 
                 <div class="mx-auto max-w-7xl pt-24">
                      <div class="mx-auto max-w-2xl text-center">
-                        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">And So Much More...</h2>
-                        <p class="mt-4 text-lg text-slate-600">A full suite of features designed to make learning and contributing as seamless as possible.</p>
+                        <h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">And So Much More...</h2>
+                        <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">A full suite of features designed to make learning and contributing as seamless as possible.</p>
                     </div>
                     <div class="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                         @php
@@ -191,13 +194,13 @@
                         @endphp
 
                         @foreach($features as $index => $feature)
-                            <div class="group relative rounded-2xl border border-slate-200/80 bg-white/60 p-8 backdrop-blur-sm transition-all duration-300 hover:z-10 hover:-translate-y-1 hover:border-slate-300 hover:bg-white/80 hover:shadow-2xl hover:shadow-slate-600/10">
+                            <div class="group relative rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:z-10 hover:-translate-y-1 hover:border-{{ $feature['color'] }}-400 hover:shadow-xl hover:shadow-{{ $feature['color'] }}-500/20 dark:border-slate-700 dark:bg-slate-800/50 dark:hover:border-{{ $feature['color'] }}-500 dark:hover:shadow-{{ $feature['color'] }}-500/30">
                                 <div class="relative">
-                                    <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-{{ $feature['color'] }}-100 text-2xl">
-                                        <span class="transform transition-transform duration-300 group-hover:scale-110">{{ $feature['icon'] }}</span>
+                                    <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-{{ $feature['color'] }}-400 to-{{ $feature['color'] }}-600 text-2xl shadow-lg shadow-{{ $feature['color'] }}-500/30">
+                                        <span class="transform transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6">{{ $feature['icon'] }}</span>
                                     </div>
-                                    <h3 class="mb-2 text-lg font-semibold text-slate-900">{{ $feature['title'] }}</h3>
-                                    <p class="text-sm leading-relaxed text-slate-600">{{ $feature['description'] }}</p>
+                                    <h3 class="mb-2 text-lg font-semibold text-slate-900 dark:text-white">{{ $feature['title'] }}</h3>
+                                    <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">{{ $feature['description'] }}</p>
                                 </div>
                             </div>
                         @endforeach
@@ -205,65 +208,65 @@
                 </div>
             </section>
 
-            <section class="border-y border-slate-200/80 bg-white/60 py-20 backdrop-blur-sm">
+            <section class="border-y border-slate-200 bg-gradient-to-b from-white to-slate-50 py-20 dark:border-slate-700 dark:from-slate-900 dark:to-slate-800">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 gap-y-12 text-center sm:grid-cols-3">
                         <div x-data="{ target: 50, current: 0, start() { let interval = setInterval(() => { if (this.current < this.target) { this.current++ } else { clearInterval(interval) } }, 40); } }" x-intersect.once="start()">
-                            <div class="text-5xl font-bold tracking-tighter text-sky-600"><span x-text="current"></span>+</div>
-                            <p class="mt-2 text-sm text-slate-500">Guides at Launch</p>
+                            <div class="text-5xl font-bold tracking-tighter text-sky-600 dark:text-sky-400"><span x-text="current"></span>+</div>
+                            <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Guides at Launch</p>
                         </div>
                         <div x-data="{ target: 50, current: 150, start() { let interval = setInterval(() => { if (this.current > this.target) { this.current -= 2 } else { this.current = this.target; clearInterval(interval) } }, 20); } }" x-intersect.once="start()">
-                            <div class="text-5xl font-bold tracking-tighter text-indigo-600">&lt;<span x-text="current"></span>ms</div>
-                            <p class="mt-2 text-sm text-slate-500">Search Response Time</p>
+                            <div class="text-5xl font-bold tracking-tighter text-indigo-600 dark:text-indigo-400">&lt;<span x-text="current"></span>ms</div>
+                            <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Search Response Time</p>
                         </div>
                         <div x-data="{ target: 100, current: 0, start() { let interval = setInterval(() => { if (this.current < this.target) { this.current++ } else { clearInterval(interval) } }, 20); } }" x-intersect.once="start()">
-                            <div class="text-5xl font-bold tracking-tighter text-rose-600"><span x-text="current"></span>%</div>
-                            <p class="mt-2 text-sm text-slate-500">Free & Open Source</p>
+                            <div class="text-5xl font-bold tracking-tighter text-rose-600 dark:text-rose-400"><span x-text="current"></span>%</div>
+                            <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Free & Open Source</p>
                         </div>
                     </div>
                 </div>
             </section>
         </main>
 
-        <footer class="border-t border-slate-200/80 bg-slate-100/50">
+        <footer class="border-t border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
                     <div class="space-y-4">
-                        <h4 class="font-semibold text-slate-800">Explore</h4>
-                        <ul class="space-y-2 text-slate-600">
-                            <li><a href="#" class="hover:text-sky-600">Trending Guides</a></li>
-                            <li><a href="#" class="hover:text-sky-600">New Guides</a></li>
-                            <li><a href="#" class="hover:text-sky-600">Random Guide</a></li>
-                            <li><a href="#" class="hover:text-sky-600">Tag Cloud</a></li>
+                        <h4 class="font-semibold text-slate-900 dark:text-white">Explore</h4>
+                        <ul class="space-y-2 text-slate-600 dark:text-slate-400">
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Trending Guides</a></li>
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">New Guides</a></li>
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Random Guide</a></li>
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Tag Cloud</a></li>
                         </ul>
                     </div>
                     <div class="space-y-4">
-                        <h4 class="font-semibold text-slate-800">Categories</h4>
-                        <ul class="space-y-2 text-slate-600">
-                            <li><a href="#" class="hover:text-sky-600">Server Admin</a></li>
-                            <li><a href="#" class="hover:text-sky-600">Laravel Dev</a></li>
-                            <li><a href="#" class="hover:text-sky-600">Git Workflows</a></li>
-                            <li><a href="#" class="hover:text-sky-600">Docker</a></li>
+                        <h4 class="font-semibold text-slate-900 dark:text-white">Categories</h4>
+                        <ul class="space-y-2 text-slate-600 dark:text-slate-400">
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Server Admin</a></li>
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Laravel Dev</a></li>
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Git Workflows</a></li>
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Docker</a></li>
                         </ul>
                     </div>
                     <div class="space-y-4">
-                        <h4 class="font-semibold text-slate-800">Community</h4>
-                        <ul class="space-y-2 text-slate-600">
-                            <li><a href="#" class="hover:text-sky-600">Submit a Guide</a></li>
-                            <li><a href="#" class="hover:text-sky-600">Leaderboard</a></li>
-                            <li><a href="#" class="hover:text-sky-600">Changelog</a></li>
+                        <h4 class="font-semibold text-slate-900 dark:text-white">Community</h4>
+                        <ul class="space-y-2 text-slate-600 dark:text-slate-400">
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Submit a Guide</a></li>
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Leaderboard</a></li>
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Changelog</a></li>
                         </ul>
                     </div>
                     <div class="space-y-4">
-                        <h4 class="font-semibold text-slate-800">RTFM.GUIDE</h4>
-                        <ul class="space-y-2 text-slate-600">
-                            <li><a href="#" class="hover:text-sky-600">About</a></li>
-                            <li><a href="#" class="hover:text-sky-600">Contact</a></li>
-                            <li><a href="#" class="hover:text-sky-600">Privacy Policy</a></li>
+                        <h4 class="font-semibold text-slate-900 dark:text-white">RTFM.GUIDE</h4>
+                        <ul class="space-y-2 text-slate-600 dark:text-slate-400">
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">About</a></li>
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Contact</a></li>
+                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Privacy Policy</a></li>
                         </ul>
                     </div>
                 </div>
-                <div class="mt-16 border-t border-slate-200/80 pt-8 text-center text-sm text-slate-500">
+                <div class="mt-16 border-t border-slate-200 pt-8 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
                     © {{ date('Y') }} RTFM.GUIDE. All rights reserved, except for the right to complain about bad docs.
                 </div>
             </div>
@@ -271,12 +274,59 @@
 
         <style>
             /* Define Tailwind JIT-safe classes for dynamic colors */
-            .bg-sky-100 { background-color: #e0f2fe; }
-            .bg-indigo-100 { background-color: #e0e7ff; }
-            .bg-rose-100 { background-color: #ffe4e6; }
-            .bg-amber-100 { background-color: #fef3c7; }
-            .bg-emerald-100 { background-color: #d1fae5; }
-            .bg-violet-100 { background-color: #ede9fe; }
+            /* Gradient backgrounds */
+            .from-sky-400 { --tw-gradient-from: #38bdf8; }
+            .to-sky-600 { --tw-gradient-to: #0284c7; }
+            .from-indigo-400 { --tw-gradient-from: #818cf8; }
+            .to-indigo-600 { --tw-gradient-to: #4f46e5; }
+            .from-rose-400 { --tw-gradient-from: #fb7185; }
+            .to-rose-600 { --tw-gradient-to: #e11d48; }
+            .from-amber-400 { --tw-gradient-from: #fbbf24; }
+            .to-amber-600 { --tw-gradient-to: #d97706; }
+            .from-emerald-400 { --tw-gradient-from: #34d399; }
+            .to-emerald-600 { --tw-gradient-to: #059669; }
+            .from-violet-400 { --tw-gradient-from: #a78bfa; }
+            .to-violet-600 { --tw-gradient-to: #7c3aed; }
+
+            /* Hover borders */
+            .hover\:border-sky-400:hover { border-color: #38bdf8; }
+            .hover\:border-indigo-400:hover { border-color: #818cf8; }
+            .hover\:border-rose-400:hover { border-color: #fb7185; }
+            .hover\:border-amber-400:hover { border-color: #fbbf24; }
+            .hover\:border-emerald-400:hover { border-color: #34d399; }
+            .hover\:border-violet-400:hover { border-color: #a78bfa; }
+
+            /* Dark mode hover borders */
+            .dark .dark\:hover\:border-sky-500:hover { border-color: #0ea5e9; }
+            .dark .dark\:hover\:border-indigo-500:hover { border-color: #6366f1; }
+            .dark .dark\:hover\:border-rose-500:hover { border-color: #f43f5e; }
+            .dark .dark\:hover\:border-amber-500:hover { border-color: #f59e0b; }
+            .dark .dark\:hover\:border-emerald-500:hover { border-color: #10b981; }
+            .dark .dark\:hover\:border-violet-500:hover { border-color: #8b5cf6; }
+
+            /* Shadows */
+            .shadow-sky-500\/30 { --tw-shadow-color: rgb(14 165 233 / 0.3); box-shadow: var(--tw-shadow); }
+            .shadow-indigo-500\/30 { --tw-shadow-color: rgb(99 102 241 / 0.3); box-shadow: var(--tw-shadow); }
+            .shadow-rose-500\/30 { --tw-shadow-color: rgb(244 63 94 / 0.3); box-shadow: var(--tw-shadow); }
+            .shadow-amber-500\/30 { --tw-shadow-color: rgb(245 158 11 / 0.3); box-shadow: var(--tw-shadow); }
+            .shadow-emerald-500\/30 { --tw-shadow-color: rgb(16 185 129 / 0.3); box-shadow: var(--tw-shadow); }
+            .shadow-violet-500\/30 { --tw-shadow-color: rgb(139 92 246 / 0.3); box-shadow: var(--tw-shadow); }
+
+            /* Hover shadows */
+            .hover\:shadow-sky-500\/20:hover { --tw-shadow-color: rgb(14 165 233 / 0.2); }
+            .hover\:shadow-indigo-500\/20:hover { --tw-shadow-color: rgb(99 102 241 / 0.2); }
+            .hover\:shadow-rose-500\/20:hover { --tw-shadow-color: rgb(244 63 94 / 0.2); }
+            .hover\:shadow-amber-500\/20:hover { --tw-shadow-color: rgb(245 158 11 / 0.2); }
+            .hover\:shadow-emerald-500\/20:hover { --tw-shadow-color: rgb(16 185 129 / 0.2); }
+            .hover\:shadow-violet-500\/20:hover { --tw-shadow-color: rgb(139 92 246 / 0.2); }
+
+            /* Dark mode hover shadows */
+            .dark .dark\:hover\:shadow-sky-500\/30:hover { --tw-shadow-color: rgb(14 165 233 / 0.3); }
+            .dark .dark\:hover\:shadow-indigo-500\/30:hover { --tw-shadow-color: rgb(99 102 241 / 0.3); }
+            .dark .dark\:hover\:shadow-rose-500\/30:hover { --tw-shadow-color: rgb(244 63 94 / 0.3); }
+            .dark .dark\:hover\:shadow-amber-500\/30:hover { --tw-shadow-color: rgb(245 158 11 / 0.3); }
+            .dark .dark\:hover\:shadow-emerald-500\/30:hover { --tw-shadow-color: rgb(16 185 129 / 0.3); }
+            .dark .dark\:hover\:shadow-violet-500\/30:hover { --tw-shadow-color: rgb(139 92 246 / 0.3); }
 
             /* Polished Syntax Highlighting */
             .prose code:not(pre code) {
@@ -293,6 +343,8 @@
                 border: none !important;
             }
             .syntax-highlight code {
+                display: block;
+                padding: 1.25rem 1.5rem;
                 font-family: 'JetBrains Mono', monospace;
                 font-size: 0.875rem;
                 line-height: 1.7;
