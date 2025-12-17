@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac54519669e6845b406e64a8f26fd009",
+    "content-hash": "4acab89228496105748700df69c86801",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1160,10 +1160,16 @@
         {
             "name": "laravel/forge-sdk",
             "version": "dev-4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PeteBishwhip/forge-sdk.git",
+                "reference": "80da6fb10f5772ade0129bc338cfaf0ad2912f7c"
+            },
             "dist": {
-                "type": "path",
-                "url": "/Users/pete/Code/forge-sdk",
-                "reference": "40d322d67d3f9ae17738568419ea9e74fb109865"
+                "type": "zip",
+                "url": "https://api.github.com/repos/PeteBishwhip/forge-sdk/zipball/80da6fb10f5772ade0129bc338cfaf0ad2912f7c",
+                "reference": "80da6fb10f5772ade0129bc338cfaf0ad2912f7c",
+                "shasum": ""
             },
             "require": {
                 "ext-json": "*",
@@ -1232,9 +1238,7 @@
                 "issues": "https://github.com/laravel/forge-sdk/issues",
                 "source": "https://github.com/laravel/forge-sdk"
             },
-            "transport-options": {
-                "relative": false
-            }
+            "time": "2025-12-17T19:43:37+00:00"
         },
         {
             "name": "laravel/fortify",

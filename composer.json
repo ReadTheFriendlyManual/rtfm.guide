@@ -92,8 +92,8 @@
     },
     "repositories": [
         {
-            "type": "path",
-            "url": "/Users/pete/Code/forge-sdk"
+            "type": "vcs",
+            "url": "git@github.com:PeteBishwhip/forge-sdk"
         }
     ],
     "minimum-stability": "stable",
