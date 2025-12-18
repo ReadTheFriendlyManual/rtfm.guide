@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('guides', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('team_id')->nullable()->constrained('teams')->onDelete('cascade');
+            $table->unsignedBigInteger('team_id')->nullable();
             $table->string('slug')->unique();
             $table->string('title');
             $table->text('tldr');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->json('os_tags')->nullable();
             $table->enum('status', ['draft', 'pending', 'published'])->default('draft');
             $table->enum('visibility', ['public', 'private'])->default('public');
-            $table->foreignId('template_id')->nullable()->constrained('guide_templates')->onDelete('set null');
+            $table->unsignedBigInteger('template_id')->nullable();
             $table->integer('view_count')->default(0);
             $table->integer('share_count')->default(0);
             $table->timestamp('published_at')->nullable();
