@@ -53,7 +53,7 @@ class Index extends Component
     public function getGuidesProperty()
     {
         $query = Guide::query()
-            ->with(['user', 'category'])
+            ->with(['user', 'category', 'reactions'])
             ->where('status', 'published')
             ->where('visibility', 'public');
 

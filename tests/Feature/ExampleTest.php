@@ -18,7 +18,7 @@ test('guide detail page loads successfully', function () {
     $guide = \App\Models\Guide::first();
 
     if ($guide) {
-        $response = $this->get('/guides/' . $guide->slug);
+        $response = $this->get('/guides/'.$guide->slug);
 
         $response->assertStatus(200);
     } else {

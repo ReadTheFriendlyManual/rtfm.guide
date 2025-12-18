@@ -3,8 +3,30 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Reaction extends Model
 {
-    //
+    protected $fillable = [
+        'guide_id',
+        'user_id',
+        'type',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'type' => \App\Enums\ReactionType::class,
+        ];
+    }
+
+    public function guide(): BelongsTo
+    {
+        return $this->belongsTo(Guide::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -35,12 +35,12 @@ class GuideSeeder extends Seeder
             Guide::updateOrCreate(
                 ['slug' => 'how-to-restart-nginx'],
                 [
-                'user_id' => $user->id,
-                'category_id' => $nginxCategory->id,
+                    'user_id' => $user->id,
+                    'category_id' => $nginxCategory->id,
 
-                'title' => 'How to Restart Nginx',
-                'tldr' => 'Use systemctl restart nginx to restart Nginx service',
-                'content' => '# How to Restart Nginx
+                    'title' => 'How to Restart Nginx',
+                    'tldr' => 'Use systemctl restart nginx to restart Nginx service',
+                    'content' => '# How to Restart Nginx
 
 ## Quick Answer
 ```bash
@@ -118,12 +118,12 @@ If Nginx fails to restart:
 
 - [Nginx Documentation](https://nginx.org/en/docs/)
 - [DigitalOcean Nginx Guides](https://www.digitalocean.com/community/tags/nginx)',
-                'difficulty' => 'beginner',
-                'estimated_minutes' => 2,
-                'os_tags' => ['linux', 'ubuntu', 'centos'],
-                'status' => 'published',
-                'published_at' => now(),
-                'view_count' => 150,
+                    'difficulty' => 'beginner',
+                    'estimated_minutes' => 2,
+                    'os_tags' => ['linux', 'ubuntu', 'centos'],
+                    'status' => 'published',
+                    'published_at' => now(),
+                    'view_count' => 150,
                 ]);
         }
 
@@ -131,11 +131,11 @@ If Nginx fails to restart:
             Guide::updateOrCreate(
                 ['slug' => 'zero-downtime-deployment'],
                 [
-                'user_id' => $user->id,
-                'category_id' => $deploymentCategory->id,
-                'title' => 'Zero Downtime Laravel Deployment',
-                'tldr' => 'Use deployment strategies that keep your app running during updates',
-                'content' => '# Zero Downtime Laravel Deployment
+                    'user_id' => $user->id,
+                    'category_id' => $deploymentCategory->id,
+                    'title' => 'Zero Downtime Laravel Deployment',
+                    'tldr' => 'Use deployment strategies that keep your app running during updates',
+                    'content' => '# Zero Downtime Laravel Deployment
 
 ## Overview
 Deploy Laravel applications without any downtime using proper deployment strategies and zero-downtime techniques.
@@ -284,24 +284,24 @@ sudo supervisorctl restart laravel-worker:*
 - [Envoy](https://laravel.com/docs/envoy) - Laravel\'s deployment tool
 - [Deployer](https://deployer.org/) - PHP deployment tool
 - [Capistrano](https://capistranorb.com/) - Ruby deployment tool',
-                'difficulty' => 'intermediate',
-                'estimated_minutes' => 15,
-                'os_tags' => ['linux'],
-                'status' => 'published',
-                'published_at' => now(),
-                'view_count' => 89,
-            ]);
+                    'difficulty' => 'intermediate',
+                    'estimated_minutes' => 15,
+                    'os_tags' => ['linux'],
+                    'status' => 'published',
+                    'published_at' => now(),
+                    'view_count' => 89,
+                ]);
         }
 
         if ($gitCategory) {
             Guide::updateOrCreate(
                 ['slug' => 'git-revert-commit'],
                 [
-                'user_id' => $user->id,
-                'category_id' => $gitCategory->id,
-                'title' => 'How to Revert a Git Commit',
-                'tldr' => 'Use git revert to undo commits while preserving history',
-                'content' => '# How to Revert a Git Commit
+                    'user_id' => $user->id,
+                    'category_id' => $gitCategory->id,
+                    'title' => 'How to Revert a Git Commit',
+                    'tldr' => 'Use git revert to undo commits while preserving history',
+                    'content' => '# How to Revert a Git Commit
 
 ## Overview
 Learn how to safely undo Git commits using `git revert` instead of dangerous `git reset` operations, especially when working with shared branches.
@@ -470,12 +470,12 @@ git revert <revert-commit-hash>
 - [Git Revert Documentation](https://git-scm.com/docs/git-revert)
 - [Understanding Git Reset](https://git-scm.com/docs/git-reset)
 - [Rewriting History vs Safe Operations](https://www.atlassian.com/git/tutorials/rewriting-history)',
-                'difficulty' => 'beginner',
-                'estimated_minutes' => 5,
-                'os_tags' => ['linux', 'macos', 'windows'],
-                'status' => 'published',
-                'published_at' => now(),
-                'view_count' => 203,
+                    'difficulty' => 'beginner',
+                    'estimated_minutes' => 5,
+                    'os_tags' => ['linux', 'macos', 'windows'],
+                    'status' => 'published',
+                    'published_at' => now(),
+                    'view_count' => 203,
                 ]);
         }
     }
