@@ -5,6 +5,7 @@ namespace App\Livewire\Guides;
 use App\Models\Guide;
 use App\Models\RtfmMessage;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 #[Layout('components.layouts.public')]
@@ -13,6 +14,8 @@ class Show extends Component
     public Guide $guide;
 
     public string $rtfmMessage = '';
+
+    public bool $isNsfwMode = false;
 
     public function mount(Guide $guide)
     {
@@ -27,15 +30,26 @@ class Show extends Component
 
     private function getRandomRtfmMessage(): string
     {
-        $message = RtfmMessage::where('is_approved', true)
-            ->inRandomOrder()
-            ->first();
+        $query = RtfmMessage::where('is_approved', true);
+
+        if (! $this->isNsfwMode) {
+            $query->where('is_nsfw', false);
+        }
+
+        $message = $query->inRandomOrder()->first();
 
         return $message ? $message->message : 'You should have RTFM... but we did it for you.';
     }
 
     public function regenerateRtfmMessage()
     {
+        $this->rtfmMessage = $this->getRandomRtfmMessage();
+    }
+
+    #[On('nsfw-mode-changed')]
+    public function updateNsfwMode($data)
+    {
+        $this->isNsfwMode = $data['isNsfw'];
         $this->rtfmMessage = $this->getRandomRtfmMessage();
     }
 

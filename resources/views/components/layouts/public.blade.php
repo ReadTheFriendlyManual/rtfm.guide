@@ -13,12 +13,7 @@
     </head>
     <body
         x-data="{
-            mode: localStorage.getItem('rtfm_mode') || 'sfw',
             theme: localStorage.getItem('rtfm_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
-            toggleMode() {
-                this.mode = this.mode === 'sfw' ? 'nsfw' : 'sfw';
-                localStorage.setItem('rtfm_mode', this.mode);
-            },
             toggleTheme() {
                 this.theme = this.theme === 'dark' ? 'light' : 'dark';
                 localStorage.setItem('rtfm_theme', this.theme);
@@ -35,9 +30,9 @@
                 localStorage.setItem('rtfm_theme', value);
             });
 
-            // Force re-render of content that depends on theme
-            $nextTick(() => {
-                // Ensure any theme-dependent content is visible
+            // Listen for localStorage updates from Livewire
+            Livewire.on('update-localStorage', (data) => {
+                localStorage.setItem(data.key, data.value);
             });
         "
         class="min-h-screen antialiased bg-slate-50 dark:bg-slate-800"
