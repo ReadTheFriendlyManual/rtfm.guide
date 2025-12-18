@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\Guides\Index as GuideIndex;
+use App\Livewire\Guides\Show as GuideShow;
 use App\Livewire\Pages\ComingSoon;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
@@ -8,7 +10,10 @@ use App\Livewire\Settings\TwoFactor;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
-Route::get('/', ComingSoon::class)->name('home');
+Route::get('/', GuideIndex::class)->name('home');
+Route::get('/guides', GuideIndex::class)->name('guides.index');
+Route::get('/guides/{guide:slug}', GuideShow::class)->name('guides.show');
+Route::get('/coming-soon', ComingSoon::class)->name('coming-soon');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
