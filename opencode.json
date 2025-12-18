@@ -20,6 +20,16 @@
             "environment": {
                 "SITE_PATH": "/Users/pete/Code/rtfm"
             }
+        },
+        "linear": {
+            "type": "local",
+            "enabled": true,
+            "command": [
+                "npx",
+                "-y",
+                "mcp-remote",
+                "https://mcp.linear.app/mcp",
+            ]
         }
     }
 }

@@ -11,30 +11,15 @@ use Laravel\Fortify\Features;
 // Public Routes
 Route::get('/', ComingSoon::class)->name('home');
 
-Route::get('/guides', function () {
-    return view('guides.index');
-})->name('guides.index');
+Route::get('/guides', App\Livewire\Guides\Index::class)->name('guides.index');
 
-Route::get('/guides/{guide}', function () {
-    return view('guides.show');
-})->name('guides.show');
+Route::get('/guides/{guide}', App\Livewire\Guides\Show::class)->name('guides.show');
 
-Route::get('/categories', function () {
-    return view('categories.index');
-})->name('categories.index');
+Route::get('/categories', App\Livewire\Categories\Index::class)->name('categories.index');
 
-Route::get('/categories/{category}', function () {
-    return view('categories.show');
-})->name('categories.show');
+Route::get('/categories/{category}', App\Livewire\Categories\Show::class)->name('categories.show');
 
-Route::get('/search', function () {
-    return view('search.index');
-})->name('search.index');
-
-// Temporarily redirect to coming soon until we build the pages
-Route::get('/guides', ComingSoon::class)->name('guides.index');
-Route::get('/categories', ComingSoon::class)->name('categories.index');
-Route::get('/search', ComingSoon::class)->name('search.index');
+Route::get('/search', App\Livewire\Search\Index::class)->name('search.index');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -80,9 +65,4 @@ Route::middleware(['auth'])->group(function () {
         return view('guides.edit');
     })->name('guides.edit');
 
-    // Temporarily redirect to coming soon
-    Route::get('/profile/{user}', ComingSoon::class)->name('users.show');
-    Route::get('/my-guides', ComingSoon::class)->name('guides.my');
-    Route::get('/saved-guides', ComingSoon::class)->name('guides.saved');
-    Route::get('/guides/create', ComingSoon::class)->name('guides.create');
 });

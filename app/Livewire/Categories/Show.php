@@ -1,24 +1,18 @@
 <?php
 
-namespace App\Livewire\Guides;
+namespace App\Livewire\Categories;
 
 use App\Models\Category;
 use App\Models\Guide;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('components.layouts.public')]
-class Index extends Component
+class Show extends Component
 {
     use WithPagination;
 
-    #[Url(as: 'q', keep: true)]
-    public string $search = '';
-
-    #[Url(as: 'category', keep: true)]
-    public ?int $categoryId = null;
+    public Category $category;
 
     #[Url(as: 'difficulty', keep: true)]
     public ?string $difficulty = null;
@@ -26,14 +20,9 @@ class Index extends Component
     #[Url(as: 'sort', keep: true)]
     public string $sortBy = 'published_at';
 
-    public function updatedSearch()
+    public function mount(Category $category)
     {
-        $this->resetPage();
-    }
-
-    public function updatedCategoryId()
-    {
-        $this->resetPage();
+        $this->category = $category->load(['children']);
     }
 
     public function updatedDifficulty()
@@ -43,8 +32,6 @@ class Index extends Component
 
     public function clearFilters()
     {
-        $this->search = '';
-        $this->categoryId = null;
         $this->difficulty = null;
         $this->sortBy = 'published_at';
         $this->resetPage();
@@ -52,23 +39,15 @@ class Index extends Component
 
     public function getGuidesProperty()
     {
+        // Get all category IDs (current + children for hierarchical display)
+        $categoryIds = [$this->category->id];
+        $this->addChildCategoryIds($categoryIds, $this->category->id);
+
         $query = Guide::query()
             ->with(['user', 'category'])
             ->where('status', 'published')
-            ->where('visibility', 'public');
-
-        // Apply search if provided
-        if ($this->search) {
-            $query->search($this->search);
-        }
-
-        // Apply category filter
-        if ($this->categoryId) {
-            // Get all descendant categories for hierarchical filtering
-            $categoryIds = [$this->categoryId];
-            $this->addChildCategoryIds($categoryIds, $this->categoryId);
-            $query->whereIn('category_id', $categoryIds);
-        }
+            ->where('visibility', 'public')
+            ->whereIn('category_id', $categoryIds);
 
         // Apply difficulty filter
         if ($this->difficulty) {
@@ -105,19 +84,10 @@ class Index extends Component
         }
     }
 
-    public function getCategoriesProperty()
-    {
-        return Category::whereNull('parent_id')
-            ->with('children')
-            ->orderBy('order')
-            ->get();
-    }
-
     public function render()
     {
-        return view('livewire.guides.index', [
+        return view('livewire.categories.show', [
             'guides' => $this->guides,
-            'categories' => $this->categories,
         ]);
     }
 }

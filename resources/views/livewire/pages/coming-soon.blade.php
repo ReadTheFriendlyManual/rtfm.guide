@@ -20,58 +20,7 @@
     class="font-sans antialiased"
 >
     <div>
-        <main class="relative z-10 px-4 sm:px-6 lg:px-8">
-            <header class="mx-auto flex max-w-7xl items-center justify-between py-8">
-                <a href="/" class="text-xl font-bold text-slate-900 dark:text-white">
-                    RTFM<span class="text-sky-600 dark:text-sky-400">.guide</span>
-                </a>
-
-                <!-- Navigation Links -->
-                <div class="hidden items-center gap-6 md:flex">
-                    <a href="{{ route('guides.index') }}" class="text-sm text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Guides</a>
-                    <a href="{{ route('categories.index') }}" class="text-sm text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Categories</a>
-                    <a href="#" class="text-sm text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">API</a>
-                </div>
-
-                <div class="flex items-center gap-3">
-                    <div class="hidden items-center gap-2 text-sm text-slate-500 dark:text-slate-400 sm:flex">
-                        <span class="relative flex h-2 w-2">
-                            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
-                            <span class="relative inline-flex h-2 w-2 rounded-full bg-sky-500"></span>
-                        </span>
-                        <span>In Development</span>
-                    </div>
-
-                    <!-- Theme Toggle -->
-                    <button @click="toggleTheme()" class="rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/5" title="Toggle theme">
-                        <svg x-show="theme === 'dark'" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        <svg x-show="theme === 'light'" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" x-cloak>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                        </svg>
-                    </button>
-
-                    <!-- SFW/NSFW Toggle -->
-                    <button @click="toggleMode()" class="group relative inline-flex items-center gap-2 rounded-full p-1 text-sm font-medium text-slate-500 transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:text-slate-400 dark:focus:ring-offset-slate-900">
-                        <span class="pl-2 transition-colors" :class="mode === 'sfw' ? 'text-slate-900 dark:text-white' : ''">SFW</span>
-                        <div class="relative h-6 w-11 rounded-full bg-slate-200 transition-colors dark:bg-slate-700" :class="mode === 'nsfw' ? 'bg-sky-500 dark:bg-sky-500' : ''">
-                            <div class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm ring-1 ring-black/5 transition-transform duration-300" :class="mode === 'nsfw' ? 'translate-x-5' : ''"></div>
-                        </div>
-                        <span class="pr-2 transition-colors" :class="mode === 'nsfw' ? 'text-slate-900 dark:text-white' : ''">NSFW</span>
-                    </button>
-
-                    @auth
-                        <a href="{{ route('dashboard') }}" class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700">
-                            Dashboard
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-sky-500">
-                            Sign In
-                        </a>
-                    @endauth
-                </div>
-            </header>
+        <main class="relative min-h-screen flex flex-col">
 
             <section class="flex min-h-[calc(80vh)] items-center">
                 <div class="mx-auto w-full max-w-5xl px-6 text-center">
@@ -227,50 +176,7 @@
                 </div>
             </section>
         </main>
-
-        <footer class="border-t border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                    <div class="space-y-4">
-                        <h4 class="font-semibold text-slate-900 dark:text-white">Explore</h4>
-                        <ul class="space-y-2 text-slate-600 dark:text-slate-400">
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Trending Guides</a></li>
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">New Guides</a></li>
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Random Guide</a></li>
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Tag Cloud</a></li>
-                        </ul>
-                    </div>
-                    <div class="space-y-4">
-                        <h4 class="font-semibold text-slate-900 dark:text-white">Categories</h4>
-                        <ul class="space-y-2 text-slate-600 dark:text-slate-400">
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Server Admin</a></li>
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Laravel Dev</a></li>
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Git Workflows</a></li>
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Docker</a></li>
-                        </ul>
-                    </div>
-                    <div class="space-y-4">
-                        <h4 class="font-semibold text-slate-900 dark:text-white">Community</h4>
-                        <ul class="space-y-2 text-slate-600 dark:text-slate-400">
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Submit a Guide</a></li>
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Leaderboard</a></li>
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Changelog</a></li>
-                        </ul>
-                    </div>
-                    <div class="space-y-4">
-                        <h4 class="font-semibold text-slate-900 dark:text-white">RTFM.GUIDE</h4>
-                        <ul class="space-y-2 text-slate-600 dark:text-slate-400">
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">About</a></li>
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Contact</a></li>
-                            <li><a href="#" class="transition-colors hover:text-sky-600 dark:hover:text-sky-400">Privacy Policy</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="mt-16 border-t border-slate-200 pt-8 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
-                    © {{ date('Y') }} RTFM.GUIDE. All rights reserved, except for the right to complain about bad docs.
-                </div>
-            </div>
-        </footer>
+    </div>
 
         <style>
             /* Define Tailwind JIT-safe classes for dynamic colors */
