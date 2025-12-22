@@ -1,38 +1,56 @@
 <?php
 
-use App\Livewire\Pages\ComingSoon;
-use App\Livewire\Settings\Appearance;
-use App\Livewire\Settings\Password;
-use App\Livewire\Settings\Profile;
-use App\Livewire\Settings\TwoFactor;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
+use Inertia\Inertia;
 
 // Public Routes
-Route::get('/', ComingSoon::class)->name('home');
+Route::get('/', function () {
+    return Inertia::render('Public/Home');
+})->name('home');
 
-Route::get('/guides', App\Livewire\Guides\Index::class)->name('guides.index');
+Route::get('/guides', function () {
+    return response('Guides coming soon...', 200);
+})->name('guides.index');
 
-Route::get('/guides/{guide}', App\Livewire\Guides\Show::class)->name('guides.show');
+Route::get('/guides/{guide}', function () {
+    return response('Guide detail coming soon...', 200);
+})->name('guides.show');
 
-Route::get('/categories', App\Livewire\Categories\Index::class)->name('categories.index');
+Route::get('/categories', function () {
+    return response('Categories coming soon...', 200);
+})->name('categories.index');
 
-Route::get('/categories/{category}', App\Livewire\Categories\Show::class)->name('categories.show');
+Route::get('/categories/{category}', function () {
+    return response('Category detail coming soon...', 200);
+})->name('categories.show');
 
-Route::get('/search', App\Livewire\Search\Index::class)->name('search.index');
+Route::get('/search', function () {
+    return response('Search coming soon...', 200);
+})->name('search.index');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::get('/dashboard', function () {
+    return response('Dashboard coming soon...', 200);
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
-    Route::get('settings/profile', Profile::class)->name('profile.edit');
-    Route::get('settings/password', Password::class)->name('user-password.edit');
-    Route::get('settings/appearance', Appearance::class)->name('appearance.edit');
+    Route::get('settings/profile', function () {
+        return response('Profile settings coming soon...', 200);
+    })->name('profile.edit');
 
-    Route::get('settings/two-factor', TwoFactor::class)
+    Route::get('settings/password', function () {
+        return response('Password settings coming soon...', 200);
+    })->name('user-password.edit');
+
+    Route::get('settings/appearance', function () {
+        return response('Appearance settings coming soon...', 200);
+    })->name('appearance.edit');
+
+    Route::get('settings/two-factor', function () {
+        return response('Two-factor settings coming soon...', 200);
+    })
         ->middleware(
             when(
                 Features::canManageTwoFactorAuthentication()
@@ -43,26 +61,23 @@ Route::middleware(['auth'])->group(function () {
         )
         ->name('two-factor.show');
 
-    // User Profile and Guides
     Route::get('/profile/{user}', function () {
-        return view('users.show');
+        return response('User profile coming soon...', 200);
     })->name('users.show');
 
     Route::get('/my-guides', function () {
-        return view('guides.my');
+        return response('My guides coming soon...', 200);
     })->name('guides.my');
 
     Route::get('/saved-guides', function () {
-        return view('guides.saved');
+        return response('Saved guides coming soon...', 200);
     })->name('guides.saved');
 
-    // Guide Management (authenticated)
     Route::get('/guides/create', function () {
-        return view('guides.create');
+        return response('Create guide coming soon...', 200);
     })->name('guides.create');
 
     Route::get('/guides/{guide}/edit', function () {
-        return view('guides.edit');
+        return response('Edit guide coming soon...', 200);
     })->name('guides.edit');
-
 });
