@@ -88,6 +88,14 @@ class Show extends Component
         return __('You should have RTFM, but we did it for you.');
     }
 
+    public function toJSON(): string
+    {
+        return $this->guide
+            ->loadMissing(['author', 'category'])
+            ->loadCount(['reactions as reactions_count', 'savedBy as saves_count'])
+            ->toJson(JSON_PRETTY_PRINT);
+    }
+
     #[Layout('components.layouts.public')]
     public function render(): View
     {

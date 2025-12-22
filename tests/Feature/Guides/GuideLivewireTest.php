@@ -38,6 +38,14 @@ test('guide show tracks reactions and saves for authenticated users', function (
     $component = Livewire::actingAs($user)->test(Show::class, ['guide' => $guide]);
     $component->assertSee($guide->title);
 
+    $component->call('toJSON')->assertReturned(function ($json) use ($guide) {
+        $decoded = json_decode((string) $json, true);
+
+        return data_get($decoded, 'id') === $guide->id
+            && data_get($decoded, 'reactions_count') === 0
+            && data_get($decoded, 'saves_count') === 0;
+    });
+
     $component->call('react', 'helpful')->assertSet('reactionType', 'helpful');
     $component->call('toggleSave')->assertSet('saved', true);
 
