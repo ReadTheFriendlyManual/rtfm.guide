@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -60,5 +62,29 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    /**
+     * @return HasMany<Guide>
+     */
+    public function guides(): HasMany
+    {
+        return $this->hasMany(Guide::class);
+    }
+
+    /**
+     * @return BelongsToMany<Guide>
+     */
+    public function savedGuides(): BelongsToMany
+    {
+        return $this->belongsToMany(Guide::class, 'saved_guides')->withTimestamps();
+    }
+
+    /**
+     * @return HasMany<Reaction>
+     */
+    public function reactions(): HasMany
+    {
+        return $this->hasMany(Reaction::class);
     }
 }
