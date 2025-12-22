@@ -1,6 +1,7 @@
 <?php
 
-use App\Livewire\Pages\ComingSoon;
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\ModeController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -9,7 +10,9 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
 // Public Routes
-Route::get('/', ComingSoon::class)->name('home');
+Route::get('/', [LandingController::class, 'show'])->name('home');
+Route::post('/mode', ModeController::class)->name('mode.update');
+Route::post('/subscribe', [LandingController::class, 'subscribe'])->name('subscribe');
 
 Route::get('/guides', App\Livewire\Guides\Index::class)->name('guides.index');
 
