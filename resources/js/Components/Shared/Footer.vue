@@ -1,39 +1,39 @@
 <template>
-    <footer class="bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+    <footer class="bg-pearl-50 dark:bg-pearl-950 border-t-2 border-pearl-200 dark:border-pearl-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <!-- Brand -->
                 <div class="col-span-1 md:col-span-2">
-                    <h3 class="text-2xl font-bold bg-gradient-to-r from-sky-500 to-blue-600 bg-clip-text text-transparent mb-3">
-                        RTFM.guide
+                    <h3 class="font-display text-2xl/tight font-bold mb-3">
+                        <span class="text-pearl-900 dark:text-pearl-50">RTFM</span><span class="bg-linear-to-r from-wine-600 via-wine-500 to-gold-600 bg-clip-text text-transparent">.guide</span>
                     </h3>
-                    <p class="text-slate-600 dark:text-slate-400 max-w-md">
+                    <p class="text-pearl-600 dark:text-pearl-400 max-w-md text-base/relaxed">
                         {{ tagline }}
                     </p>
                 </div>
 
                 <!-- Links -->
                 <div>
-                    <h4 class="font-semibold text-slate-900 dark:text-white mb-3">Resources</h4>
+                    <h4 class="font-display font-semibold text-pearl-900 dark:text-pearl-50 mb-3">Resources</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-sky-500 dark:hover:text-sky-400 transition-colors">Guides</a></li>
-                        <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-sky-500 dark:hover:text-sky-400 transition-colors">Categories</a></li>
-                        <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-sky-500 dark:hover:text-sky-400 transition-colors">Search</a></li>
+                        <li><a href="#" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Guides</a></li>
+                        <li><a href="#" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Categories</a></li>
+                        <li><a href="#" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Search</a></li>
                     </ul>
                 </div>
 
                 <!-- Legal -->
                 <div>
-                    <h4 class="font-semibold text-slate-900 dark:text-white mb-3">Legal</h4>
+                    <h4 class="font-display font-semibold text-pearl-900 dark:text-pearl-50 mb-3">Legal</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-sky-500 dark:hover:text-sky-400 transition-colors">Privacy</a></li>
-                        <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-sky-500 dark:hover:text-sky-400 transition-colors">Terms</a></li>
+                        <li><a href="#" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Privacy</a></li>
+                        <li><a href="#" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Terms</a></li>
                     </ul>
                 </div>
             </div>
 
-            <div class="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800 text-center text-slate-600 dark:text-slate-400 text-sm">
-                <p>&copy; {{ new Date().getFullYear() }} RTFM.guide. Built with ❤️ for developers who forget to read the manual.</p>
+            <div class="mt-8 pt-8 border-t-2 border-pearl-200 dark:border-pearl-800 text-center text-pearl-600 dark:text-pearl-400 text-sm/relaxed">
+                <p>&copy; {{ new Date().getFullYear() }} RTFM.guide. Built with <span class="text-wine-600 dark:text-wine-500">♥</span> for developers who forget to read the manual.</p>
             </div>
         </div>
     </footer>

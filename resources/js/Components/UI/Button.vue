@@ -38,20 +38,20 @@ const props = defineProps({
 })
 
 const buttonClasses = computed(() => {
-    const base = 'inline-flex items-center justify-center font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+    const base = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-hidden focus:ring-3 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
 
     const sizes = {
-        sm: 'px-3 py-1.5 text-sm rounded-lg',
-        md: 'px-4 py-2 text-base rounded-lg',
-        lg: 'px-6 py-3 text-lg rounded-xl'
+        sm: 'px-4 py-2 text-sm/tight rounded-xl',
+        md: 'px-5 py-2.5 text-base/tight rounded-xl',
+        lg: 'px-8 py-3.5 text-lg/tight rounded-2xl'
     }
 
     const variants = {
-        primary: 'bg-sky-500 hover:bg-sky-600 text-white focus:ring-sky-500 shadow-lg shadow-sky-500/50',
-        secondary: 'bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white focus:ring-slate-500',
-        ghost: 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 focus:ring-slate-500',
-        danger: 'bg-red-500 hover:bg-red-600 text-white focus:ring-red-500 shadow-lg shadow-red-500/50',
-        link: 'text-sky-500 hover:text-sky-600 dark:text-sky-400 dark:hover:text-sky-300 focus:ring-sky-500'
+        primary: 'bg-wine-600 hover:bg-wine-700 text-white focus:ring-wine-500 shadow-lg shadow-wine-600/30 dark:shadow-wine-700/40',
+        secondary: 'bg-pearl-200 dark:bg-pearl-700 hover:bg-pearl-300 dark:hover:bg-pearl-600 text-pearl-900 dark:text-pearl-50 focus:ring-pearl-500',
+        ghost: 'hover:bg-pearl-100 dark:hover:bg-pearl-800 text-pearl-700 dark:text-pearl-300 focus:ring-pearl-500',
+        danger: 'bg-wine-600 hover:bg-wine-700 text-white focus:ring-wine-500 shadow-lg shadow-wine-600/30',
+        link: 'text-wine-600 hover:text-wine-700 dark:text-wine-400 dark:hover:text-wine-300 focus:ring-wine-500'
     }
 
     return [base, sizes[props.size], variants[props.variant]].join(' ')
