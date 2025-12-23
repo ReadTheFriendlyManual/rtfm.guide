@@ -1,21 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
 use Inertia\Inertia;
+use Laravel\Fortify\Features;
 
 // Public Routes
 Route::get('/', function () {
     return Inertia::render('Public/Home');
 })->name('home');
 
-Route::get('/guides', function () {
-    return response('Guides coming soon...', 200);
-})->name('guides.index');
-
-Route::get('/guides/{guide}', function () {
-    return response('Guide detail coming soon...', 200);
-})->name('guides.show');
+Route::get('/guides', [App\Http\Controllers\GuideController::class, 'index'])->name('guides.index');
+Route::get('/guides/{guide}', [App\Http\Controllers\GuideController::class, 'show'])->name('guides.show');
 
 Route::get('/categories', function () {
     return response('Categories coming soon...', 200);
@@ -25,9 +20,7 @@ Route::get('/categories/{category}', function () {
     return response('Category detail coming soon...', 200);
 })->name('categories.show');
 
-Route::get('/search', function () {
-    return response('Search coming soon...', 200);
-})->name('search.index');
+Route::get('/search', [App\Http\Controllers\SearchController::class, 'index'])->name('search.index');
 
 Route::get('/dashboard', function () {
     return response('Dashboard coming soon...', 200);

@@ -67,11 +67,25 @@ class Guide extends Model
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'slug' => $this->slug,
             'tldr' => $this->tldr,
-            'content' => $this->content,
+            'content' => strip_tags($this->content), // Remove markdown tags for better search
             'category' => $this->category->name,
+            'category_slug' => $this->category->slug,
             'difficulty' => $this->difficulty,
-            'status' => $this->status,
+            'os_tags' => $this->os_tags,
+            'view_count' => $this->view_count,
+            'published_at' => $this->published_at?->timestamp,
         ];
+    }
+
+    public function searchableAs(): string
+    {
+        return 'guides_index';
+    }
+
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status === 'published' && $this->visibility === 'public';
     }
 }
