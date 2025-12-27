@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             RtfmMessageSeeder::class,
             GuideSeeder::class,
+            EnhancedGuideSeeder::class,
         ]);
     }
 }

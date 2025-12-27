@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Guide;
 use App\Models\RtfmMessage;
+use App\Services\MarkdownRenderer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -62,7 +63,7 @@ class GuideController extends Controller
         ]);
     }
 
-    public function show(string $slug)
+    public function show(string $slug, MarkdownRenderer $markdown)
     {
         $guide = Guide::with(['user', 'category', 'comments.user'])
             ->where('slug', $slug)
@@ -72,13 +73,12 @@ class GuideController extends Controller
         // Increment view count
         $guide->increment('view_count');
 
+        // Determine user's preferred mode
+        $isNsfw = auth()->check() && auth()->user()->preferences['mode'] === 'nsfw';
+
         // Get random RTFM message
         $rtfmMessage = RtfmMessage::where('is_approved', true)
-            ->where(function ($query) {
-                // Match NSFW/SFW based on guide or user preference
-                $isNsfw = auth()->check() && auth()->user()->preferences['mode'] === 'nsfw';
-                $query->where('is_nsfw', $isNsfw);
-            })
+            ->where('is_nsfw', $isNsfw)
             ->inRandomOrder()
             ->first();
 
@@ -90,8 +90,33 @@ class GuideController extends Controller
             ->limit(3)
             ->get();
 
+        // Render markdown content on the backend
+        $content = [
+            'sfw' => [
+                'tldr' => $guide->tldr,
+                'html' => $markdown->render($guide->content),
+            ],
+            'nsfw' => [
+                'tldr' => $guide->tldr_nsfw ?? $guide->tldr,
+                'html' => $markdown->render($guide->content_nsfw ?? $guide->content),
+            ],
+        ];
+
         return Inertia::render('Guides/Show', [
-            'guide' => $guide,
+            'guide' => [
+                'id' => $guide->id,
+                'slug' => $guide->slug,
+                'title' => $guide->title,
+                'difficulty' => $guide->difficulty,
+                'estimated_minutes' => $guide->estimated_minutes,
+                'os_tags' => $guide->os_tags,
+                'view_count' => $guide->view_count,
+                'published_at' => $guide->published_at,
+                'user' => $guide->user,
+                'category' => $guide->category,
+            ],
+            'content' => $content,
+            'defaultMode' => $isNsfw ? 'nsfw' : 'sfw',
             'rtfmMessage' => $rtfmMessage?->message ?? "You should've RTFM... but we did it for you.",
             'relatedGuides' => $relatedGuides,
         ]);

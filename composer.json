@@ -20,7 +20,9 @@
         "laravel/scout": "^10.23",
         "laravel/socialite": "^5.24",
         "laravel/tinker": "^2.10.1",
-        "meilisearch/meilisearch-php": "^1.16"
+        "league/commonmark": "^2.8",
+        "meilisearch/meilisearch-php": "^1.16",
+        "torchlight/torchlight-laravel": "^0.6.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
