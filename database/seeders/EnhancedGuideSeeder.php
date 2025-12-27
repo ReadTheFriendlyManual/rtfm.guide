@@ -43,7 +43,7 @@ class EnhancedGuideSeeder extends Seeder
                     'content' => $this->getNginxContentSFW(),
 
                     // NSFW Version
-                    'tldr_nsfw' => 'Just run `systemctl restart nginx` and stop overthinking it.',
+                    'tldr_nsfw' => 'Just run `systemctl restart nginx` you fucking idiot. It\'s not rocket science.',
                     'content_nsfw' => $this->getNginxContentNSFW(),
                 ]
             );
@@ -296,9 +296,10 @@ MARKDOWN;
         return <<<'MARKDOWN'
 ## Prerequisites
 
-- Root/sudo access
-- Nginx actually installed (obviously)
-- The ability to read error messages
+- Root/sudo access (if you don't have this, what the fuck are you even doing here?)
+- Nginx actually fucking installed
+- Two brain cells to rub together
+- The ability to read fucking error messages instead of panic-posting on Stack Overflow
 
 ## Quick Answer
 
@@ -306,106 +307,129 @@ MARKDOWN;
 sudo systemctl restart nginx
 ```
 
-That's it. You're done. Go grab a coffee.
+That's it. You're done. Fuck off and do something productive now.
 
-## Detailed Steps (If You Really Need Hand-Holding)
+## Detailed Steps (For Those Who Need Their Hand Held Like a Goddamn Toddler)
 
-### 1. Check if It's Even Running
+### 1. Check if the Bastard is Even Running
 
 ```bash
 sudo systemctl status nginx
 ```
 
-### 2. Test Your Damn Configuration First
+If it says "active (running)" - congrats, it's alive. If not, it's dead. Pretty fucking straightforward.
 
-Seriously, **TEST BEFORE YOU RESTART**:
+### 2. Test Your Shitty Configuration First
+
+Listen up, dipshit: **TEST BEFORE YOU RESTART**. This is not optional.
 
 ```bash
 sudo nginx -t
 ```
 
-If this fails, you f*cked up your config. Fix it first, or you'll have downtime.
+If this fails, you fucked up your config. Fix your broken-ass configuration file before proceeding, or you'll take your entire site down like the amateur you are.
 
-### 3. Actually Restart the Thing
+Expected output when you haven't shit the bed:
+```
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+```
+
+### 3. Actually Restart the Fucking Thing
 
 ```bash
 sudo systemctl restart nginx
 ```
 
-### 4. Make Sure You Didn't Break Anything
+Was that so hard? Jesus Christ.
+
+### 4. Verify You Didn't Fuck Everything Up
 
 ```bash
 sudo systemctl status nginx
 ```
 
-See "active (running)"? Good. You did it right.
+See "active (running)"? Good job, you managed to execute a basic command. Want a fucking medal?
 
-## Reload vs Restart: Know the F*cking Difference
+## Reload vs Restart: Learn the Fucking Difference or Pay the Price
 
-| Command | What It Does | Downtime |
-|---------|--------------|----------|
-| `reload` | Graceful restart, keeps connections | Zero |
-| `restart` | Hard restart, drops everything | 1-2 seconds |
+| Command | What the Fuck It Does | Downtime |
+|---------|------------------------|----------|
+| `reload` | Graceful restart, keeps connections alive | Zero (you're welcome) |
+| `restart` | Hard restart, drops all active connections like a motherfucker | 1-2 seconds of "oh shit" |
 
-For config changes, use reload:
+For simple config changes, use reload instead of being a savage:
 
 ```bash
 sudo systemctl reload nginx
 ```
 
-## Common Ways to Screw This Up
+Your users will thank you for not kicking them off mid-session, asshole.
+
+## Common Ways Idiots Fuck This Up
 
 ### "Permission Denied"
 
-You forgot `sudo`. Read the error message next time.
+You forgot `sudo`, genius. The error message literally fucking told you this.
 
 ```bash
-sudo systemctl restart nginx  # ← Notice the sudo
+sudo systemctl restart nginx  # ← See that? That's sudo. Use it.
 ```
 
 ### "Service Not Found"
 
-Nginx isn't installed. How did you even get this far?
+Nginx isn't installed, you absolute walnut. How the hell did you get this far without Nginx being installed?
 
 ```bash
-nginx -v  # Check if it exists
+nginx -v  # Does it exist? Let's find out!
 ```
 
-Not there? Install it:
+Not there? Then install the damn thing:
 
 ```bash
-# Ubuntu/Debian
+# Ubuntu/Debian (for the Debian fanboys)
 sudo apt install nginx
 
-# CentOS/RHEL
+# CentOS/RHEL (for masochists)
 sudo yum install nginx
 ```
 
 ### Config Test Failed
 
-This means you have syntax errors. Read the output - it literally tells you what's wrong:
+This means you have syntax errors. The output literally tells you what's wrong and where. **READ THE FUCKING ERROR MESSAGE.**
 
 ```bash
-sudo nginx -t
+sudo nginx -t  # Run this. Read it. Fix it.
 ```
 
-Common f*ckups:
-- Missing semicolons (every directive needs one)
-- Typos in file paths
-- Copy-pasting config without reading it
+Common fuckups that make you look incompetent:
+- Missing semicolons (every directive needs one, you dunce)
+- Typos in file paths (learn to spell)
+- Copy-pasting random shit from Stack Overflow without understanding it
+- Not closing brackets like a goddamn amateur
+- Trailing commas where they don't belong
 
 ### Port Already in Use
 
-Something else is squatting on port 80/443. Find the bastard:
+Something else is camping on port 80 or 443. Find the squatter:
 
 ```bash
 sudo lsof -i :80
 sudo lsof -i :443
 ```
 
-Kill it or change Nginx's port. Your choice.
+Then kill that process or reconfigure Nginx to use a different port. Your circus, your monkeys.
 
-## Platform-Specific (It's All Pretty Much the Same)
+### "It's Not Working" (The Vague Bullshit)
+
+"It's not working" is not a fucking error message. Check the actual logs:
+
+```bash
+sudo tail -f /var/log/nginx/error.log
+```
+
+Read what it says. Google the specific error. Don't just throw your hands up and cry.
+
+## Platform-Specific Bullshit (It's Basically All the Same, Relax)
 
 ### Ubuntu/Debian
 
@@ -419,54 +443,73 @@ sudo systemctl restart nginx
 sudo systemctl restart nginx
 ```
 
-### macOS
+### macOS (For the Hipsters)
 
 ```bash
 brew services restart nginx
 ```
 
-## Actually Useful Best Practices
-
-1. **Test first, restart second** - `nginx -t` is your friend
-2. **Use reload for config changes** - No downtime
-3. **Check the logs** - `/var/log/nginx/error.log` will tell you what went wrong
-4. **Backup working configs** - Future you will thank present you
-
-## Verify It Actually Works
+Or if you're doing it manually like a masochist:
 
 ```bash
-# Check logs for errors
+nginx -s stop && nginx
+```
+
+## Best Practices (That You'll Probably Ignore)
+
+1. **Test first, restart second** - Run `nginx -t` before restarting. Every. Fucking. Time.
+2. **Use reload for config changes** - Zero downtime is better than "oops, site's down"
+3. **Check the goddamn logs** - `/var/log/nginx/error.log` is your best friend when shit goes sideways
+4. **Backup configs before making changes** - Future you will want to kiss present you
+5. **Don't edit config files while drunk** - Seriously, don't
+
+## Verify This Shit Actually Works
+
+```bash
+# Watch for errors in real-time
 sudo tail -f /var/log/nginx/error.log
 
 # Test HTTP response
 curl -I http://localhost
 ```
 
-If you see `HTTP/1.1 200 OK` or your expected status, you're golden.
+If you see `HTTP/1.1 200 OK`, you're golden. If not, you fucked something up. Back to the logs.
 
-## Stop, Start, and Other Obvious Commands
+## Other Obvious Commands You Might Need
 
 ```bash
-# Start
+# Start Nginx (if it's stopped, duh)
 sudo systemctl start nginx
 
-# Stop
+# Stop Nginx (kills it dead)
 sudo systemctl stop nginx
 
-# Reload (graceful restart)
+# Reload without full restart
 sudo systemctl reload nginx
 
-# View logs
-sudo journalctl -u nginx
+# Check if it's set to start on boot
+sudo systemctl is-enabled nginx
+
+# View full system logs
+sudo journalctl -u nginx -n 50
 ```
 
-## TL;DR
+## The No-Bullshit TL;DR
 
-1. Test config: `sudo nginx -t`
-2. Restart: `sudo systemctl restart nginx`
-3. Verify: `sudo systemctl status nginx`
+1. Test your config: `sudo nginx -t`
+2. If it passes, restart: `sudo systemctl restart nginx`
+3. Verify it worked: `sudo systemctl status nginx`
+4. If it's fucked, read the error logs: `sudo tail -f /var/log/nginx/error.log`
 
-If that doesn't work, read the error messages. They're there for a reason.
+If you can't figure it out after that, maybe server administration isn't for you. Try something easier, like underwater basket weaving.
+
+## Final Warning
+
+If you're about to restart Nginx on a production server at 3 PM on a Friday without testing the config first, **stop right the fuck now**. Test it. Make sure it works. Then restart.
+
+Don't be the asshole who takes down the company website because you were too lazy to run `nginx -t` first.
+
+You've been warned, dipshit.
 MARKDOWN;
     }
 }

@@ -23,12 +23,36 @@ class GuideFactory extends Factory
      */
     public function definition(): array
     {
+        $nsfwPrefixes = [
+            'What the fuck is wrong with you? ',
+            'Listen up, dipshit: ',
+            'Holy shit, ',
+            'Goddamn it, ',
+            'For fuck\'s sake, ',
+            'Jesus fucking Christ, ',
+            'Fucking hell, ',
+            'Are you fucking kidding me? ',
+        ];
+
+        $nsfwSuffixes = [
+            ', you absolute moron!',
+            ', dickhead!',
+            ', you useless fuck!',
+            ', asshole!',
+            ', you incompetent bastard!',
+            ', shithead!',
+            ', fuckface!',
+            ', you dense motherfucker!',
+        ];
+
         return [
             'user_id' => \App\Models\User::factory(),
             'slug' => $this->faker->unique()->slug(),
             'title' => $this->faker->sentence(),
             'tldr' => $this->faker->sentence(),
             'content' => $this->faker->paragraphs(3, true),
+            'tldr_nsfw' => $this->faker->randomElement($nsfwPrefixes).$this->faker->sentence().$this->faker->randomElement($nsfwSuffixes),
+            'content_nsfw' => "## Fucking Prerequisites\n\n".$this->faker->paragraphs(2, true)."\n\n## Stop Being a Dumbass and Do This\n\n".$this->faker->paragraphs(3, true)."\n\n## If You Fuck This Up\n\n".$this->faker->paragraph()."\n\nSeriously, read the fucking instructions, dipshit.",
             'category_id' => \App\Models\Category::factory(),
             'difficulty' => $this->faker->randomElement(['beginner', 'intermediate', 'advanced']),
             'estimated_minutes' => $this->faker->numberBetween(5, 120),
