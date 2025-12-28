@@ -45,6 +45,15 @@ class GuideController extends Controller
 
         $guides = $query->paginate(12)->withQueryString();
 
+        // Transform guides to include both SFW and NSFW TLDRs
+        $guides->getCollection()->transform(function ($guide) {
+            return [
+                ...$guide->toArray(),
+                'tldr_sfw' => $guide->tldr,
+                'tldr_nsfw' => $guide->tldr_nsfw ?? $guide->tldr,
+            ];
+        });
+
         // Get filter options
         $categories = Category::whereNull('parent_id')
             ->with('children')
@@ -73,10 +82,8 @@ class GuideController extends Controller
         // Increment view count
         $guide->increment('view_count');
 
-        // Determine user's preferred mode
-        $isNsfw = auth()->check() && auth()->user()->preferences['mode'] === 'nsfw';
-
-        // Get random RTFM message
+        // Get random RTFM message based on user's preferred mode
+        $isNsfw = auth()->check() && auth()->user()->preferred_rtfm_mode === 'nsfw';
         $rtfmMessage = RtfmMessage::where('is_approved', true)
             ->where('is_nsfw', $isNsfw)
             ->inRandomOrder()
@@ -116,7 +123,6 @@ class GuideController extends Controller
                 'category' => $guide->category,
             ],
             'content' => $content,
-            'defaultMode' => $isNsfw ? 'nsfw' : 'sfw',
             'rtfmMessage' => $rtfmMessage?->message ?? "You should've RTFM... but we did it for you.",
             'relatedGuides' => $relatedGuides,
         ]);

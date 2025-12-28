@@ -124,7 +124,6 @@ import { usePreferencesStore } from '@/Stores/preferences'
 const props = defineProps({
     guide: Object,
     content: Object,
-    defaultMode: String,
     rtfmMessage: String,
     relatedGuides: Array,
 })
@@ -132,10 +131,8 @@ const props = defineProps({
 // Use the global preferences store
 const preferencesStore = usePreferencesStore()
 
-// Initialize store mode from server-side default if needed
-if (props.defaultMode && preferencesStore.mode !== props.defaultMode) {
-    preferencesStore.setMode(props.defaultMode)
-}
+// Note: The preferences store handles initialization from localStorage for guests
+// and from backend for authenticated users. No need to override here.
 
 const activeTldr = computed(() => {
     return props.content[preferencesStore.mode]?.tldr || ''

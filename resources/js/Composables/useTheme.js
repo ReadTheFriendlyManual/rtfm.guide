@@ -1,38 +1,31 @@
-import { ref, watch, onMounted } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { watch, onMounted, computed } from 'vue'
+import { usePreferencesStore } from '@/Stores/preferences'
 
 export function useTheme() {
-    const getInitialTheme = () => {
-        const stored = localStorage.getItem('rtfm_theme')
-        if (stored) return stored
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    }
+    const preferencesStore = usePreferencesStore()
 
-    const theme = ref(getInitialTheme())
+    // Use the preferences store as the source of truth
+    const theme = computed({
+        get: () => preferencesStore.theme,
+        set: (value) => preferencesStore.setTheme(value)
+    })
 
     const toggleTheme = () => {
-        theme.value = theme.value === 'dark' ? 'light' : 'dark'
+        preferencesStore.toggleTheme()
     }
 
     const setTheme = (newTheme) => {
-        theme.value = newTheme
+        preferencesStore.setTheme(newTheme)
     }
 
-    watch(theme, (newTheme) => {
-        localStorage.setItem('rtfm_theme', newTheme)
+    // Watch for theme changes to update document class for Tailwind dark mode
+    watch(() => preferencesStore.theme, (newTheme) => {
         document.documentElement.classList.toggle('dark', newTheme === 'dark')
+    }, { immediate: true })
 
-        // Sync to backend for authenticated users
-        if (window.rtfm?.user?.id) {
-            router.post('/api/preferences/theme',
-                { theme: newTheme },
-                { preserveState: true, preserveScroll: true }
-            )
-        }
-    })
-
+    // Apply theme class on mount
     onMounted(() => {
-        document.documentElement.classList.toggle('dark', theme.value === 'dark')
+        document.documentElement.classList.toggle('dark', preferencesStore.theme === 'dark')
     })
 
     return { theme, toggleTheme, setTheme }

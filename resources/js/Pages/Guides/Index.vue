@@ -131,7 +131,7 @@
                                 </h2>
 
                                 <p class="text-sm/relaxed text-pearl-600 dark:text-pearl-400 mb-4">
-                                    {{ guide.tldr }}
+                                    {{ preferencesStore.mode === 'nsfw' ? guide.tldr_nsfw : guide.tldr_sfw }}
                                 </p>
 
                                 <!-- Meta -->
@@ -207,7 +207,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { Link, router } from '@inertiajs/vue3'
+import { usePreferencesStore } from '@/Stores/preferences'
 import PublicLayout from '@/Layouts/PublicLayout.vue'
+
+const preferencesStore = usePreferencesStore()
 
 const props = defineProps({
     guides: Object,

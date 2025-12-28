@@ -27,6 +27,10 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
+    // API Routes for preferences
+    Route::post('/api/preferences/mode', [App\Http\Controllers\Api\PreferencesController::class, 'updateMode'])->name('api.preferences.mode');
+    Route::post('/api/preferences/theme', [App\Http\Controllers\Api\PreferencesController::class, 'updateTheme'])->name('api.preferences.theme');
+
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', function () {

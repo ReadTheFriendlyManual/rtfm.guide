@@ -34,6 +34,8 @@ class User extends Authenticatable
         'trust_level',
         'preferred_locale',
         'newsletter_subscribed',
+        'preferred_rtfm_mode',
+        'preferred_theme',
     ];
 
     /**

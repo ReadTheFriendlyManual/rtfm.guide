@@ -41,12 +41,12 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useRtfmMode } from '@/Composables/useRtfmMode'
+import { usePreferencesStore } from '@/Stores/preferences'
 
-const { mode } = useRtfmMode()
+const preferencesStore = usePreferencesStore()
 
 const tagline = computed(() => {
-    return mode.value === 'nsfw'
+    return preferencesStore.mode === 'nsfw'
         ? "You should have RTFM... but we did it for you."
         : "We read the manual so you don't have to."
 })

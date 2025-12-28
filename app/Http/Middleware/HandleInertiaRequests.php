@@ -45,6 +45,8 @@ class HandleInertiaRequests extends Middleware
                     'avatar' => $request->user()->avatar,
                     'trust_level' => $request->user()->trust_level,
                     'reputation_points' => $request->user()->reputation_points,
+                    'preferred_rtfm_mode' => $request->user()->preferred_rtfm_mode,
+                    'preferred_theme' => $request->user()->preferred_theme,
                 ] : null,
             ],
             'flash' => [
