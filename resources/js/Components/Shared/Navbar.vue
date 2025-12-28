@@ -11,10 +11,12 @@
 
                 <!-- Search Bar -->
                 <div class="hidden md:flex flex-1 max-w-md">
-                    <div class="relative w-full">
+                    <div class="relative w-full" v-click-outside="closeDropdown">
                         <input
                             v-model="searchQuery"
+                            @input="handleSearchInput"
                             @keyup.enter="performSearch"
+                            @focus="showDropdown = true"
                             type="search"
                             placeholder="Search guides..."
                             class="w-full px-4 py-2 pr-10 rounded-xl border-2 border-pearl-300 dark:border-pearl-600
@@ -33,6 +35,85 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </button>
+
+                        <!-- Dropdown Results -->
+                        <Transition
+                            enter-active-class="transition-all duration-200"
+                            enter-from-class="opacity-0 -translate-y-2"
+                            enter-to-class="opacity-100 translate-y-0"
+                            leave-active-class="transition-all duration-150"
+                            leave-from-class="opacity-100 translate-y-0"
+                            leave-to-class="opacity-0 -translate-y-2"
+                        >
+                            <div
+                                v-if="showDropdown && (searchResults.length > 0 || (searchQuery && !isSearching))"
+                                class="absolute top-full mt-2 w-full bg-white dark:bg-pearl-800 rounded-2xl
+                                       border-2 border-pearl-300 dark:border-pearl-600 shadow-xl shadow-pearl-900/10
+                                       overflow-hidden z-50"
+                            >
+                                <!-- Loading State -->
+                                <div v-if="isSearching" class="px-4 py-3">
+                                    <div class="flex items-center gap-2 text-sm/tight text-pearl-500">
+                                        <div class="size-4 border-2 border-wine-600 border-t-transparent rounded-full animate-spin"></div>
+                                        Searching...
+                                    </div>
+                                </div>
+
+                                <!-- Results -->
+                                <div v-else-if="searchResults.length > 0" class="max-h-96 overflow-y-auto">
+                                    <Link
+                                        v-for="result in searchResults"
+                                        :key="result.id"
+                                        :href="`/guides/${result.slug}`"
+                                        @click="closeDropdown"
+                                        class="block px-4 py-3 hover:bg-pearl-50 dark:hover:bg-pearl-700/50
+                                               transition-colors border-b border-pearl-200 dark:border-pearl-700
+                                               last:border-b-0"
+                                    >
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-xs/tight font-semibold px-2 py-0.5 rounded-lg
+                                                         bg-wine-100 dark:bg-wine-900/30 text-wine-700 dark:text-wine-400">
+                                                {{ result.category }}
+                                            </span>
+                                            <span :class="[
+                                                'text-xs/tight font-semibold px-2 py-0.5 rounded-lg capitalize',
+                                                result.difficulty === 'beginner' ? 'bg-sage-100 dark:bg-sage-900/30 text-sage-700 dark:text-sage-400' :
+                                                result.difficulty === 'intermediate' ? 'bg-gold-100 dark:bg-gold-900/30 text-gold-700 dark:text-gold-400' :
+                                                'bg-wine-100 dark:bg-wine-900/30 text-wine-700 dark:text-wine-400'
+                                            ]">
+                                                {{ result.difficulty }}
+                                            </span>
+                                        </div>
+                                        <h3 class="font-semibold text-sm/tight text-pearl-900 dark:text-pearl-50 mb-1">
+                                            {{ result.title }}
+                                        </h3>
+                                        <p class="text-xs/relaxed text-pearl-600 dark:text-pearl-400 line-clamp-2">
+                                            {{ result.tldr }}
+                                        </p>
+                                    </Link>
+
+                                    <!-- View All Results Link -->
+                                    <button
+                                        @click="performSearch"
+                                        class="w-full px-4 py-3 text-sm/tight font-semibold text-wine-600 dark:text-wine-400
+                                               hover:bg-pearl-50 dark:hover:bg-pearl-700/50 transition-colors text-center
+                                               border-t-2 border-pearl-200 dark:border-pearl-600"
+                                    >
+                                        View all results for "{{ searchQuery }}"
+                                    </button>
+                                </div>
+
+                                <!-- No Results -->
+                                <div v-else class="px-4 py-6 text-center">
+                                    <svg class="size-8 mx-auto text-pearl-300 dark:text-pearl-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                    <p class="text-sm/tight text-pearl-600 dark:text-pearl-400">
+                                        No guides found for "{{ searchQuery }}"
+                                    </p>
+                                </div>
+                            </div>
+                        </Transition>
                     </div>
                 </div>
 
@@ -76,11 +157,16 @@ import { useTheme } from '@/Composables/useTheme'
 import { usePreferencesStore } from '@/Stores/preferences'
 import Button from '@/Components/UI/Button.vue'
 import Toggle from '@/Components/UI/Toggle.vue'
+import { debounce } from 'lodash'
+import axios from 'axios'
 
 const { theme, toggleTheme } = useTheme()
 const preferencesStore = usePreferencesStore()
 
 const searchQuery = ref('')
+const searchResults = ref([])
+const showDropdown = ref(false)
+const isSearching = ref(false)
 
 const isNsfw = computed({
     get: () => preferencesStore.mode === 'nsfw',
@@ -91,9 +177,59 @@ const isNsfw = computed({
     }
 })
 
+const fetchSearchResults = async () => {
+    if (!searchQuery.value || searchQuery.value.length < 2) {
+        searchResults.value = []
+        return
+    }
+
+    isSearching.value = true
+
+    try {
+        const response = await axios.get('/api/search/quick', {
+            params: {
+                q: searchQuery.value
+            }
+        })
+        searchResults.value = response.data.results
+    } catch (error) {
+        console.error('Search error:', error)
+        searchResults.value = []
+    } finally {
+        isSearching.value = false
+    }
+}
+
+const debouncedSearch = debounce(fetchSearchResults, 300)
+
+const handleSearchInput = () => {
+    showDropdown.value = true
+    debouncedSearch()
+}
+
+const closeDropdown = () => {
+    showDropdown.value = false
+}
+
 const performSearch = () => {
     if (searchQuery.value.trim()) {
+        closeDropdown()
         router.visit(`/search?q=${encodeURIComponent(searchQuery.value)}`)
+    }
+}
+
+// Click outside directive
+const vClickOutside = {
+    mounted(el, binding) {
+        el.clickOutsideEvent = (event) => {
+            if (!(el === event.target || el.contains(event.target))) {
+                binding.value()
+            }
+        }
+        document.addEventListener('click', el.clickOutsideEvent)
+    },
+    unmounted(el) {
+        document.removeEventListener('click', el.clickOutsideEvent)
     }
 }
 </script>

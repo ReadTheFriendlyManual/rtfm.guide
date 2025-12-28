@@ -26,6 +26,9 @@ Route::get('/dashboard', function () {
     return response('Dashboard coming soon...', 200);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Public API Routes
+Route::get('/api/search/quick', [App\Http\Controllers\Api\SearchController::class, 'quick'])->name('api.search.quick');
+
 Route::middleware(['auth'])->group(function () {
     // API Routes for preferences
     Route::post('/api/preferences/mode', [App\Http\Controllers\Api\PreferencesController::class, 'updateMode'])->name('api.preferences.mode');
