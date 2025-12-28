@@ -22,6 +22,8 @@
         "laravel/tinker": "^2.10.1",
         "league/commonmark": "^2.8",
         "meilisearch/meilisearch-php": "^1.16",
+        "symfony/http-client": "^8.0",
+        "symfony/postmark-mailer": "^8.0",
         "torchlight/torchlight-laravel": "^0.6.1"
     },
     "require-dev": {
