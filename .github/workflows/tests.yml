@@ -36,6 +36,7 @@ jobs:
         uses: moy2010/meilisearch-github-action@0.1
         with:
           meilisearch-version: v1.27.0
+          meilisearch-api-key: test-api-key
 
       - name: Install Node Dependencies
         run: npm ci
@@ -47,7 +48,7 @@ jobs:
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Copy Environment File
-        run: cp .env.example .env
+        run: cp .env.ci .env
 
       - name: Generate Application Key
         run: php artisan key:generate
