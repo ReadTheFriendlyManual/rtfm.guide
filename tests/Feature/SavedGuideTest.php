@@ -3,8 +3,6 @@
 use App\Models\Guide;
 use App\Models\User;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
 test('authenticated user can save a guide', function () {
     $user = User::factory()->create();
     $guide = Guide::factory()->create(['status' => 'published', 'visibility' => 'public']);

@@ -4,9 +4,6 @@ use App\Enums\FlagReason;
 use App\Models\Comment;
 use App\Models\ContentFlag;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
 
 test('authenticated user can flag a comment', function () {
     $user = User::factory()->create();

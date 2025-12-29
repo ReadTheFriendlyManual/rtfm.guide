@@ -6,11 +6,10 @@ use App\Enums\GuideVisibility;
 use App\Models\Category;
 use App\Models\Guide;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
-use function Pest\Laravel\{actingAs, assertDatabaseHas, get, post, put};
-
-uses(RefreshDatabase::class);
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\get;
 
 beforeEach(function () {
     $this->user = User::factory()->create();

@@ -135,6 +135,14 @@
                     </div>
                 </div>
             </footer>
+
+            <!-- Comments Section -->
+            <div class="mt-16 pt-12 border-t-2 border-pearl-200 dark:border-pearl-800">
+                <CommentList
+                    :guide-id="guide.id"
+                    :initial-comments="comments"
+                />
+            </div>
         </article>
 
         <!-- Related Guides -->
@@ -172,6 +180,7 @@ import { Link, router, usePage } from '@inertiajs/vue3'
 import PublicLayout from '@/Layouts/PublicLayout.vue'
 import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue'
 import GuideReactions from '@/Components/Guide/GuideReactions.vue'
+import CommentList from '@/Components/Comments/CommentList.vue'
 import { usePreferencesStore } from '@/Stores/preferences'
 import axios from 'axios'
 
@@ -184,6 +193,7 @@ const props = defineProps({
     relatedGuides: Array,
     reactions: Object,
     userReactions: Array,
+    comments: Array,
 })
 
 const breadcrumbs = computed(() => [

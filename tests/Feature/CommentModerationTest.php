@@ -3,9 +3,6 @@
 use App\Models\Comment;
 use App\Models\Guide;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
 
 test('new user first comment requires approval', function () {
     $user = User::factory()->create();

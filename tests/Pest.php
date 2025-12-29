@@ -12,8 +12,11 @@
 */
 
 pest()->extend(Tests\TestCase::class)
- // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
+
+// Configure browser tests to fail fast instead of hanging
+pest()->browser()->timeout(3000); // 3 second timeout - fail fast but allow for real page loads
 
 /*
 |--------------------------------------------------------------------------

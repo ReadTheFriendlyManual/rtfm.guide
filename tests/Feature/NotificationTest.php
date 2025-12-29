@@ -4,10 +4,7 @@ use App\Models\Comment;
 use App\Models\Guide;
 use App\Models\User;
 use App\Notifications\CommentReplyNotification;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
-
-uses(RefreshDatabase::class);
 
 test('notification is sent when someone replies to a comment', function () {
     Notification::fake();
