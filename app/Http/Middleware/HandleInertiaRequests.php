@@ -54,8 +54,8 @@ class HandleInertiaRequests extends Middleware
                 'error' => $request->session()->get('error'),
             ],
             'preferences' => [
-                'mode' => $request->user()?->preferred_rtfm_mode ?? 'sfw',
-                'theme' => $request->user()?->preferred_theme ?? 'light',
+                'mode' => $request->user()?->preferred_rtfm_mode ?? $request->cookie('rtfm_mode', 'sfw'),
+                'theme' => $request->user()?->preferred_theme ?? $request->cookie('rtfm_theme', 'light'),
             ],
         ];
     }

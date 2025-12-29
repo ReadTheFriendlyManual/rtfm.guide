@@ -15,9 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\HandleInertiaRequests::class,
         ]);
 
-        // Don't encrypt the rtfm_mode cookie so JavaScript can read/write it
+        // Don't encrypt preference cookies so JavaScript can read/write them
         $middleware->encryptCookies(except: [
             'rtfm_mode',
+            'rtfm_theme',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
