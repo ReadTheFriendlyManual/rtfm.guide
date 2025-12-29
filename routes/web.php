@@ -22,9 +22,9 @@ Route::get('/categories/{category}', function () {
 
 Route::get('/search', [App\Http\Controllers\SearchController::class, 'index'])->name('search.index');
 
-Route::get('/dashboard', function () {
-    return response('Dashboard coming soon...', 200);
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 // Public API Routes
 Route::get('/api/search/quick', [App\Http\Controllers\Api\SearchController::class, 'quick'])->name('api.search.quick');
