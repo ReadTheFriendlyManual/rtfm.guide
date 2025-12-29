@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Guide;
+use App\Notifications\CommentReplyNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,6 +38,18 @@ class CommentController extends Controller
             'content' => $validated['content'],
             'is_approved' => $isApproved,
         ]);
+
+        // Send notification if this is a reply to another comment
+        if ($comment->parent_id) {
+            $parentComment = Comment::with('user')->findOrFail($comment->parent_id);
+
+            // Don't notify if user is replying to their own comment
+            if ($parentComment->user_id !== Auth::id()) {
+                $parentComment->user->notify(
+                    new CommentReplyNotification($comment, $parentComment, $guide)
+                );
+            }
+        }
 
         $comment->load('user', 'replies.user');
 
