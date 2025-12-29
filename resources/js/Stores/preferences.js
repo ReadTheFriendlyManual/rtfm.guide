@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { router, usePage } from '@inertiajs/vue3'
+import { usePage } from '@inertiajs/vue3'
+import axios from 'axios'
 
 export const usePreferencesStore = defineStore('preferences', () => {
     const page = usePage()
@@ -20,13 +21,10 @@ export const usePreferencesStore = defineStore('preferences', () => {
 
         // Sync to backend if authenticated
         if (isAuthenticated()) {
-            router.post('/api/preferences/theme',
-                { theme: newTheme },
-                {
-                    preserveState: true,
-                    preserveScroll: true,
-                }
-            )
+            axios.post('/api/preferences/theme', { theme: newTheme })
+                .catch(error => {
+                    console.error('Failed to sync theme preference:', error)
+                })
         }
     }
 
@@ -39,13 +37,10 @@ export const usePreferencesStore = defineStore('preferences', () => {
 
         // Sync to backend if authenticated
         if (isAuthenticated()) {
-            router.post('/api/preferences/mode',
-                { mode: newMode },
-                {
-                    preserveState: true,
-                    preserveScroll: true,
-                }
-            )
+            axios.post('/api/preferences/mode', { mode: newMode })
+                .catch(error => {
+                    console.error('Failed to sync mode preference:', error)
+                })
         }
     }
 
