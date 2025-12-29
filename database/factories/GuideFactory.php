@@ -64,10 +64,19 @@ class GuideFactory extends Factory
         ];
     }
 
+    public function published(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'published',
+            'published_at' => $attributes['published_at'] ?? $this->faker->dateTimeBetween('-1 year'),
+        ]);
+    }
+
     public function draft(): static
     {
         return $this->state(fn (array $attributes) => [
             'status' => 'draft',
+            'published_at' => null,
         ]);
     }
 

@@ -46,6 +46,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/api/comments/{comment}', [App\Http\Controllers\Api\CommentController::class, 'update'])->name('api.comments.update');
     Route::delete('/api/comments/{comment}', [App\Http\Controllers\Api\CommentController::class, 'destroy'])->name('api.comments.destroy');
 
+    // API Routes for content flags
+    Route::post('/api/comments/{comment}/flag', [App\Http\Controllers\Api\ContentFlagController::class, 'flagComment'])->name('api.comments.flag');
+    Route::delete('/api/comments/{comment}/flag', [App\Http\Controllers\Api\ContentFlagController::class, 'unflagComment'])->name('api.comments.unflag');
+
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', function () {
@@ -73,9 +77,7 @@ Route::middleware(['auth'])->group(function () {
         )
         ->name('two-factor.show');
 
-    Route::get('/profile/{user}', function () {
-        return response('User profile coming soon...', 200);
-    })->name('users.show');
+    Route::get('/profile/{user}', [App\Http\Controllers\UserProfileController::class, 'show'])->name('users.show');
 
     Route::get('/my-guides', [App\Http\Controllers\GuideManagementController::class, 'index'])->name('guides.my');
 

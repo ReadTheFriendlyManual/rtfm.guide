@@ -80,6 +80,16 @@ class User extends Authenticatable
         return $this->savedGuides()->where('guide_id', $guideId)->exists();
     }
 
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function hasApprovedComment(): bool
+    {
+        return $this->comments()->where('is_approved', true)->exists();
+    }
+
     /**
      * Get the user's initials
      */

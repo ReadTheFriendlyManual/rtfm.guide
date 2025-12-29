@@ -182,8 +182,15 @@ class GuideController extends Controller
         }
 
         // Get top-level comments (parent comments only) with replies
+        // Show approved comments OR user's own pending comments
         $comments = Comment::where('guide_id', $guide->id)
             ->whereNull('parent_id')
+            ->where(function ($query) {
+                $query->where('is_approved', true)
+                    ->when(auth()->check(), function ($q) {
+                        $q->orWhere('user_id', auth()->id());
+                    });
+            })
             ->with(['user', 'replies.user'])
             ->latest()
             ->get()
@@ -220,6 +227,7 @@ class GuideController extends Controller
             'guide_id' => $comment->guide_id,
             'parent_id' => $comment->parent_id,
             'content' => $comment->content,
+            'is_approved' => $comment->is_approved,
             'user' => [
                 'id' => $comment->user->id,
                 'name' => $comment->user->name,
@@ -228,7 +236,14 @@ class GuideController extends Controller
             'updated_at' => $comment->updated_at->diffForHumans(),
             'can_edit' => auth()->check() && auth()->id() === $comment->user_id,
             'can_delete' => auth()->check() && auth()->id() === $comment->user_id,
-            'replies' => $comment->replies->map(fn ($reply) => $this->formatComment($reply))->toArray(),
+            'replies' => $comment->replies
+                ->filter(function ($reply) {
+                    // Show approved replies OR user's own pending replies
+                    return $reply->is_approved || (auth()->check() && $reply->user_id === auth()->id());
+                })
+                ->map(fn ($reply) => $this->formatComment($reply))
+                ->values()
+                ->toArray(),
         ];
     }
 }

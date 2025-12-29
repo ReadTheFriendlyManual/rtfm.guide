@@ -18,7 +18,7 @@ class CommentController extends Controller
         ]);
 
         // If parent_id is provided, ensure it belongs to the same guide
-        if ($validated['parent_id']) {
+        if (isset($validated['parent_id']) && $validated['parent_id']) {
             $parentComment = Comment::findOrFail($validated['parent_id']);
             if ($parentComment->guide_id !== $guide->id) {
                 return response()->json([
@@ -27,11 +27,15 @@ class CommentController extends Controller
             }
         }
 
+        // Auto-approve comments from users with previously approved comments
+        $isApproved = Auth::user()->hasApprovedComment();
+
         $comment = Comment::create([
             'guide_id' => $guide->id,
             'user_id' => Auth::id(),
             'parent_id' => $validated['parent_id'] ?? null,
             'content' => $validated['content'],
+            'is_approved' => $isApproved,
         ]);
 
         $comment->load('user', 'replies.user');
@@ -91,6 +95,7 @@ class CommentController extends Controller
             'guide_id' => $comment->guide_id,
             'parent_id' => $comment->parent_id,
             'content' => $comment->content,
+            'is_approved' => $comment->is_approved,
             'user' => [
                 'id' => $comment->user->id,
                 'name' => $comment->user->name,
