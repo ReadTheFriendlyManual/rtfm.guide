@@ -14,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
         ]);
+
+        // Don't encrypt the rtfm_mode cookie so JavaScript can read/write it
+        $middleware->encryptCookies(except: [
+            'rtfm_mode',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
