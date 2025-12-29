@@ -11,13 +11,13 @@ A humorous yet genuinely helpful guide repository for web developers and system 
 
 Create an interactive community-driven platform where developers can quickly find solutions to common problems, submit their own guides, and engage with content in creative ways. The site balances humor with utility, making technical documentation approachable and even entertaining.
 
-## Technical Stack (TALL + OAuth)
+## Technical Stack
 
 - **Framework**: Laravel 12
-- **Frontend**: Livewire 3 + Alpine.js
-- **Styling**: Tailwind CSS v4 + Flux UI (free)
-- **Authentication**: OAuth 2.0 (GitHub, Google, GitLab)
-- **API**: RESTful API with Laravel Sanctum (API-first for future NativePHP app)
+- **Frontend**: Inertia.js + Vue 3 (changed from Livewire to Inertia for better interactivity)
+- **Styling**: Tailwind CSS v4
+- **Authentication**: Laravel Fortify (GitHub, Google, GitLab OAuth)
+- **API**: RESTful API with Laravel Sanctum
 - **Search**: Meilisearch + Laravel Scout
 - **Feature Flags**: Laravel Pennant (free vs paid tiers)
 - **Testing**: Pest 4 (Unit, Feature, Browser)
@@ -334,41 +334,48 @@ resolved_by_user_id, resolved_at, created_at
 
 ## Development Phases
 
-### Phase 1: Foundation (Weeks 1-2)
-- [ ] Laravel 12 setup with TALL stack
-- [ ] OAuth integration (GitHub, Google, GitLab)
-- [ ] Meilisearch installation and Scout configuration
-- [ ] Database schema and migrations
-- [ ] Seeders with sample guides
-- [ ] Basic routing structure
-- [ ] Livewire component architecture
-- [ ] Flux UI integration
+### ✅ Phase 1: Foundation (COMPLETED)
+- [x] Laravel 12 setup with Inertia + Vue 3
+- [x] OAuth integration with Laravel Fortify
+- [x] Meilisearch installation and Scout configuration
+- [x] Database schema and migrations
+- [x] Seeders with sample guides
+- [x] Basic routing structure
+- [x] Vue/Inertia component architecture
+- [x] Tailwind CSS v4 integration
 
-### Phase 2: Core Guide System (Weeks 3-4)
-- [ ] Guide listing page with filters
-- [ ] Guide detail page with markdown rendering
-- [ ] Category system (hierarchical)
-- [ ] Search functionality (Meilisearch + Scout with instant search)
-- [ ] Configure searchable attributes, filterable attributes, synonyms
-- [ ] View tracking
-- [ ] Related guides algorithm
-- [ ] RTFM message randomizer
+### ✅ Phase 2: Core Guide System (COMPLETED)
+- [x] Guide listing page with filters (sort, category, difficulty)
+- [x] Guide detail page with markdown rendering
+- [x] Category system (hierarchical)
+- [x] Search functionality (Meilisearch + Scout with live dropdown)
+- [x] Configure searchable attributes, filterable attributes
+- [x] View tracking
+- [x] Enhanced related guides algorithm (priority-based)
+- [x] RTFM message randomizer (with NSFW support)
+- [x] Breadcrumb navigation
+- [x] Copy-to-clipboard for code snippets
+- [x] Share and bookmark UI buttons
 
-### Phase 3: User Features (Weeks 5-6)
-- [ ] User profiles
-- [ ] Saved guides (bookmarking)
-- [ ] Comments system (Livewire)
+### 🚧 Phase 3: User Features (IN PROGRESS) - **PRIORITY NEXT SESSION**
+- [x] Saved guides (bookmarking functionality)
+- [x] Saved guides page with pagination
+- [x] User dashboard with stats and quick actions
+- [ ] **Guide submission form** ⬅️ START HERE
+- [ ] **My Guides page** (view/edit created guides)
+- [ ] **Guide editing interface**
+- [ ] Draft system
+- [ ] User profiles (public view)
+- [ ] Comments system
 - [ ] Reactions system
 - [ ] Notifications (comment replies)
-- [ ] Reputation system
 
-### Phase 4: Content Creation (Weeks 7-8)
-- [ ] Guide submission form
-- [ ] Markdown editor with preview
-- [ ] Draft system
-- [ ] Admin review queue
-- [ ] Edit suggestions
+### Phase 4: Content Creation & Moderation
+- [ ] Markdown editor with live preview
+- [ ] Admin review queue for submitted guides
+- [ ] Edit suggestions from community
 - [ ] Contributor attribution
+- [ ] Guide analytics (views, engagement)
 
 ### Phase 5: Sharing & Customization (Weeks 9-10)
 - [ ] Dynamic OG image generation
