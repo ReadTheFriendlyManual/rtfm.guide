@@ -34,6 +34,8 @@ class User extends Authenticatable
         'trust_level',
         'preferred_locale',
         'newsletter_subscribed',
+        'preferred_rtfm_mode',
+        'preferred_theme',
     ];
 
     /**
@@ -66,6 +68,26 @@ class User extends Authenticatable
     public function reactions(): HasMany
     {
         return $this->hasMany(\App\Models\Reaction::class);
+    }
+
+    public function savedGuides(): HasMany
+    {
+        return $this->hasMany(SavedGuide::class);
+    }
+
+    public function hasSavedGuide(int $guideId): bool
+    {
+        return $this->savedGuides()->where('guide_id', $guideId)->exists();
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function hasApprovedComment(): bool
+    {
+        return $this->comments()->where('is_approved', true)->exists();
     }
 
     /**

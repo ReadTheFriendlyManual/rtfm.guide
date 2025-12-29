@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\GuideDifficulty;
+use App\Enums\GuideStatus;
+use App\Enums\GuideVisibility;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,7 +21,9 @@ class Guide extends Model
         'slug',
         'title',
         'tldr',
+        'tldr_nsfw',
         'content',
+        'content_nsfw',
         'category_id',
         'difficulty',
         'estimated_minutes',
@@ -34,6 +39,9 @@ class Guide extends Model
     protected function casts(): array
     {
         return [
+            'difficulty' => GuideDifficulty::class,
+            'status' => GuideStatus::class,
+            'visibility' => GuideVisibility::class,
             'os_tags' => 'array',
             'published_at' => 'datetime',
             'view_count' => 'integer',
@@ -67,11 +75,25 @@ class Guide extends Model
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'slug' => $this->slug,
             'tldr' => $this->tldr,
-            'content' => $this->content,
+            'content' => strip_tags($this->content), // Remove markdown tags for better search
             'category' => $this->category->name,
+            'category_slug' => $this->category->slug,
             'difficulty' => $this->difficulty,
-            'status' => $this->status,
+            'os_tags' => $this->os_tags,
+            'view_count' => $this->view_count,
+            'published_at' => $this->published_at?->timestamp,
         ];
+    }
+
+    public function searchableAs(): string
+    {
+        return 'guides_index';
+    }
+
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status === 'published' && $this->visibility === 'public';
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Guide;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class GuideSeeder extends Seeder
 {
@@ -18,8 +19,8 @@ class GuideSeeder extends Seeder
         $user = User::firstOrCreate(
             ['email' => 'demo@rtfm.guide'],
             [
-                'name' => 'RTFM Demo User',
-                'password' => bcrypt('password'),
+                'name' => 'RTFM Guides Admin',
+                'password' => bcrypt(Str::random(32)),
                 'github_username' => 'rtfm-demo',
                 'trust_level' => 'trusted',
                 'reputation_points' => 100,

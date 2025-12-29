@@ -1,66 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Onest:wght@300;400;500;600;700&display=swap');
 @import 'tailwindcss';
-@import '../../vendor/livewire/flux/dist/flux.css';
 
 @source '../views';
+@source '../js';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
-@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    /* Bold, geometric display font */
+    --font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
 
-    --color-zinc-50: #fafafa;
-    --color-zinc-100: #f5f5f5;
-    --color-zinc-200: #e5e5e5;
-    --color-zinc-300: #d4d4d4;
-    --color-zinc-400: #a3a3a3;
-    --color-zinc-500: #737373;
-    --color-zinc-600: #525252;
-    --color-zinc-700: #404040;
-    --color-zinc-800: #262626;
-    --color-zinc-900: #171717;
-    --color-zinc-950: #0a0a0a;
+    /* Modern, clean body font */
+    --font-sans: 'Onest', ui-sans-serif, system-ui, sans-serif;
 
-    --color-accent: var(--color-neutral-800);
-    --color-accent-content: var(--color-neutral-800);
-    --color-accent-foreground: var(--color-white);
-}
+    /* Warm neutrals - elegant base */
+    --color-pearl-50: #fafaf9;
+    --color-pearl-100: #f5f5f4;
+    --color-pearl-200: #e7e5e4;
+    --color-pearl-300: #d4d4d3;
+    --color-pearl-400: #a3a3a2;
+    --color-pearl-500: #737372;
+    --color-pearl-600: #525251;
+    --color-pearl-700: #404040;
+    --color-pearl-800: #262626;
+    --color-pearl-900: #171717;
+    --color-pearl-950: #0a0a0a;
 
-@layer theme {
-    .dark {
-        --color-accent: var(--color-white);
-        --color-accent-content: var(--color-white);
-        --color-accent-foreground: var(--color-neutral-800);
-    }
+    /* Rich burgundy/wine - sophisticated primary */
+    --color-wine-400: #e879b9;
+    --color-wine-500: #db2777;
+    --color-wine-600: #be185d;
+    --color-wine-700: #9f1239;
+    --color-wine-800: #881337;
+    --color-wine-900: #701a2e;
+
+    /* Warm gold - luxurious accent */
+    --color-gold-400: #fcd34d;
+    --color-gold-500: #fbbf24;
+    --color-gold-600: #f59e0b;
+    --color-gold-700: #d97706;
+
+    /* Soft sage - fresh, modern accent */
+    --color-sage-400: #86efac;
+    --color-sage-500: #4ade80;
+    --color-sage-600: #22c55e;
+    --color-sage-700: #16a34a;
+    --color-sage-800: #15803d;
 }
 
 @layer base {
-
     *,
     ::after,
     ::before,
     ::backdrop,
     ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+        border-color: var(--color-pearl-200, currentColor);
+    }
+
+    /* Elegant diagonal stripes pattern */
+    .pattern-stripes {
+        background-image: linear-gradient(
+            135deg,
+            currentColor 0%,
+            currentColor 25%,
+            transparent 25%,
+            transparent 50%,
+            currentColor 50%,
+            currentColor 75%,
+            transparent 75%,
+            transparent 100%
+        );
+        background-size: 40px 40px;
+    }
+
+    /* Subtle grid pattern */
+    .pattern-grid {
+        background-image:
+            linear-gradient(currentColor 1px, transparent 1px),
+            linear-gradient(90deg, currentColor 1px, transparent 1px);
+        background-size: 24px 24px;
+    }
+
+    /* Elegant grain texture */
+    .texture-grain {
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
     }
 }
 
-[data-flux-field]:not(ui-radio, ui-checkbox) {
-    @apply grid gap-2;
+@layer utilities {
+    /* Elegant float animation */
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    /* Smooth slide in from left */
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .animate-slide-in-left {
+        animation: slideInLeft 0.6s ease-out forwards;
+        opacity: 0;
+    }
+
+    /* Staggered fade-in with delay utilities */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in-up {
+        animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+    }
+
+    /* Elegant scale in */
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .animate-scale-in {
+        animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+    }
+
+    /* Shimmer effect for interactive elements */
+    @keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    .animate-shimmer {
+        background-size: 200% 100%;
+        animation: shimmer 2s ease-in-out infinite;
+    }
+
+    /* Elegant text shadows */
+    .text-shadow-elegant {
+        text-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
+    }
+
+    .text-shadow-glow {
+        text-shadow:
+            0 0 20px currentColor,
+            0 0 40px currentColor,
+            0 2px 4px rgb(0 0 0 / 0.3);
+    }
 }
 
-[data-flux-label] {
-    @apply  !mb-0 !leading-tight;
-}
 
-input:focus[data-flux-control],
-textarea:focus[data-flux-control],
-select:focus[data-flux-control] {
-    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
-}
-
-/* \[:where(&)\]:size-4 {
-    @apply size-4;
-} */

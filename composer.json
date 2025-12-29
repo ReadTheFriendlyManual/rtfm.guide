@@ -10,6 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "inertiajs/inertia-laravel": "^2.0",
         "laravel/forge-sdk": "dev-4.x-dev",
         "laravel/fortify": "^1.30",
         "laravel/framework": "^12.0",
@@ -19,8 +20,11 @@
         "laravel/scout": "^10.23",
         "laravel/socialite": "^5.24",
         "laravel/tinker": "^2.10.1",
-        "livewire/flux": "^2.9.0",
-        "meilisearch/meilisearch-php": "^1.16"
+        "league/commonmark": "^2.8",
+        "meilisearch/meilisearch-php": "^1.16",
+        "symfony/http-client": "^8.0",
+        "symfony/postmark-mailer": "^8.0",
+        "torchlight/torchlight-laravel": "^0.6.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -31,6 +35,7 @@
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
         "pestphp/pest": "^4.2",
+        "pestphp/pest-plugin-browser": "^4.1",
         "pestphp/pest-plugin-laravel": "^4.0"
     },
     "autoload": {

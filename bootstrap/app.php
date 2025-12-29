@@ -11,7 +11,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->web(append: [
+            \App\Http\Middleware\HandleInertiaRequests::class,
+        ]);
+
+        // Don't encrypt preference cookies so JavaScript can read/write them
+        $middleware->encryptCookies(except: [
+            'rtfm_mode',
+            'rtfm_theme',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
