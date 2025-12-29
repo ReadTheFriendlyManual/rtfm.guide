@@ -1,0 +1,180 @@
+---
+title: Notifications
+description: Stay updated on your RTFM.guide activity
+---
+
+## What Are Notifications?
+
+Notifications keep you informed about:
+- Comments on your guides
+- Reactions to your guides
+- Replies to your comments (coming soon)
+- @mentions (coming soon)
+- System announcements
+
+## Viewing Notifications
+
+### Notification Center
+
+Access all notifications via the bell icon in the navigation, or visit the API endpoint for unread count.
+
+### Notification Types
+
+<CardGroup cols={2}>
+  <Card title="Comments" icon="comment">
+    Someone commented on one of your guides
+  </Card>
+  <Card title="Reactions" icon="heart">
+    Your guide received a reaction
+  </Card>
+  <Card title="Mentions" icon="at" color="gray">
+    Someone mentioned you (coming soon)
+  </Card>
+  <Card title="System" icon="bell">
+    Important platform updates
+  </Card>
+</CardGroup>
+
+## Managing Notifications
+
+### Mark as Read
+
+- Click on a notification to mark it as read
+- Or click **Mark all as read** to clear all at once
+
+### Delete Notifications
+
+- Remove individual notifications
+- Or clear all read notifications
+
+### Unread Count
+
+The bell icon shows your unread notification count:
+- Red badge indicates unread notifications
+- Number shows exact count
+- Updates in real-time
+
+## Notification Settings
+
+Configure your notification preferences at [https://rtfm.guide/settings/notifications](https://rtfm.guide/settings/notifications) (coming soon).
+
+### Email Notifications
+
+Choose what triggers email notifications:
+- New comments on your guides
+- Reactions received
+- Mentions
+- Weekly digest
+- System announcements
+
+### In-App Notifications
+
+Control in-app alerts:
+- Desktop notifications (browser permission required)
+- Sound alerts
+- Badge counts
+
+### Frequency
+
+Set notification frequency:
+- **Real-time**: Immediate notifications
+- **Digest**: Bundled daily or weekly
+- **Off**: No notifications
+
+<Tip>
+  **Reduce noise**: Consider digest mode if you receive many notifications
+</Tip>
+
+## Notification Details
+
+Each notification includes:
+- **What happened**: Clear description of the activity
+- **When**: Timestamp of the event
+- **Who**: User who triggered the notification
+- **Where**: Link to the related guide or comment
+
+## Coming Soon
+
+### Advanced Features
+
+- **Mentions**: Get notified when someone @mentions you
+- **Replies**: Notifications for comment replies
+- **Follows**: Alerts when someone follows you
+- **Guide updates**: Notified when saved guides are updated
+
+### Filtering
+
+- Filter by notification type
+- Search notifications
+- Sort by date or importance
+- Archive old notifications
+
+### Notification Rules
+
+Create custom rules:
+- Mute specific guides
+- Priority notifications from certain users
+- Keyword filters
+- Time-based rules (e.g., no notifications after 10 PM)
+
+## Privacy
+
+<Info>
+  **Your notifications are private**. Only you can see your notification history.
+</Info>
+
+## Notification Limits
+
+Currently:
+- **No limit**: Unlimited notification history
+- **Retention**: Kept indefinitely
+- **Auto-cleanup**: None (manual deletion only)
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Check Regularly">
+    - Review notifications daily
+    - Respond to comments promptly
+    - Acknowledge feedback
+  </Accordion>
+
+  <Accordion title="Manage Your Inbox">
+    - Mark as read after viewing
+    - Delete irrelevant notifications
+    - Keep unread count low
+  </Accordion>
+
+  <Accordion title="Configure Wisely">
+    - Enable important notifications
+    - Disable noise
+    - Use digest for high-volume
+  </Accordion>
+</AccordionGroup>
+
+## Troubleshooting
+
+### Not Receiving Notifications?
+
+1. Check your notification settings
+2. Verify email address
+3. Check spam folder
+4. Ensure JavaScript is enabled
+5. Try a different browser
+
+### Too Many Notifications?
+
+1. Switch to digest mode
+2. Disable less important types
+3. Mute high-volume guides
+4. Adjust frequency settings
+
+## API Access (Coming Soon)
+
+Access notifications programmatically:
+- Get unread count
+- Fetch notification list
+- Mark as read
+- Delete notifications
+
+API endpoint: `https://rtfm.guide/api/notifications`
