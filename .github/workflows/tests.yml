@@ -32,8 +32,13 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
+      - name: Start Meilisearch
+        uses: moy2010/meilisearch-github-action@0.1
+        with:
+          meilisearch-version: v1.27.0
+
       - name: Install Node Dependencies
-        run: npm i
+        run: npm ci
 
       - name: Add Flux Credentials Loaded From ENV
         run: composer config http-basic.composer.fluxui.dev "${{ secrets.FLUX_USERNAME }}" "${{ secrets.FLUX_LICENSE_KEY }}"
