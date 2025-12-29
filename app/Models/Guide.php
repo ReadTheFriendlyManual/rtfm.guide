@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\GuideDifficulty;
+use App\Enums\GuideStatus;
+use App\Enums\GuideVisibility;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,6 +39,9 @@ class Guide extends Model
     protected function casts(): array
     {
         return [
+            'difficulty' => GuideDifficulty::class,
+            'status' => GuideStatus::class,
+            'visibility' => GuideVisibility::class,
             'os_tags' => 'array',
             'published_at' => 'datetime',
             'view_count' => 'integer',

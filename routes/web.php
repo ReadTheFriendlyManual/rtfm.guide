@@ -10,7 +10,6 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/guides', [App\Http\Controllers\GuideController::class, 'index'])->name('guides.index');
-Route::get('/guides/{guide}', [App\Http\Controllers\GuideController::class, 'show'])->name('guides.show');
 
 Route::get('/categories', function () {
     return response('Categories coming soon...', 200);
@@ -69,17 +68,16 @@ Route::middleware(['auth'])->group(function () {
         return response('User profile coming soon...', 200);
     })->name('users.show');
 
-    Route::get('/my-guides', function () {
-        return response('My guides coming soon...', 200);
-    })->name('guides.my');
+    Route::get('/my-guides', [App\Http\Controllers\GuideManagementController::class, 'index'])->name('guides.my');
 
     Route::get('/saved-guides', [App\Http\Controllers\SavedGuidePageController::class, 'index'])->name('guides.saved');
 
-    Route::get('/guides/create', function () {
-        return response('Create guide coming soon...', 200);
-    })->name('guides.create');
+    Route::get('/guides/create', [App\Http\Controllers\GuideManagementController::class, 'create'])->name('guides.create');
+    Route::post('/guides', [App\Http\Controllers\GuideManagementController::class, 'store'])->name('guides.store');
 
-    Route::get('/guides/{guide}/edit', function () {
-        return response('Edit guide coming soon...', 200);
-    })->name('guides.edit');
+    Route::get('/guides/{guide}/edit', [App\Http\Controllers\GuideManagementController::class, 'edit'])->name('guides.edit');
+    Route::put('/guides/{guide}', [App\Http\Controllers\GuideManagementController::class, 'update'])->name('guides.update');
 });
+
+// Public guide view - must be after authenticated routes to avoid conflicts
+Route::get('/guides/{guide}', [App\Http\Controllers\GuideController::class, 'show'])->name('guides.show');

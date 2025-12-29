@@ -9,11 +9,11 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
-class StoreGuideRequest extends FormRequest
+class UpdateGuideRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() !== null;
+        return $this->user() !== null && $this->user()->id === $this->route('guide')->user_id;
     }
 
     protected function prepareForValidation(): void
@@ -27,9 +27,11 @@ class StoreGuideRequest extends FormRequest
 
     public function rules(): array
     {
+        $guideId = $this->route('guide')->id;
+
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'unique:guides,slug'],
+            'slug' => ['required', 'string', 'max:255', Rule::unique('guides', 'slug')->ignore($guideId)],
             'tldr' => ['required', 'string', 'max:1000'],
             'content' => ['required', 'string'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
