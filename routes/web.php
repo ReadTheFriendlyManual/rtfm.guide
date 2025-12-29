@@ -73,9 +73,7 @@ Route::middleware(['auth'])->group(function () {
         return response('My guides coming soon...', 200);
     })->name('guides.my');
 
-    Route::get('/saved-guides', function () {
-        return response('Saved guides coming soon...', 200);
-    })->name('guides.saved');
+    Route::get('/saved-guides', [App\Http\Controllers\SavedGuidePageController::class, 'index'])->name('guides.saved');
 
     Route::get('/guides/create', function () {
         return response('Create guide coming soon...', 200);
