@@ -89,13 +89,53 @@ class GuideController extends Controller
             ->inRandomOrder()
             ->first();
 
-        // Get related guides
-        $relatedGuides = Guide::where('status', 'published')
+        // Get related guides with improved algorithm
+        // Priority: 1. Same category & difficulty, 2. Same category, 3. Similar OS tags
+        $relatedGuides = collect();
+
+        // First: Try to find guides in the same category with same difficulty
+        $sameCategoryDifficulty = Guide::where('status', 'published')
             ->where('visibility', 'public')
             ->where('category_id', $guide->category_id)
+            ->where('difficulty', $guide->difficulty)
             ->where('id', '!=', $guide->id)
+            ->orderBy('view_count', 'desc')
             ->limit(3)
             ->get();
+
+        $relatedGuides = $relatedGuides->merge($sameCategoryDifficulty);
+
+        // If we need more, get from same category regardless of difficulty
+        if ($relatedGuides->count() < 3) {
+            $sameCategory = Guide::where('status', 'published')
+                ->where('visibility', 'public')
+                ->where('category_id', $guide->category_id)
+                ->where('id', '!=', $guide->id)
+                ->whereNotIn('id', $relatedGuides->pluck('id'))
+                ->orderBy('view_count', 'desc')
+                ->limit(3 - $relatedGuides->count())
+                ->get();
+
+            $relatedGuides = $relatedGuides->merge($sameCategory);
+        }
+
+        // If still need more, search by similar OS tags
+        if ($relatedGuides->count() < 3 && $guide->os_tags) {
+            $similarOsTags = Guide::where('status', 'published')
+                ->where('visibility', 'public')
+                ->where('id', '!=', $guide->id)
+                ->whereNotIn('id', $relatedGuides->pluck('id'))
+                ->where(function ($query) use ($guide) {
+                    foreach ($guide->os_tags as $tag) {
+                        $query->orWhereJsonContains('os_tags', $tag);
+                    }
+                })
+                ->orderBy('view_count', 'desc')
+                ->limit(3 - $relatedGuides->count())
+                ->get();
+
+            $relatedGuides = $relatedGuides->merge($similarOsTags);
+        }
 
         // Render markdown content on the backend
         $content = [
