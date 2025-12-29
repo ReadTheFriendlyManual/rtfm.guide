@@ -9,6 +9,9 @@ export const usePreferencesStore = defineStore('preferences', () => {
     const theme = ref(localStorage.getItem('rtfm_theme') || 'light')
     const mode = ref(localStorage.getItem('rtfm_mode') || 'sfw')
 
+    // Set initial cookie on load
+    document.cookie = `rtfm_mode=${mode.value}; path=/; max-age=31536000; SameSite=Lax`
+
     const isAuthenticated = () => Boolean(page.props.auth?.user)
 
     const setTheme = (newTheme) => {
@@ -30,6 +33,9 @@ export const usePreferencesStore = defineStore('preferences', () => {
     const setMode = (newMode) => {
         mode.value = newMode
         localStorage.setItem('rtfm_mode', newMode)
+
+        // Set cookie for backend to read (for both guests and authenticated users)
+        document.cookie = `rtfm_mode=${newMode}; path=/; max-age=31536000; SameSite=Lax`
 
         // Sync to backend if authenticated
         if (isAuthenticated()) {

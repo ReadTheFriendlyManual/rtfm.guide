@@ -83,7 +83,10 @@ class GuideController extends Controller
         $guide->increment('view_count');
 
         // Get random RTFM message based on user's preferred mode
-        $isNsfw = auth()->check() && auth()->user()->preferred_rtfm_mode === 'nsfw';
+        // Check cookie first (for guests), then user preference (for authenticated users)
+        $isNsfw = request()->cookie('rtfm_mode') === 'nsfw'
+            || (auth()->check() && auth()->user()->preferred_rtfm_mode === 'nsfw');
+
         $rtfmMessage = RtfmMessage::where('is_approved', true)
             ->where('is_nsfw', $isNsfw)
             ->inRandomOrder()
