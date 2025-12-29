@@ -140,9 +140,14 @@
                         </svg>
                     </button>
 
-                    <!-- Sign In Button -->
-                    <Button href="/login" variant="primary" size="sm" class="bg-linear-to-r from-wine-600 to-wine-700 hover:from-wine-500 hover:to-wine-600 text-white font-semibold shadow-lg shadow-wine-600/20">
-                        Sign In
+                    <!-- Sign In / Dashboard Button -->
+                    <Button
+                        :href="isAuthenticated ? '/dashboard' : '/login'"
+                        variant="primary"
+                        size="sm"
+                        class="bg-linear-to-r from-wine-600 to-wine-700 hover:from-wine-500 hover:to-wine-600 text-white font-semibold shadow-lg shadow-wine-600/20"
+                    >
+                        {{ isAuthenticated ? 'Dashboard' : 'Sign In' }}
                     </Button>
                 </div>
             </div>
@@ -152,7 +157,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Link, router } from '@inertiajs/vue3'
+import { Link, router, usePage } from '@inertiajs/vue3'
 import { useTheme } from '@/Composables/useTheme'
 import { usePreferencesStore } from '@/Stores/preferences'
 import Button from '@/Components/UI/Button.vue'
@@ -162,6 +167,9 @@ import axios from 'axios'
 
 const { theme, toggleTheme } = useTheme()
 const preferencesStore = usePreferencesStore()
+const page = usePage()
+
+const isAuthenticated = computed(() => page.props.auth?.user !== null && page.props.auth?.user !== undefined)
 
 const searchQuery = ref('')
 const searchResults = ref([])
