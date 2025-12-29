@@ -164,6 +164,7 @@ class GuideController extends Controller
                 'published_at' => $guide->published_at,
                 'user' => $guide->user,
                 'category' => $guide->category,
+                'is_saved' => auth()->check() && auth()->user()->hasSavedGuide($guide->id),
             ],
             'content' => $content,
             'rtfmMessage' => $rtfmMessage?->message ?? "You should've RTFM... but we did it for you.",

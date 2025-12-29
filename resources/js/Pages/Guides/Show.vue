@@ -72,14 +72,16 @@
                         </button>
                         <button
                             @click="toggleBookmark"
+                            :disabled="isTogglingBookmark"
                             class="p-2.5 rounded-xl border-2 border-pearl-300 dark:border-pearl-600
                                    text-pearl-600 dark:text-pearl-400 hover:border-wine-500 hover:text-wine-600
-                                   dark:hover:text-wine-400 transition-all"
+                                   dark:hover:text-wine-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                             :title="isBookmarked ? 'Remove bookmark' : 'Bookmark guide'"
                         >
-                            <svg class="size-5" :fill="isBookmarked ? 'currentColor' : 'none'" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg v-if="!isTogglingBookmark" class="size-5" :fill="isBookmarked ? 'currentColor' : 'none'" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                             </svg>
+                            <div v-else class="size-5 border-2 border-wine-600 border-t-transparent rounded-full animate-spin"></div>
                         </button>
                     </div>
                 </div>
@@ -147,11 +149,14 @@
 </template>
 
 <script setup>
-import { computed, onMounted, watch } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { ref, computed, onMounted, watch } from 'vue'
+import { Link, router, usePage } from '@inertiajs/vue3'
 import PublicLayout from '@/Layouts/PublicLayout.vue'
 import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue'
 import { usePreferencesStore } from '@/Stores/preferences'
+import axios from 'axios'
+
+const page = usePage()
 
 const props = defineProps({
     guide: Object,
@@ -173,7 +178,8 @@ const preferencesStore = usePreferencesStore()
 // Note: The preferences store handles initialization from localStorage for guests
 // and from backend for authenticated users. No need to override here.
 
-const isBookmarked = computed(() => false) // TODO: Implement bookmark functionality
+const isBookmarked = ref(props.guide.is_saved)
+const isTogglingBookmark = ref(false)
 
 const shareGuide = async () => {
     if (navigator.share) {
@@ -203,9 +209,30 @@ const copyToClipboard = async () => {
     }
 }
 
-const toggleBookmark = () => {
-    // TODO: Implement bookmark functionality
-    console.log('Bookmark toggled')
+const toggleBookmark = async () => {
+    // Require authentication
+    if (!page.props.auth.user) {
+        router.visit('/login')
+        return
+    }
+
+    isTogglingBookmark.value = true
+
+    try {
+        if (isBookmarked.value) {
+            // Remove bookmark
+            await axios.delete(`/api/guides/${props.guide.id}/save`)
+            isBookmarked.value = false
+        } else {
+            // Add bookmark
+            await axios.post(`/api/guides/${props.guide.id}/save`)
+            isBookmarked.value = true
+        }
+    } catch (error) {
+        console.error('Bookmark error:', error)
+    } finally {
+        isTogglingBookmark.value = false
+    }
 }
 
 const activeTldr = computed(() => {

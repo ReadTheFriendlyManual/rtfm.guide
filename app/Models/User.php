@@ -70,6 +70,16 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Reaction::class);
     }
 
+    public function savedGuides(): HasMany
+    {
+        return $this->hasMany(SavedGuide::class);
+    }
+
+    public function hasSavedGuide(int $guideId): bool
+    {
+        return $this->savedGuides()->where('guide_id', $guideId)->exists();
+    }
+
     /**
      * Get the user's initials
      */
