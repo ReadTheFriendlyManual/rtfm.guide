@@ -37,6 +37,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/api/guides/{guide}/save', [App\Http\Controllers\Api\SavedGuideController::class, 'store'])->name('api.guides.save');
     Route::delete('/api/guides/{guide}/save', [App\Http\Controllers\Api\SavedGuideController::class, 'destroy'])->name('api.guides.unsave');
 
+    // API Routes for reactions
+    Route::post('/api/guides/{guide}/reactions', [App\Http\Controllers\Api\ReactionController::class, 'store'])->name('api.guides.reactions.store');
+    Route::delete('/api/guides/{guide}/reactions', [App\Http\Controllers\Api\ReactionController::class, 'destroy'])->name('api.guides.reactions.destroy');
+
+    // API Routes for comments
+    Route::post('/api/guides/{guide}/comments', [App\Http\Controllers\Api\CommentController::class, 'store'])->name('api.guides.comments.store');
+    Route::put('/api/comments/{comment}', [App\Http\Controllers\Api\CommentController::class, 'update'])->name('api.comments.update');
+    Route::delete('/api/comments/{comment}', [App\Http\Controllers\Api\CommentController::class, 'destroy'])->name('api.comments.destroy');
+
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', function () {

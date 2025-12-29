@@ -103,6 +103,24 @@
                 class="article-content"
             ></div>
 
+            <!-- Reactions -->
+            <div class="mt-12 pt-8 border-t-2 border-pearl-200 dark:border-pearl-800">
+                <h3 class="font-display text-xl/tight font-bold text-pearl-900 dark:text-white mb-4">
+                    Was this guide helpful?
+                </h3>
+                <GuideReactions
+                    :guide-id="guide.id"
+                    :reactions="reactions"
+                    :user-reactions="userReactions"
+                />
+                <p v-if="!$page.props.auth.user" class="mt-3 text-sm/relaxed text-pearl-500">
+                    <Link href="/login" class="text-wine-600 dark:text-wine-400 hover:underline font-medium">
+                        Sign in
+                    </Link>
+                    to react to this guide
+                </p>
+            </div>
+
             <!-- Author Info -->
             <footer class="mt-16 pt-12 border-t-2 border-pearl-200 dark:border-pearl-800">
                 <div class="flex items-center gap-5">
@@ -153,6 +171,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { Link, router, usePage } from '@inertiajs/vue3'
 import PublicLayout from '@/Layouts/PublicLayout.vue'
 import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue'
+import GuideReactions from '@/Components/Guide/GuideReactions.vue'
 import { usePreferencesStore } from '@/Stores/preferences'
 import axios from 'axios'
 
@@ -163,6 +182,8 @@ const props = defineProps({
     content: Object,
     rtfmMessage: String,
     relatedGuides: Array,
+    reactions: Object,
+    userReactions: Array,
 })
 
 const breadcrumbs = computed(() => [

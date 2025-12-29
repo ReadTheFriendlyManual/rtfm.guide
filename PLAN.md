@@ -357,21 +357,21 @@ resolved_by_user_id, resolved_at, created_at
 - [x] Copy-to-clipboard for code snippets
 - [x] Share and bookmark UI buttons
 
-### 🚧 Phase 3: User Features (IN PROGRESS) - **PRIORITY NEXT SESSION**
+### 🚧 Phase 3: User Features (IN PROGRESS)
 - [x] Saved guides (bookmarking functionality)
 - [x] Saved guides page with pagination
 - [x] User dashboard with stats and quick actions
-- [ ] **Guide submission form** ⬅️ START HERE
-- [ ] **My Guides page** (view/edit created guides)
-- [ ] **Guide editing interface**
-- [ ] Draft system
+- [x] **Guide submission form**
+- [x] **My Guides page** (view/edit created guides)
+- [x] **Guide editing interface**
+- [x] Draft system
 - [ ] User profiles (public view)
 - [ ] Comments system
 - [ ] Reactions system
 - [ ] Notifications (comment replies)
 
 ### Phase 4: Content Creation & Moderation
-- [ ] Markdown editor with live preview
+- [x] Markdown editor with live preview
 - [ ] Admin review queue for submitted guides
 - [ ] Edit suggestions from community
 - [ ] Contributor attribution

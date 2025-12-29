@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ReactionType;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Guide;
+use App\Models\Reaction;
 use App\Models\RtfmMessage;
 use App\Services\MarkdownRenderer;
 use Illuminate\Http\Request;
@@ -74,7 +77,7 @@ class GuideController extends Controller
 
     public function show(string $slug, MarkdownRenderer $markdown)
     {
-        $guide = Guide::with(['user', 'category', 'comments.user'])
+        $guide = Guide::with(['user', 'category'])
             ->where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();
@@ -152,6 +155,41 @@ class GuideController extends Controller
             ],
         ];
 
+        // Get reaction counts
+        $reactionCounts = Reaction::where('guide_id', $guide->id)
+            ->selectRaw('type, count(*) as count')
+            ->groupBy('type')
+            ->pluck('count', 'type')
+            ->toArray();
+
+        // Ensure all reaction types are present
+        foreach (ReactionType::cases() as $type) {
+            if (! isset($reactionCounts[$type->value])) {
+                $reactionCounts[$type->value] = 0;
+            }
+        }
+
+        // Get user's reactions
+        $userReactions = [];
+        if (auth()->check()) {
+            $userReactions = Reaction::where([
+                'guide_id' => $guide->id,
+                'user_id' => auth()->id(),
+            ])
+                ->pluck('type')
+                ->map(fn ($type) => $type->value)
+                ->toArray();
+        }
+
+        // Get top-level comments (parent comments only) with replies
+        $comments = Comment::where('guide_id', $guide->id)
+            ->whereNull('parent_id')
+            ->with(['user', 'replies.user'])
+            ->latest()
+            ->get()
+            ->map(fn ($comment) => $this->formatComment($comment))
+            ->toArray();
+
         return Inertia::render('Guides/Show', [
             'guide' => [
                 'id' => $guide->id,
@@ -169,6 +207,28 @@ class GuideController extends Controller
             'content' => $content,
             'rtfmMessage' => $rtfmMessage?->message ?? "You should've RTFM... but we did it for you.",
             'relatedGuides' => $relatedGuides,
+            'reactions' => $reactionCounts,
+            'userReactions' => $userReactions,
+            'comments' => $comments,
         ]);
+    }
+
+    private function formatComment(Comment $comment): array
+    {
+        return [
+            'id' => $comment->id,
+            'guide_id' => $comment->guide_id,
+            'parent_id' => $comment->parent_id,
+            'content' => $comment->content,
+            'user' => [
+                'id' => $comment->user->id,
+                'name' => $comment->user->name,
+            ],
+            'created_at' => $comment->created_at->diffForHumans(),
+            'updated_at' => $comment->updated_at->diffForHumans(),
+            'can_edit' => auth()->check() && auth()->id() === $comment->user_id,
+            'can_delete' => auth()->check() && auth()->id() === $comment->user_id,
+            'replies' => $comment->replies->map(fn ($reply) => $this->formatComment($reply))->toArray(),
+        ];
     }
 }
