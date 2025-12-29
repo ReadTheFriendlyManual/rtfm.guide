@@ -13,6 +13,9 @@
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <!-- Breadcrumbs -->
+            <Breadcrumbs :items="breadcrumbs" />
+
             <div class="flex flex-col lg:flex-row gap-8">
                 <!-- Filters Sidebar -->
                 <aside class="lg:w-64 shrink-0">
@@ -209,6 +212,7 @@ import { ref, computed } from 'vue'
 import { Link, router } from '@inertiajs/vue3'
 import { usePreferencesStore } from '@/Stores/preferences'
 import PublicLayout from '@/Layouts/PublicLayout.vue'
+import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue'
 
 const preferencesStore = usePreferencesStore()
 
@@ -216,6 +220,23 @@ const props = defineProps({
     guides: Object,
     categories: Array,
     filters: Object,
+})
+
+const breadcrumbs = computed(() => {
+    const items = [
+        { label: 'Home', href: '/' },
+        { label: 'Guides' }
+    ]
+
+    if (props.filters.category) {
+        const category = props.categories.find(c => c.slug === props.filters.category)
+        if (category) {
+            items[items.length - 1].href = '/guides'
+            items.push({ label: category.name })
+        }
+    }
+
+    return items
 })
 
 const localFilters = ref({

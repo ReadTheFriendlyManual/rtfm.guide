@@ -19,38 +19,69 @@
 
         <!-- Guide Content -->
         <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <!-- Breadcrumbs -->
+            <Breadcrumbs :items="breadcrumbs" />
+
             <!-- Meta Header -->
             <header class="mb-12">
-                <div class="flex flex-wrap items-center gap-3 mb-6">
-                    <Link
-                        :href="`/guides?category=${guide.category.slug}`"
-                        class="text-xs font-semibold px-3 py-1.5 rounded-lg
-                               bg-wine-100 dark:bg-wine-900/30 text-wine-700 dark:text-wine-400
-                               hover:bg-wine-200 dark:hover:bg-wine-900/50 transition-colors"
-                    >
-                        {{ guide.category.name }}
-                    </Link>
-                    <span :class="[
-                        'text-xs font-semibold px-3 py-1.5 rounded-lg capitalize',
-                        guide.difficulty === 'beginner' ? 'bg-sage-100 dark:bg-sage-900/30 text-sage-700 dark:text-sage-400' :
-                        guide.difficulty === 'intermediate' ? 'bg-gold-100 dark:bg-gold-900/30 text-gold-700 dark:text-gold-400' :
-                        'bg-wine-100 dark:bg-wine-900/30 text-wine-700 dark:text-wine-400'
-                    ]">
-                        {{ guide.difficulty }}
-                    </span>
-                    <span class="text-xs text-pearl-500 flex items-center gap-1.5">
-                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        {{ guide.estimated_minutes }} min read
-                    </span>
-                    <span class="text-xs text-pearl-500 flex items-center gap-1.5">
-                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                        {{ guide.view_count }} views
-                    </span>
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <Link
+                            :href="`/guides?category=${guide.category.slug}`"
+                            class="text-xs font-semibold px-3 py-1.5 rounded-lg
+                                   bg-wine-100 dark:bg-wine-900/30 text-wine-700 dark:text-wine-400
+                                   hover:bg-wine-200 dark:hover:bg-wine-900/50 transition-colors"
+                        >
+                            {{ guide.category.name }}
+                        </Link>
+                        <span :class="[
+                            'text-xs font-semibold px-3 py-1.5 rounded-lg capitalize',
+                            guide.difficulty === 'beginner' ? 'bg-sage-100 dark:bg-sage-900/30 text-sage-700 dark:text-sage-400' :
+                            guide.difficulty === 'intermediate' ? 'bg-gold-100 dark:bg-gold-900/30 text-gold-700 dark:text-gold-400' :
+                            'bg-wine-100 dark:bg-wine-900/30 text-wine-700 dark:text-wine-400'
+                        ]">
+                            {{ guide.difficulty }}
+                        </span>
+                        <span class="text-xs text-pearl-500 flex items-center gap-1.5">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {{ guide.estimated_minutes }} min read
+                        </span>
+                        <span class="text-xs text-pearl-500 flex items-center gap-1.5">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            {{ guide.view_count }} views
+                        </span>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex items-center gap-2">
+                        <button
+                            @click="shareGuide"
+                            class="p-2.5 rounded-xl border-2 border-pearl-300 dark:border-pearl-600
+                                   text-pearl-600 dark:text-pearl-400 hover:border-wine-500 hover:text-wine-600
+                                   dark:hover:text-wine-400 transition-all"
+                            title="Share guide"
+                        >
+                            <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                            </svg>
+                        </button>
+                        <button
+                            @click="toggleBookmark"
+                            class="p-2.5 rounded-xl border-2 border-pearl-300 dark:border-pearl-600
+                                   text-pearl-600 dark:text-pearl-400 hover:border-wine-500 hover:text-wine-600
+                                   dark:hover:text-wine-400 transition-all"
+                            :title="isBookmarked ? 'Remove bookmark' : 'Bookmark guide'"
+                        >
+                            <svg class="size-5" :fill="isBookmarked ? 'currentColor' : 'none'" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <h1 class="font-display text-5xl sm:text-6xl font-bold text-pearl-900 dark:text-white leading-tight mb-8">
@@ -58,7 +89,7 @@
                 </h1>
 
                 <!-- TL;DR -->
-                <div class="bg-gold-50 dark:bg-gold-900/10 border-l-4 border-gold-500 p-6 rounded-r-2xl">
+                <div class="bg-gold-50 dark:bg-gold-900/10 border-l-4 border-gold-500 p-6 rounded-r-2xl shadow-sm">
                     <p class="font-bold text-gold-900 dark:text-gold-400 text-sm uppercase tracking-wide mb-2">TL;DR</p>
                     <p class="text-lg text-pearl-800 dark:text-pearl-200 leading-relaxed">{{ activeTldr }}</p>
                 </div>
@@ -119,6 +150,7 @@
 import { computed, onMounted, watch } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import PublicLayout from '@/Layouts/PublicLayout.vue'
+import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue'
 import { usePreferencesStore } from '@/Stores/preferences'
 
 const props = defineProps({
@@ -128,11 +160,53 @@ const props = defineProps({
     relatedGuides: Array,
 })
 
+const breadcrumbs = computed(() => [
+    { label: 'Home', href: '/' },
+    { label: 'Guides', href: '/guides' },
+    { label: props.guide.category.name, href: `/guides?category=${props.guide.category.slug}` },
+    { label: props.guide.title }
+])
+
 // Use the global preferences store
 const preferencesStore = usePreferencesStore()
 
 // Note: The preferences store handles initialization from localStorage for guests
 // and from backend for authenticated users. No need to override here.
+
+const isBookmarked = computed(() => false) // TODO: Implement bookmark functionality
+
+const shareGuide = async () => {
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: props.guide.title,
+                text: props.guide.tldr,
+                url: window.location.href
+            })
+        } catch (err) {
+            if (err.name !== 'AbortError') {
+                copyToClipboard()
+            }
+        }
+    } else {
+        copyToClipboard()
+    }
+}
+
+const copyToClipboard = async () => {
+    try {
+        await navigator.clipboard.writeText(window.location.href)
+        // TODO: Show toast notification
+        console.log('Link copied to clipboard!')
+    } catch (err) {
+        console.error('Failed to copy:', err)
+    }
+}
+
+const toggleBookmark = () => {
+    // TODO: Implement bookmark functionality
+    console.log('Bookmark toggled')
+}
 
 const activeTldr = computed(() => {
     return props.content[preferencesStore.mode]?.tldr || ''
