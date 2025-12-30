@@ -1,9 +1,12 @@
 <template>
-    <div class="py-24 bg-white dark:bg-pearl-950 relative overflow-hidden">
+    <div class="pt-16 pb-24 bg-white dark:bg-pearl-950 relative overflow-hidden -mt-16">
+        <!-- Top gradient to blend with hero -->
+        <div class="absolute top-0 left-0 right-0 h-24 bg-linear-to-b from-pearl-50 dark:from-pearl-950 to-transparent pointer-events-none"></div>
+
         <!-- Subtle background pattern -->
         <div class="absolute inset-0 pattern-grid text-pearl-200/20 dark:text-pearl-800/20"></div>
 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
             <div class="text-center mb-16 animate-fade-in-up">
                 <h2 class="font-display text-4xl/tight sm:text-5xl/tight font-bold text-pearl-900 dark:text-pearl-50 mb-4">
                     Why Waste Time Reading?

@@ -27,8 +27,12 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 ## Foundational Context
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
 
+<<<<<<< Updated upstream
 - php - 8.4.15
 - inertiajs/inertia-laravel (INERTIA) - v2
+=======
+- php - 8.4.16
+>>>>>>> Stashed changes
 - laravel/fortify (FORTIFY) - v1
 - laravel/framework (LARAVEL) - v12
 - laravel/nightwatch (NIGHTWATCH) - v1
@@ -37,6 +41,11 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - laravel/sanctum (SANCTUM) - v4
 - laravel/scout (SCOUT) - v10
 - laravel/socialite (SOCIALITE) - v5
+<<<<<<< Updated upstream
+=======
+- livewire/flux (FLUXUI_FREE) - v2
+- livewire/livewire (LIVEWIRE) - v3
+>>>>>>> Stashed changes
 - laravel/mcp (MCP) - v0
 - laravel/pint (PINT) - v1
 - laravel/sail (SAIL) - v1
@@ -135,14 +144,6 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 ## Enums
 - Typically, keys in an Enum should be TitleCase. For example: `FavoritePerson`, `BestLake`, `Monthly`.
-
-
-=== herd rules ===
-
-## Laravel Herd
-
-- The application is served by Laravel Herd and will be available at: https?://[kebab-case-project-dir].test. Use the `get-absolute-url` tool to generate URLs for the user to ensure valid URLs.
-- You must not run any commands to make the site available via HTTP(s). It is _always_ available through Laravel Herd.
 
 
 === tests rules ===
@@ -262,6 +263,17 @@ Route::get('/users', function () {
 
 
 === pennant/core rules ===
+<<<<<<< Updated upstream
+=======
+
+## Laravel Pennant
+
+- This application uses Laravel Pennant for feature flag management, providing a flexible system for controlling feature availability across different organizations and user types.
+- Use the `search-docs` tool if available, in combination with existing codebase conventions, to assist the user effectively with feature flags.
+
+
+=== fluxui-free/core rules ===
+>>>>>>> Stashed changes
 
 ## Laravel Pennant
 

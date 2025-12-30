@@ -1,19 +1,19 @@
 {
     "mcpServers": {
         "laravel-boost": {
-            "command": "/Users/pete/Library/Application Support/Herd/bin/php84",
+            "command": "/Users/ryan/Library/Application Support/Herd/bin/php84",
             "args": [
-                "/Users/pete/Code/rtfm/artisan",
+                "/Users/ryan/code/rtfm.guide/artisan",
                 "boost:mcp"
             ]
         },
         "herd": {
-            "command": "/Users/pete/Library/Application Support/Herd/bin/php84",
+            "command": "/Users/ryan/Library/Application Support/Herd/bin/php84",
             "args": [
                 "/Applications/Herd.app/Contents/Resources/herd-mcp.phar"
             ],
             "env": {
-                "SITE_PATH": "/Users/pete/Code/rtfm"
+                "SITE_PATH": "/Users/ryan/code/rtfm.guide"
             }
         }
     }
