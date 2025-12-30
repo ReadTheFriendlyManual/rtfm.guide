@@ -14,10 +14,10 @@
         </div>
 
         <!-- Terminal Content -->
-        <div class="bg-pearl-100 dark:bg-pearl-700/50 rounded-lg p-3 text-xs font-mono text-pearl-600 dark:text-pearl-400 text-left">
+        <div class="bg-pearl-100 dark:bg-pearl-700/50 rounded-lg p-3 text-xs font-mono text-pearl-600 dark:text-pearl-400 text-left whitespace-nowrap">
             <div class="mb-1">
                 <span class="text-pearl-500 dark:text-pearl-400">$</span>
-                <span class="ml-1">npm install rtfm-guide</span>
+                <span class="ml-1">composer global require rtfm-guide</span>
             </div>
             <div class="text-pearl-500 dark:text-pearl-500">&gt; Adding knowledge...</div>
             <div class="text-pearl-500 dark:text-pearl-500">&gt; Done!</div>

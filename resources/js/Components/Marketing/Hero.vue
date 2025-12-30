@@ -40,10 +40,10 @@
                     <!-- Hero Illustration Section - inline layout -->
                     <div class="relative w-full max-w-5xl mx-auto animate-fade-in-up" style="animation-delay: 0.7s;">
                         <!-- Three column layout - items aligned to bottom -->
-                        <div class="relative z-10 grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 lg:gap-6 items-end px-4">
+                        <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 items-end px-4">
                             <!-- Left Card -->
-                            <div class="hidden md:flex justify-end">
-                                <div class="w-full max-w-xs">
+                            <div class="hidden md:flex justify-center">
+                                <div class="w-full max-w-sm">
                                     <HeroFloatingCard :show-footer="true">
                                         <div class="space-y-2">
                                             <div class="h-2 w-full bg-pearl-200 dark:bg-pearl-700 rounded"></div>
@@ -71,8 +71,8 @@
                             </div>
 
                             <!-- Right Card - Terminal -->
-                            <div class="hidden md:flex justify-start">
-                                <div class="w-full max-w-xs">
+                            <div class="hidden md:flex justify-center">
+                                <div class="w-full max-w-sm">
                                     <HeroCodeCard />
                                 </div>
                             </div>
