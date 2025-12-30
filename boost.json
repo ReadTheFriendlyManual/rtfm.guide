@@ -10,11 +10,7 @@
     ],
     "editors": [
         "claude_code",
-<<<<<<< Updated upstream
         "codex",
-=======
-        "cursor",
->>>>>>> Stashed changes
         "gemini",
         "opencode",
         "phpstorm"
