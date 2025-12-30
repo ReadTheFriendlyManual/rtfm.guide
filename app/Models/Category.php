@@ -30,8 +30,13 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    // public function guides(): HasMany
-    // {
-    //     return $this->hasMany(Guide::class);
-    // }
+    public function guides(): HasMany
+    {
+        return $this->hasMany(Guide::class);
+    }
+
+    public function guideTemplates(): HasMany
+    {
+        return $this->hasMany(GuideTemplate::class);
+    }
 }

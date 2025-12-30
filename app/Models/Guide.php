@@ -55,9 +55,19 @@ class Guide extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function team(): BelongsTo
+    {
+        return $this->belongsTo(Team::class);
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(GuideTemplate::class);
     }
 
     public function comments(): HasMany
@@ -94,6 +104,6 @@ class Guide extends Model
 
     public function shouldBeSearchable(): bool
     {
-        return $this->status === 'published' && $this->visibility === 'public';
+        return $this->status === GuideStatus::Published && $this->visibility === GuideVisibility::Public;
     }
 }

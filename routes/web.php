@@ -25,38 +25,8 @@ Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'inde
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-// Public API Routes
-Route::get('/api/search/quick', [App\Http\Controllers\Api\SearchController::class, 'quick'])->name('api.search.quick');
-
 Route::middleware(['auth'])->group(function () {
-    // API Routes for preferences
-    Route::post('/api/preferences/mode', [App\Http\Controllers\Api\PreferencesController::class, 'updateMode'])->name('api.preferences.mode');
-    Route::post('/api/preferences/theme', [App\Http\Controllers\Api\PreferencesController::class, 'updateTheme'])->name('api.preferences.theme');
-
-    // API Routes for saved guides
-    Route::post('/api/guides/{guide}/save', [App\Http\Controllers\Api\SavedGuideController::class, 'store'])->name('api.guides.save');
-    Route::delete('/api/guides/{guide}/save', [App\Http\Controllers\Api\SavedGuideController::class, 'destroy'])->name('api.guides.unsave');
-
-    // API Routes for reactions
-    Route::post('/api/guides/{guide}/reactions', [App\Http\Controllers\Api\ReactionController::class, 'store'])->name('api.guides.reactions.store');
-    Route::delete('/api/guides/{guide}/reactions', [App\Http\Controllers\Api\ReactionController::class, 'destroy'])->name('api.guides.reactions.destroy');
-
-    // API Routes for comments
-    Route::post('/api/guides/{guide}/comments', [App\Http\Controllers\Api\CommentController::class, 'store'])->name('api.guides.comments.store');
-    Route::put('/api/comments/{comment}', [App\Http\Controllers\Api\CommentController::class, 'update'])->name('api.comments.update');
-    Route::delete('/api/comments/{comment}', [App\Http\Controllers\Api\CommentController::class, 'destroy'])->name('api.comments.destroy');
-
-    // API Routes for content flags
-    Route::post('/api/comments/{comment}/flag', [App\Http\Controllers\Api\ContentFlagController::class, 'flagComment'])->name('api.comments.flag');
-    Route::delete('/api/comments/{comment}/flag', [App\Http\Controllers\Api\ContentFlagController::class, 'unflagComment'])->name('api.comments.unflag');
-
-    // API Routes for notifications
-    Route::get('/api/notifications', [App\Http\Controllers\Api\NotificationController::class, 'index'])->name('api.notifications.index');
-    Route::get('/api/notifications/unread-count', [App\Http\Controllers\Api\NotificationController::class, 'unreadCount'])->name('api.notifications.unread-count');
-    Route::post('/api/notifications/{id}/read', [App\Http\Controllers\Api\NotificationController::class, 'markAsRead'])->name('api.notifications.read');
-    Route::post('/api/notifications/read-all', [App\Http\Controllers\Api\NotificationController::class, 'markAllAsRead'])->name('api.notifications.read-all');
-    Route::delete('/api/notifications/{id}', [App\Http\Controllers\Api\NotificationController::class, 'destroy'])->name('api.notifications.destroy');
-
+    // Settings routes (basic access, no verification required)
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', function () {
@@ -83,16 +53,18 @@ Route::middleware(['auth'])->group(function () {
             ),
         )
         ->name('two-factor.show');
+});
 
+// Routes that require email verification
+Route::middleware(['auth', 'verified'])->group(function () {
+    // User profile and guides
     Route::get('/profile/{user}', [App\Http\Controllers\UserProfileController::class, 'show'])->name('users.show');
-
     Route::get('/my-guides', [App\Http\Controllers\GuideManagementController::class, 'index'])->name('guides.my');
-
     Route::get('/saved-guides', [App\Http\Controllers\SavedGuidePageController::class, 'index'])->name('guides.saved');
 
+    // Guide management (create and edit)
     Route::get('/guides/create', [App\Http\Controllers\GuideManagementController::class, 'create'])->name('guides.create');
     Route::post('/guides', [App\Http\Controllers\GuideManagementController::class, 'store'])->name('guides.store');
-
     Route::get('/guides/{guide}/edit', [App\Http\Controllers\GuideManagementController::class, 'edit'])->name('guides.edit');
     Route::put('/guides/{guide}', [App\Http\Controllers\GuideManagementController::class, 'update'])->name('guides.update');
 });

@@ -194,7 +194,7 @@ const fetchSearchResults = async () => {
     isSearching.value = true
 
     try {
-        const response = await axios.get('/api/search/quick', {
+        const response = await axios.get('/api/v1/search/quick', {
             params: {
                 q: searchQuery.value
             }

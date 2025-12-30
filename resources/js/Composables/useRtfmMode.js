@@ -17,7 +17,7 @@ export function useRtfmMode() {
 
         // Sync to backend for authenticated users
         if (window.rtfm?.user?.id) {
-            router.post('/api/preferences/mode',
+            router.post('/api/v1/preferences/mode',
                 { mode: newMode },
                 { preserveState: true, preserveScroll: true }
             )

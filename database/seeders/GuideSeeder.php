@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\Guide;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class GuideSeeder extends Seeder
 {
@@ -20,7 +19,7 @@ class GuideSeeder extends Seeder
             ['email' => 'demo@rtfm.guide'],
             [
                 'name' => 'RTFM Guides Admin',
-                'password' => bcrypt(Str::random(32)),
+                'password' => bcrypt('password'),
                 'github_username' => 'rtfm-demo',
                 'trust_level' => 'trusted',
                 'reputation_points' => 100,

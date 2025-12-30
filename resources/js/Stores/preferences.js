@@ -21,7 +21,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
 
         // Sync to backend if authenticated
         if (isAuthenticated()) {
-            axios.post('/api/preferences/theme', { theme: newTheme })
+            axios.post('/api/v1/preferences/theme', { theme: newTheme })
                 .catch(error => {
                     console.error('Failed to sync theme preference:', error)
                 })
@@ -37,7 +37,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
 
         // Sync to backend if authenticated
         if (isAuthenticated()) {
-            axios.post('/api/preferences/mode', { mode: newMode })
+            axios.post('/api/v1/preferences/mode', { mode: newMode })
                 .catch(error => {
                     console.error('Failed to sync mode preference:', error)
                 })
