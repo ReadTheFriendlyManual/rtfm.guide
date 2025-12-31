@@ -105,7 +105,7 @@ const subtitle = computed(() => {
 
 const speechBubbleText = computed(() => {
     return preferencesStore.mode === 'nsfw'
-        ? 'Read the fucking docs'
-        : 'Read the !@#$%^&* docs'
+        ? 'Read the fucking manual'
+        : 'Read the !@#$%^&* manual'
 })
 </script>
