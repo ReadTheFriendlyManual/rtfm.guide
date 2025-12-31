@@ -118,10 +118,10 @@
                 </div>
 
                 <!-- Right side controls -->
-                <div class="flex items-center gap-4 shrink-0">
+                <div class="flex items-center gap-1.5 sm:gap-4 shrink-0">
                     <!-- NSFW/SFW Toggle -->
-                    <div class="flex items-center gap-2 text-xs/relaxed font-medium" data-toggle-mode>
-                        <span class="text-pearl-500 dark:text-pearl-400">SFW</span>
+                    <div class="flex items-center gap-1 sm:gap-2 text-[10px] sm:text-xs font-medium pr-1.5 sm:pr-0" data-toggle-mode>
+                        <span class="hidden sm:inline text-pearl-500 dark:text-pearl-400">SFW</span>
                         <Toggle v-model="isNsfw" label="Toggle NSFW mode" />
                         <span class="text-wine-600 dark:text-wine-400">NSFW</span>
                     </div>
@@ -129,13 +129,13 @@
                     <!-- Theme Toggle -->
                     <button
                         @click="toggleTheme"
-                        class="p-2 rounded-xl hover:bg-pearl-100 dark:hover:bg-pearl-800 text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-all duration-200"
+                        class="p-1 sm:p-2 rounded-xl hover:bg-pearl-100 dark:hover:bg-pearl-800 text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-all duration-200"
                         :aria-label="`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`"
                     >
-                        <svg v-if="theme === 'dark'" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg v-if="theme === 'dark'" class="size-4 sm:size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
-                        <svg v-else class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg v-else class="size-4 sm:size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                         </svg>
                     </button>
@@ -145,7 +145,7 @@
                         :href="isAuthenticated ? '/dashboard' : '/login'"
                         variant="primary"
                         size="sm"
-                        class="bg-linear-to-r from-wine-600 to-wine-700 hover:from-wine-500 hover:to-wine-600 text-white font-semibold shadow-lg shadow-wine-600/20"
+                        class="bg-linear-to-r from-wine-600 to-wine-700 hover:from-wine-500 hover:to-wine-600 text-white font-semibold shadow-lg shadow-wine-600/20 text-xs px-3 py-1.5 sm:px-4 sm:py-2"
                     >
                         {{ isAuthenticated ? 'Dashboard' : 'Sign In' }}
                     </Button>
