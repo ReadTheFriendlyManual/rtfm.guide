@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Guide;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class EnhancedGuideSeeder extends Seeder
 {
@@ -15,7 +16,7 @@ class EnhancedGuideSeeder extends Seeder
             ['email' => 'demo@rtfm.guide'],
             [
                 'name' => 'RTFM Demo User',
-                'password' => bcrypt('password'),
+                'password' => Hash::make('password'),
                 'github_username' => 'rtfm-demo',
                 'trust_level' => 'trusted',
                 'reputation_points' => 100,
