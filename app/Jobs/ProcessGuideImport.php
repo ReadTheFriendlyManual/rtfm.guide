@@ -68,7 +68,7 @@ class ProcessGuideImport implements ShouldQueue
                     $category = Category::firstOrCreate(
                         ['slug' => $guideData['category']],
                         [
-                            'name' => ucfirst($guideData['category']),
+                            'name' => ucwords($guideData['category']),
                             'description' => "Guides related to {$guideData['category']}",
                         ]
                     );
@@ -85,7 +85,7 @@ class ProcessGuideImport implements ShouldQueue
                         'category_id' => $category->id,
                         'difficulty' => GuideDifficulty::from($guideData['difficulty']),
                         'estimated_minutes' => $guideData['estimated_minutes'] ?? null,
-                        'status' => GuideStatus::Pending,
+                        'status' => GuideStatus::Published,
                         'visibility' => 'public',
                     ]);
 
