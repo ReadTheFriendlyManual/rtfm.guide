@@ -1,0 +1,44 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('guide_revisions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('guide_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->text('tldr');
+            $table->text('tldr_nsfw')->nullable();
+            $table->longText('content');
+            $table->longText('content_nsfw')->nullable();
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->enum('difficulty', ['beginner', 'intermediate', 'advanced']);
+            $table->integer('estimated_minutes')->nullable();
+            $table->json('os_tags')->nullable();
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->timestamp('approved_at')->nullable();
+            $table->text('rejection_reason')->nullable();
+            $table->timestamps();
+
+            $table->index(['guide_id', 'status']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('guide_revisions');
+    }
+};

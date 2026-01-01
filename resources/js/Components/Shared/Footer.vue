@@ -16,9 +16,9 @@
                 <div>
                     <h4 class="font-display font-semibold text-pearl-900 dark:text-pearl-50 mb-3">Resources</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Guides</a></li>
-                        <li><a href="#" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Categories</a></li>
-                        <li><a href="#" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Search</a></li>
+                        <li><Link href="/guides" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Guides</Link></li>
+                        <li><Link href="/categories" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Categories</Link></li>
+                        <li><Link href="/search" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Search</Link></li>
                     </ul>
                 </div>
 
@@ -26,8 +26,8 @@
                 <div>
                     <h4 class="font-display font-semibold text-pearl-900 dark:text-pearl-50 mb-3">Legal</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Privacy</a></li>
-                        <li><a href="#" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Terms</a></li>
+                        <li><a href="https://docs.rtfm.guide/legal/privacy" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Privacy</a></li>
+                        <li><a href="https://docs.rtfm.guide/legal/terms" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Terms</a></li>
                     </ul>
                 </div>
             </div>
@@ -41,6 +41,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import { Link } from '@inertiajs/vue3'
 import { usePreferencesStore } from '@/Stores/preferences'
 
 const preferencesStore = usePreferencesStore()

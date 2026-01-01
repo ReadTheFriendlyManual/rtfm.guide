@@ -113,6 +113,8 @@ class GuideManagementController extends Controller
             'Docker',
         ];
 
+        $pendingRevision = $guide->pendingRevision();
+
         return Inertia::render('Guides/Edit', [
             'guide' => [
                 'id' => $guide->id,
@@ -126,7 +128,23 @@ class GuideManagementController extends Controller
                 'os_tags' => $guide->os_tags ?? [],
                 'status' => $guide->status->value,
                 'visibility' => $guide->visibility->value,
+                'has_pending_revision' => $guide->hasPendingRevision(),
             ],
+            'pendingRevision' => $pendingRevision ? [
+                'id' => $pendingRevision->id,
+                'title' => $pendingRevision->title,
+                'tldr' => $pendingRevision->tldr,
+                'content' => $pendingRevision->content,
+                'category_id' => $pendingRevision->category_id,
+                'difficulty' => $pendingRevision->difficulty->value,
+                'estimated_minutes' => $pendingRevision->estimated_minutes,
+                'os_tags' => $pendingRevision->os_tags ?? [],
+                'user' => [
+                    'name' => $pendingRevision->user->name,
+                ],
+                'created_at' => $pendingRevision->created_at->diffForHumans(),
+            ] : null,
+            'isTrustedEditor' => Auth::user()->trusted_editor,
             'categories' => $categories,
             'difficulties' => $difficulties,
             'osTags' => $osTags,
@@ -135,27 +153,49 @@ class GuideManagementController extends Controller
 
     public function update(UpdateGuideRequest $request, Guide $guide)
     {
-        $wasPublished = $guide->status === GuideStatus::Published;
+        $user = Auth::user();
 
-        $guide->update([
+        // Trusted editors can update directly
+        if ($user->trusted_editor) {
+            $wasPublished = $guide->status === GuideStatus::Published;
+
+            $guide->update([
+                'title' => $request->title,
+                'slug' => $request->slug,
+                'tldr' => $request->tldr,
+                'content' => $request->content,
+                'category_id' => $request->category_id,
+                'difficulty' => $request->difficulty,
+                'estimated_minutes' => $request->estimated_minutes,
+                'os_tags' => $request->os_tags ?? [],
+                'status' => $request->status ?? $guide->status,
+                'visibility' => $request->visibility ?? $guide->visibility,
+            ]);
+
+            if (! $wasPublished && $guide->status === GuideStatus::Published) {
+                $guide->published_at = now();
+                $guide->save();
+            }
+
+            return back()->with('success', 'Guide updated successfully!');
+        }
+
+        // Non-trusted editors create a pending revision
+        $guide->revisions()->create([
+            'user_id' => $user->id,
             'title' => $request->title,
-            'slug' => $request->slug,
             'tldr' => $request->tldr,
+            'tldr_nsfw' => $request->tldr_nsfw,
             'content' => $request->content,
+            'content_nsfw' => $request->content_nsfw,
             'category_id' => $request->category_id,
             'difficulty' => $request->difficulty,
             'estimated_minutes' => $request->estimated_minutes,
             'os_tags' => $request->os_tags ?? [],
-            'status' => $request->status ?? $guide->status,
-            'visibility' => $request->visibility ?? $guide->visibility,
+            'status' => 'pending',
         ]);
 
-        if (! $wasPublished && $guide->status === GuideStatus::Published) {
-            $guide->published_at = now();
-            $guide->save();
-        }
-
-        return back()->with('success', 'Guide updated successfully!');
+        return back()->with('success', 'Your edits have been submitted for review!');
     }
 
     public function index()

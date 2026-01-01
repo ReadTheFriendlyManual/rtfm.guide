@@ -17,6 +17,22 @@
             </div>
         </div>
 
+        <!-- Pending Revision Notice -->
+        <div v-if="guide.has_pending_revision" class="bg-gold-50 dark:bg-gold-900/20 border-b-2 border-gold-200 dark:border-gold-800">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div class="flex items-start gap-3">
+                    <svg class="size-5 text-gold-600 dark:text-gold-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div class="flex-1">
+                        <p class="text-sm/relaxed text-gold-800 dark:text-gold-200 font-medium">
+                            This guide has pending edits awaiting moderation approval.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Guide Content -->
         <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <!-- Breadcrumbs -->

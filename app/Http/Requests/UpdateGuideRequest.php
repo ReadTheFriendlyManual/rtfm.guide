@@ -13,7 +13,8 @@ class UpdateGuideRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() !== null && $this->user()->id === $this->route('guide')->user_id;
+        // Allow all authenticated users to submit edits (will go through moderation unless trusted)
+        return $this->user() !== null;
     }
 
     protected function prepareForValidation(): void
@@ -33,7 +34,9 @@ class UpdateGuideRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('guides', 'slug')->ignore($guideId)],
             'tldr' => ['required', 'string', 'max:1000'],
+            'tldr_nsfw' => ['nullable', 'string', 'max:1000'],
             'content' => ['required', 'string'],
+            'content_nsfw' => ['nullable', 'string'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
             'difficulty' => ['required', Rule::enum(GuideDifficulty::class)],
             'estimated_minutes' => ['nullable', 'integer', 'min:1', 'max:999'],
