@@ -56,6 +56,7 @@ it('allows login when login is enabled', function () {
 
     $user = User::factory()->create([
         'password' => 'password123',
+        'two_factor_secret' => null,
     ]);
 
     $response = post('/login', [
@@ -99,6 +100,10 @@ it('shows login disabled message in login view', function () {
 
 it('uses default message when custom message is null', function () {
     Setting::set('registration_enabled', false);
+
+    // Delete the message to test the fallback
+    Setting::query()->where('key', 'registration_disabled_message')->delete();
+    Setting::clearCache();
 
     $response = get('/register');
 
