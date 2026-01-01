@@ -26,8 +26,8 @@
                 <div>
                     <h4 class="font-display font-semibold text-pearl-900 dark:text-pearl-50 mb-3">Legal</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Privacy</a></li>
-                        <li><a href="#" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Terms</a></li>
+                        <li><a href="https://docs.rtfm.guide/legal/privacy" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Privacy</a></li>
+                        <li><a href="https://docs.rtfm.guide/legal/terms" class="text-pearl-600 dark:text-pearl-400 hover:text-wine-600 dark:hover:text-wine-400 transition-colors font-medium">Terms</a></li>
                     </ul>
                 </div>
             </div>
