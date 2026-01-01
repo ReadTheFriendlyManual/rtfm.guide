@@ -13,6 +13,12 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @inertiaHead
+
+    @production
+    <!-- Fathom - beautiful, simple website analytics -->
+    <script src="https://cdn.usefathom.com/script.js" data-spa="auto" data-site="CHRSVKMZ" defer></script>
+    <!-- / Fathom -->
+    @endproduction
 </head>
 <body class="font-sans antialiased">
     @inertia

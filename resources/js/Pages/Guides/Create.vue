@@ -26,6 +26,7 @@
                         <Form
                             :action="route('guides.store')"
                             method="post"
+                            @success="handleSuccess"
                             #default="{ errors, processing }"
                         >
                             <!-- Title -->
@@ -327,6 +328,9 @@ import { ref, computed } from 'vue'
 import { Form, Link } from '@inertiajs/vue3'
 import { marked } from 'marked'
 import PublicLayout from '@/Layouts/PublicLayout.vue'
+import { useFathom } from '@/Composables/useFathom'
+
+const { trackEvent } = useFathom()
 
 const props = defineProps({
     categories: Array,
@@ -370,5 +374,16 @@ function route(name, params) {
         return '/guides'
     }
     return '/'
+}
+
+function handleSuccess(page) {
+    // Track guide creation based on status
+    const status = page.props?.flash?.guide_status || 'draft'
+
+    if (status === 'draft') {
+        trackEvent('guide_saved_draft')
+    } else if (status === 'pending') {
+        trackEvent('guide_submitted_review')
+    }
 }
 </script>

@@ -85,7 +85,7 @@ class ProcessGuideImport implements ShouldQueue
                         'category_id' => $category->id,
                         'difficulty' => GuideDifficulty::from($guideData['difficulty']),
                         'estimated_minutes' => $guideData['estimated_minutes'] ?? null,
-                        'status' => GuideStatus::Published,
+                        'status' => GuideStatus::Pending,
                         'visibility' => 'public',
                     ]);
 

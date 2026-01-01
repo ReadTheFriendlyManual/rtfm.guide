@@ -55,6 +55,9 @@
 import { ref, computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import axios from 'axios'
+import { useFathom } from '@/Composables/useFathom'
+
+const { trackEvent } = useFathom()
 
 const props = defineProps({
     guideId: {
@@ -102,8 +105,12 @@ const submitComment = async () => {
         content.value = ''
         emit('submitted')
 
+        // Track comment submission
         if (props.replyTo) {
+            trackEvent('comment_reply')
             emit('cancel-reply')
+        } else {
+            trackEvent('comment_posted')
         }
     } catch (error) {
         console.error('Failed to post comment:', error)

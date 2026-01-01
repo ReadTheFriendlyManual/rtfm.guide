@@ -277,6 +277,9 @@ import { ref, computed } from 'vue'
 import { Link, router } from '@inertiajs/vue3'
 import PublicLayout from '@/Layouts/PublicLayout.vue'
 import { debounce } from 'lodash'
+import { useFathom } from '@/Composables/useFathom'
+
+const { trackEvent } = useFathom()
 
 const props = defineProps({
     results: Object,
@@ -301,6 +304,11 @@ const handleSearch = debounce(() => {
 }, 300)
 
 const performSearch = () => {
+    // Track search event if query is not empty
+    if (localQuery.value && localQuery.value.trim()) {
+        trackEvent('search_performed')
+    }
+
     router.get('/search', {
         q: localQuery.value,
         ...localFilters.value,
