@@ -44,7 +44,7 @@ test('sfw share link redirects to guide and sets sfw mode for guests', function 
     $response = $this->get("/share/{$shareLink->token}");
 
     $response->assertRedirect("/guides/{$guide->slug}");
-    $response->assertCookie('rtfm_mode', 'sfw');
+    $response->assertPlainCookie('rtfm_mode', 'sfw');
 });
 
 test('nsfw share link redirects to guide and sets nsfw mode for guests', function () {
@@ -58,7 +58,7 @@ test('nsfw share link redirects to guide and sets nsfw mode for guests', functio
     $response = $this->get("/share/{$shareLink->token}");
 
     $response->assertRedirect("/guides/{$guide->slug}");
-    $response->assertCookie('rtfm_mode', 'nsfw');
+    $response->assertPlainCookie('rtfm_mode', 'nsfw');
 });
 
 test('share link respects existing user mode preference', function () {
