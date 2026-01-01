@@ -182,9 +182,11 @@ import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue'
 import GuideReactions from '@/Components/Guide/GuideReactions.vue'
 import CommentList from '@/Components/Comments/CommentList.vue'
 import { usePreferencesStore } from '@/Stores/preferences'
+import { useFathom } from '@/Composables/useFathom'
 import axios from 'axios'
 
 const page = usePage()
+const { trackEvent } = useFathom()
 
 const props = defineProps({
     guide: Object,
@@ -220,6 +222,9 @@ const shareGuide = async () => {
                 text: props.guide.tldr,
                 url: window.location.href
             })
+
+            // Track successful share
+            trackEvent('guide_shared')
         } catch (err) {
             if (err.name !== 'AbortError') {
                 copyToClipboard()
@@ -235,6 +240,9 @@ const copyToClipboard = async () => {
         await navigator.clipboard.writeText(window.location.href)
         // TODO: Show toast notification
         console.log('Link copied to clipboard!')
+
+        // Track link copy (form of sharing)
+        trackEvent('guide_link_copied')
     } catch (err) {
         console.error('Failed to copy:', err)
     }
@@ -258,6 +266,9 @@ const toggleBookmark = async () => {
             // Add bookmark
             await axios.post(`/api/guides/${props.guide.id}/save`)
             isBookmarked.value = true
+
+            // Track bookmark event (only for additions)
+            trackEvent('guide_bookmarked')
         }
     } catch (error) {
         console.error('Bookmark error:', error)
@@ -311,6 +322,9 @@ const addCopyButtons = () => {
 
 onMounted(() => {
     addCopyButtons()
+
+    // Track guide view
+    trackEvent('guide_viewed')
 })
 
 // Re-add copy buttons when global mode changes

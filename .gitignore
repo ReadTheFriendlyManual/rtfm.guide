@@ -21,8 +21,10 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-.playwright-mcp
 
+# AI Slop
+.playwright-mcp
 .mcp.json
 /.junie/mcp/
 /.cursor/mcp.json
+.gemini-clipboard

@@ -24,8 +24,10 @@
 import { ref } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import axios from 'axios'
+import { useFathom } from '@/Composables/useFathom'
 
 const page = usePage()
+const { trackEvent } = useFathom()
 
 const props = defineProps({
     guideId: {
@@ -116,6 +118,9 @@ const toggleReaction = async (type) => {
             // Update local state
             localReactions.value = response.data.reactions
             localUserReactions.value = response.data.userReactions
+
+            // Track reaction event (only for additions, not removals)
+            trackEvent(`reaction_${type}`)
         }
     } catch (error) {
         console.error('Failed to toggle reaction:', error)
