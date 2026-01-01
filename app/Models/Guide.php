@@ -94,6 +94,6 @@ class Guide extends Model
 
     public function shouldBeSearchable(): bool
     {
-        return $this->status === 'published' && $this->visibility === 'public';
+        return $this->status === GuideStatus::Published && $this->visibility === GuideVisibility::Public;
     }
 }
