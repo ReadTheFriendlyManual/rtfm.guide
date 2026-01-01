@@ -4,26 +4,13 @@ use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-use function Pest\Laravel\{get, post};
+use function Pest\Laravel\get;
+use function Pest\Laravel\post;
 
 uses(RefreshDatabase::class);
 
-beforeEach(function () {
-    // Ensure settings table exists and has default data
-    if (! Setting::first()) {
-        Setting::create([
-            'registration_enabled' => true,
-            'login_enabled' => true,
-            'registration_disabled_message' => null,
-            'login_disabled_message' => null,
-        ]);
-    }
-});
-
 it('allows registration when registration is enabled', function () {
-    $settings = Setting::first();
-    $settings->update(['registration_enabled' => true]);
-    Setting::clearCache();
+    Setting::set('registration_enabled', true);
 
     $response = post('/register', [
         'name' => 'Test User',
@@ -37,12 +24,8 @@ it('allows registration when registration is enabled', function () {
 });
 
 it('blocks registration when registration is disabled', function () {
-    $settings = Setting::first();
-    $settings->update([
-        'registration_enabled' => false,
-        'registration_disabled_message' => 'Registration is temporarily disabled.',
-    ]);
-    Setting::clearCache();
+    Setting::set('registration_enabled', false);
+    Setting::set('registration_disabled_message', 'Registration is temporarily disabled.');
 
     $response = post('/register', [
         'name' => 'Test User',
@@ -56,12 +39,8 @@ it('blocks registration when registration is disabled', function () {
 });
 
 it('shows registration disabled message in register view', function () {
-    $settings = Setting::first();
-    $settings->update([
-        'registration_enabled' => false,
-        'registration_disabled_message' => 'Custom disabled message',
-    ]);
-    Setting::clearCache();
+    Setting::set('registration_enabled', false);
+    Setting::set('registration_disabled_message', 'Custom disabled message');
 
     $response = get('/register');
 
@@ -73,9 +52,7 @@ it('shows registration disabled message in register view', function () {
 });
 
 it('allows login when login is enabled', function () {
-    $settings = Setting::first();
-    $settings->update(['login_enabled' => true]);
-    Setting::clearCache();
+    Setting::set('login_enabled', true);
 
     $user = User::factory()->create([
         'password' => 'password123',
@@ -91,12 +68,8 @@ it('allows login when login is enabled', function () {
 });
 
 it('blocks login when login is disabled', function () {
-    $settings = Setting::first();
-    $settings->update([
-        'login_enabled' => false,
-        'login_disabled_message' => 'Login is temporarily disabled.',
-    ]);
-    Setting::clearCache();
+    Setting::set('login_enabled', false);
+    Setting::set('login_disabled_message', 'Login is temporarily disabled.');
 
     $user = User::factory()->create([
         'password' => 'password123',
@@ -112,12 +85,8 @@ it('blocks login when login is disabled', function () {
 });
 
 it('shows login disabled message in login view', function () {
-    $settings = Setting::first();
-    $settings->update([
-        'login_enabled' => false,
-        'login_disabled_message' => 'Custom login disabled message',
-    ]);
-    Setting::clearCache();
+    Setting::set('login_enabled', false);
+    Setting::set('login_disabled_message', 'Custom login disabled message');
 
     $response = get('/login');
 
@@ -129,12 +98,7 @@ it('shows login disabled message in login view', function () {
 });
 
 it('uses default message when custom message is null', function () {
-    $settings = Setting::first();
-    $settings->update([
-        'registration_enabled' => false,
-        'registration_disabled_message' => null,
-    ]);
-    Setting::clearCache();
+    Setting::set('registration_enabled', false);
 
     $response = get('/register');
 
@@ -146,16 +110,39 @@ it('uses default message when custom message is null', function () {
 });
 
 it('clears cache when settings are updated', function () {
-    $settings = Setting::first();
+    Setting::set('registration_enabled', true);
 
     // Get cached value
-    $cached1 = Setting::current();
-    expect($cached1->registration_enabled)->toBeTrue();
+    $cached1 = Setting::get('registration_enabled');
+    expect($cached1)->toBeTrue();
 
-    // Update settings
-    $settings->update(['registration_enabled' => false]);
+    // Update setting
+    Setting::set('registration_enabled', false);
 
     // Verify cache was cleared
-    $cached2 = Setting::current();
-    expect($cached2->registration_enabled)->toBeFalse();
+    $cached2 = Setting::get('registration_enabled');
+    expect($cached2)->toBeFalse();
+});
+
+it('can get and set different setting types', function () {
+    // Boolean
+    Setting::set('test_boolean', true);
+    expect(Setting::get('test_boolean'))->toBeTrue();
+
+    // Text
+    Setting::set('test_text', 'Hello World');
+    expect(Setting::get('test_text'))->toBe('Hello World');
+
+    // Integer
+    Setting::set('test_integer', 42);
+    expect(Setting::get('test_integer'))->toBe(42);
+
+    // JSON
+    Setting::set('test_json', ['foo' => 'bar', 'baz' => 123]);
+    expect(Setting::get('test_json'))->toBe(['foo' => 'bar', 'baz' => 123]);
+});
+
+it('returns default value when setting does not exist', function () {
+    expect(Setting::get('nonexistent_setting', 'default'))->toBe('default');
+    expect(Setting::get('nonexistent_boolean', true))->toBeTrue();
 });

@@ -45,11 +45,13 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::createUsersUsing(CreateNewUser::class);
 
         Fortify::authenticateUsing(function (Request $request) {
-            $settings = Setting::current();
+            $loginEnabled = Setting::get('login_enabled', true);
 
-            if (! $settings->login_enabled) {
+            if (! $loginEnabled) {
+                $message = Setting::get('login_disabled_message', 'Login is currently disabled.');
+
                 throw ValidationException::withMessages([
-                    Fortify::username() => [$settings->login_disabled_message ?? 'Login is currently disabled.'],
+                    Fortify::username() => [$message],
                 ]);
             }
 
@@ -69,21 +71,17 @@ class FortifyServiceProvider extends ServiceProvider
     private function configureViews(): void
     {
         Fortify::loginView(function () {
-            $settings = Setting::current();
-
             return Inertia::render('Auth/Login', [
                 'canResetPassword' => true,
-                'loginEnabled' => $settings->login_enabled,
-                'loginDisabledMessage' => $settings->login_disabled_message ?? 'Login is currently disabled.',
+                'loginEnabled' => Setting::get('login_enabled', true),
+                'loginDisabledMessage' => Setting::get('login_disabled_message', 'Login is currently disabled.'),
             ]);
         });
 
         Fortify::registerView(function () {
-            $settings = Setting::current();
-
             return Inertia::render('Auth/Register', [
-                'registrationEnabled' => $settings->registration_enabled,
-                'registrationDisabledMessage' => $settings->registration_disabled_message ?? 'Registration is currently disabled.',
+                'registrationEnabled' => Setting::get('registration_enabled', true),
+                'registrationDisabledMessage' => Setting::get('registration_disabled_message', 'Registration is currently disabled.'),
             ]);
         });
 

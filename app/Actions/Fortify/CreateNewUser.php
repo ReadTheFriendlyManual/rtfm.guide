@@ -20,11 +20,13 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
-        $settings = Setting::current();
+        $registrationEnabled = Setting::get('registration_enabled', true);
 
-        if (! $settings->registration_enabled) {
+        if (! $registrationEnabled) {
+            $message = Setting::get('registration_disabled_message', 'Registration is currently disabled.');
+
             throw ValidationException::withMessages([
-                'email' => [$settings->registration_disabled_message ?? 'Registration is currently disabled.'],
+                'email' => [$message],
             ]);
         }
 

@@ -14,21 +14,43 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->boolean('registration_enabled')->default(false);
-            $table->boolean('login_enabled')->default(true);
-            $table->text('registration_disabled_message')->nullable();
-            $table->text('login_disabled_message')->nullable();
+            $table->string('key')->unique();
+            $table->string('type');
+            $table->text('value')->nullable();
             $table->timestamps();
         });
 
         // Insert default settings
+        $now = now();
         DB::table('settings')->insert([
-            'registration_enabled' => false,
-            'login_enabled' => true,
-            'registration_disabled_message' => 'Registration is temporarily disabled while we resolve an email deliverability issue. We expect it to be resolved within a few hours.',
-            'login_disabled_message' => null,
-            'created_at' => now(),
-            'updated_at' => now(),
+            [
+                'key' => 'registration_enabled',
+                'type' => 'boolean',
+                'value' => '0',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'key' => 'login_enabled',
+                'type' => 'boolean',
+                'value' => '1',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'key' => 'registration_disabled_message',
+                'type' => 'text',
+                'value' => 'Registration is temporarily disabled while we resolve an email deliverability issue. We expect it to be resolved within a few hours.',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'key' => 'login_disabled_message',
+                'type' => 'text',
+                'value' => null,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
         ]);
     }
 
