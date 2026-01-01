@@ -40,7 +40,7 @@ class ShareLinkController extends Controller
 
         $guide = $shareLink->guide;
 
-        $response = redirect()->route('guides.show', $guide);
+        $response = redirect()->route('guides.show', $guide->slug);
 
         $existingMode = request()->cookie('rtfm_mode');
 

@@ -84,7 +84,7 @@ test('share link increments visit count', function () {
         'mode' => 'sfw',
     ]);
 
-    expect($shareLink->visit_count)->toBe(0);
+    expect($shareLink->fresh()->visit_count)->toBe(0);
 
     $this->get("/share/{$shareLink->token}");
 
