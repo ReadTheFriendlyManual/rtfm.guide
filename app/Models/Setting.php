@@ -51,22 +51,13 @@ class Setting extends Model
      */
     public static function set(string $key, mixed $value, ?SettingType $type = null): self
     {
-        $setting = self::withoutGlobalScopes()->firstOrCreate(
+        return self::withoutGlobalScopes()->updateOrCreate(
             ['key' => $key],
             [
                 'type' => $type ?? self::inferType($value),
                 'value' => self::encodeValue($value),
             ]
         );
-
-        if ($setting->wasRecentlyCreated === false) {
-            $setting->update([
-                'value' => self::encodeValue($value),
-                'type' => $type ?? self::inferType($value),
-            ]);
-        }
-
-        return $setting;
     }
 
     /**
