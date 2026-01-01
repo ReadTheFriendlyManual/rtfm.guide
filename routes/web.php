@@ -95,6 +95,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/guides/{guide}/edit', [App\Http\Controllers\GuideManagementController::class, 'edit'])->name('guides.edit');
     Route::put('/guides/{guide}', [App\Http\Controllers\GuideManagementController::class, 'update'])->name('guides.update');
+
+    // Guide revisions (moderation)
+    Route::get('/revisions', [App\Http\Controllers\GuideRevisionController::class, 'index'])->name('revisions.index');
+    Route::get('/revisions/{revision}', [App\Http\Controllers\GuideRevisionController::class, 'show'])->name('revisions.show');
+    Route::post('/revisions/{revision}/approve', [App\Http\Controllers\GuideRevisionController::class, 'approve'])->name('revisions.approve');
+    Route::post('/revisions/{revision}/reject', [App\Http\Controllers\GuideRevisionController::class, 'reject'])->name('revisions.reject');
 });
 
 // Public guide view - must be after authenticated routes to avoid conflicts

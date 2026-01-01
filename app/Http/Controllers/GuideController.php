@@ -210,6 +210,7 @@ class GuideController extends Controller
                 'user' => $guide->user,
                 'category' => $guide->category,
                 'is_saved' => auth()->check() && auth()->user()->hasSavedGuide($guide->id),
+                'has_pending_revision' => $guide->hasPendingRevision(),
             ],
             'content' => $content,
             'rtfmMessage' => $rtfmMessage?->message ?? "You should've RTFM... but we did it for you.",

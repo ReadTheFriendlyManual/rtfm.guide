@@ -37,6 +37,8 @@ class User extends Authenticatable
         'newsletter_subscribed',
         'preferred_rtfm_mode',
         'preferred_theme',
+        'trusted_editor',
+        'is_admin',
     ];
 
     /**
@@ -63,6 +65,8 @@ class User extends Authenticatable
             'password' => 'hashed',
             'newsletter_subscribed' => 'boolean',
             'reputation_points' => 'integer',
+            'trusted_editor' => 'boolean',
+            'is_admin' => 'boolean',
         ];
     }
 

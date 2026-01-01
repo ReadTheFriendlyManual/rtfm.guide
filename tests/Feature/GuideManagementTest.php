@@ -169,6 +169,9 @@ it('prevents editing other users guides', function () {
 });
 
 it('can update own guide', function () {
+    // Make user trusted so they can update directly
+    $this->user->update(['trusted_editor' => true]);
+
     $guide = Guide::factory()->create([
         'user_id' => $this->user->id,
         'title' => 'Old Title',
@@ -194,6 +197,7 @@ it('prevents updating other users guides', function () {
     $otherUser = User::factory()->create();
     $guide = Guide::factory()->create(['user_id' => $otherUser->id]);
 
+    // Non-trusted users can submit edits, which creates a revision
     actingAs($this->user)
         ->put(route('guides.update', $guide), [
             'title' => 'Hacked Title',
@@ -202,13 +206,21 @@ it('prevents updating other users guides', function () {
             'category_id' => $guide->category_id,
             'difficulty' => $guide->difficulty->value,
         ])
-        ->assertForbidden();
+        ->assertRedirect()
+        ->assertSessionHas('success', 'Your edits have been submitted for review!');
 
+    // Guide should not be updated directly
     $guide->refresh();
     expect($guide->title)->not->toBe('Hacked Title');
+
+    // A revision should be created instead
+    expect(\App\Models\GuideRevision::where('guide_id', $guide->id)->count())->toBe(1);
 });
 
 it('sets published_at when status changes to published', function () {
+    // Make user trusted so they can update directly
+    $this->user->update(['trusted_editor' => true]);
+
     $guide = Guide::factory()->create([
         'user_id' => $this->user->id,
         'status' => GuideStatus::Draft,
@@ -235,6 +247,9 @@ it('sets published_at when status changes to published', function () {
 });
 
 it('allows updating slug if unique', function () {
+    // Make user trusted so they can update directly
+    $this->user->update(['trusted_editor' => true]);
+
     $guide = Guide::factory()->create([
         'user_id' => $this->user->id,
         'slug' => 'old-slug',
@@ -276,6 +291,9 @@ it('prevents updating slug to existing slug', function () {
 });
 
 it('can update os_tags', function () {
+    // Make user trusted so they can update directly
+    $this->user->update(['trusted_editor' => true]);
+
     $guide = Guide::factory()->create([
         'user_id' => $this->user->id,
         'os_tags' => ['Linux'],

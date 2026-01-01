@@ -70,6 +70,21 @@ class Guide extends Model
         return $this->hasMany(Reaction::class);
     }
 
+    public function revisions(): HasMany
+    {
+        return $this->hasMany(GuideRevision::class);
+    }
+
+    public function pendingRevision(): ?GuideRevision
+    {
+        return $this->revisions()->pending()->latest()->first();
+    }
+
+    public function hasPendingRevision(): bool
+    {
+        return $this->revisions()->pending()->exists();
+    }
+
     public function toSearchableArray(): array
     {
         return [
