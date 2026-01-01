@@ -10,7 +10,33 @@
             </p>
         </div>
 
+        <!-- Login Disabled Notice -->
+        <div v-if="!loginEnabled" class="relative overflow-hidden rounded-2xl border-2 border-wine-400/40 dark:border-wine-500/30 bg-linear-to-br from-wine-50/80 via-gold-50/40 to-pearl-50 dark:from-pearl-800/80 dark:via-wine-900/40 dark:to-pearl-900 p-6 backdrop-blur-sm">
+            <!-- Decorative accent -->
+            <div class="absolute top-0 right-0 size-32 bg-linear-to-br from-wine-400/20 to-gold-400/20 dark:from-wine-500/10 dark:to-gold-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+
+            <!-- Icon -->
+            <div class="relative flex items-start gap-4">
+                <div class="shrink-0 size-12 rounded-xl bg-linear-to-br from-wine-500 to-wine-600 dark:from-wine-600 dark:to-wine-700 flex items-center justify-center shadow-lg shadow-wine-600/20">
+                    <svg class="size-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                </div>
+
+                <!-- Content -->
+                <div class="flex-1 pt-0.5">
+                    <h3 class="font-display text-lg/tight font-bold text-pearl-900 dark:text-pearl-50 mb-2">
+                        Login Unavailable
+                    </h3>
+                    <p class="text-sm/relaxed text-pearl-700 dark:text-pearl-300">
+                        {{ loginDisabledMessage }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <!-- Login Form -->
+        <div v-else>
         <Form
             action="/login"
             method="post"
@@ -86,6 +112,7 @@
                 {{ processing ? 'Signing in...' : 'Sign In' }}
             </button>
         </Form>
+        </div>
 
         <!-- Register Link -->
         <div class="mt-6 text-center text-sm/relaxed text-pearl-600 dark:text-pearl-400">
@@ -105,6 +132,14 @@ defineProps({
     canResetPassword: {
         type: Boolean,
         default: true,
+    },
+    loginEnabled: {
+        type: Boolean,
+        default: true,
+    },
+    loginDisabledMessage: {
+        type: String,
+        default: 'Login is currently disabled.',
     },
 })
 </script>

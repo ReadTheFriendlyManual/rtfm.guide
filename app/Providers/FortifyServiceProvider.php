@@ -4,11 +4,15 @@ namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
+use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Laravel\Fortify\Fortify;
 
@@ -39,6 +43,26 @@ class FortifyServiceProvider extends ServiceProvider
     {
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::createUsersUsing(CreateNewUser::class);
+
+        Fortify::authenticateUsing(function (Request $request) {
+            $loginEnabled = Setting::get('login_enabled', true);
+
+            if (! $loginEnabled) {
+                $message = Setting::get('login_disabled_message', 'Login is currently disabled.');
+
+                throw ValidationException::withMessages([
+                    Fortify::username() => [$message],
+                ]);
+            }
+
+            $user = User::where('email', $request->email)->first();
+
+            if ($user && Hash::check($request->password, $user->password)) {
+                return $user;
+            }
+
+            return null;
+        });
     }
 
     /**
@@ -46,11 +70,20 @@ class FortifyServiceProvider extends ServiceProvider
      */
     private function configureViews(): void
     {
-        Fortify::loginView(fn () => Inertia::render('Auth/Login', [
-            'canResetPassword' => true,
-        ]));
+        Fortify::loginView(function () {
+            return Inertia::render('Auth/Login', [
+                'canResetPassword' => true,
+                'loginEnabled' => Setting::get('login_enabled', true),
+                'loginDisabledMessage' => Setting::get('login_disabled_message', 'Login is currently disabled.'),
+            ]);
+        });
 
-        Fortify::registerView(fn () => Inertia::render('Auth/Register'));
+        Fortify::registerView(function () {
+            return Inertia::render('Auth/Register', [
+                'registrationEnabled' => Setting::get('registration_enabled', true),
+                'registrationDisabledMessage' => Setting::get('registration_disabled_message', 'Registration is currently disabled.'),
+            ]);
+        });
 
         Fortify::verifyEmailView(fn () => Inertia::render('Auth/VerifyEmail'));
         Fortify::twoFactorChallengeView(fn () => Inertia::render('Auth/TwoFactorChallenge'));

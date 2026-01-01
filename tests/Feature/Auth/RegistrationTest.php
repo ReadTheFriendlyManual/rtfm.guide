@@ -1,5 +1,10 @@
 <?php
 
+use App\Models\Setting;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
+
 test('registration screen can be rendered', function () {
     $response = $this->get(route('register'));
 
@@ -7,6 +12,8 @@ test('registration screen can be rendered', function () {
 });
 
 test('new users can register', function () {
+    Setting::set('registration_enabled', true);
+
     $response = $this->post(route('register.store'), [
         'name' => 'John Doe',
         'email' => 'test@example.com',
