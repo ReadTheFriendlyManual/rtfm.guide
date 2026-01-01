@@ -28,6 +28,10 @@ Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'inde
 // Public API Routes
 Route::get('/api/search/quick', [App\Http\Controllers\Api\SearchController::class, 'quick'])->name('api.search.quick');
 
+// Share links
+Route::get('/share/{token}', [App\Http\Controllers\ShareLinkController::class, 'show'])->name('share.show');
+Route::post('/api/guides/{guide}/share-links', [App\Http\Controllers\ShareLinkController::class, 'store'])->name('api.guides.share-links.store');
+
 Route::middleware(['auth'])->group(function () {
     // API Routes for preferences
     Route::post('/api/preferences/mode', [App\Http\Controllers\Api\PreferencesController::class, 'updateMode'])->name('api.preferences.mode');
