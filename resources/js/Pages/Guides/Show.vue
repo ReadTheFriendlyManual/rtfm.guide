@@ -187,6 +187,14 @@
                 </div>
             </div>
         </div>
+
+        <!-- Share Modal -->
+        <ShareModal
+            :is-open="isShareModalOpen"
+            :guide-id="guide.id"
+            :current-mode="preferencesStore.mode"
+            @close="isShareModalOpen = false"
+        />
     </PublicLayout>
 </template>
 
@@ -197,6 +205,7 @@ import PublicLayout from '@/Layouts/PublicLayout.vue'
 import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue'
 import GuideReactions from '@/Components/Guide/GuideReactions.vue'
 import CommentList from '@/Components/Comments/CommentList.vue'
+import ShareModal from '@/Components/ShareModal.vue'
 import { usePreferencesStore } from '@/Stores/preferences'
 import { useFathom } from '@/Composables/useFathom'
 import axios from 'axios'
@@ -229,26 +238,10 @@ const preferencesStore = usePreferencesStore()
 
 const isBookmarked = ref(props.guide.is_saved)
 const isTogglingBookmark = ref(false)
+const isShareModalOpen = ref(false)
 
-const shareGuide = async () => {
-    if (navigator.share) {
-        try {
-            await navigator.share({
-                title: props.guide.title,
-                text: props.guide.tldr,
-                url: window.location.href
-            })
-
-            // Track successful share
-            trackEvent('guide_shared')
-        } catch (err) {
-            if (err.name !== 'AbortError') {
-                copyToClipboard()
-            }
-        }
-    } else {
-        copyToClipboard()
-    }
+const shareGuide = () => {
+    isShareModalOpen.value = true
 }
 
 const copyToClipboard = async () => {

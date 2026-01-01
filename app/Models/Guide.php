@@ -75,6 +75,11 @@ class Guide extends Model
         return $this->hasMany(GuideRevision::class);
     }
 
+    public function shareLinks(): HasMany
+    {
+        return $this->hasMany(ShareLink::class);
+    }
+
     public function pendingRevision(): ?GuideRevision
     {
         return $this->revisions()->pending()->latest()->first();
