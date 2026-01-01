@@ -16,6 +16,7 @@ use Inertia\Inertia;
 class GuideManagementController extends Controller
 {
     use AuthorizesRequests;
+
     public function create()
     {
         $categories = Category::with('parent')
@@ -76,7 +77,8 @@ class GuideManagementController extends Controller
 
         return redirect()
             ->route('guides.edit', $guide)
-            ->with('success', 'Guide created successfully!');
+            ->with('success', 'Guide created successfully!')
+            ->with('guide_status', $guide->status->value);
     }
 
     public function edit(Guide $guide)
