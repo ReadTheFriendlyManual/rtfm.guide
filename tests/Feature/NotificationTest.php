@@ -320,3 +320,38 @@ test('notifications are paginated', function () {
     expect($response->json('pagination.total'))->toBe(20);
     expect($response->json('pagination.last_page'))->toBe(2);
 });
+
+test('comment reply notification sends email with custom template', function () {
+    $user = User::factory()->create();
+    $commenter = User::factory()->create();
+    $guide = Guide::factory()->published()->create();
+
+    $parentComment = Comment::factory()->create([
+        'user_id' => $user->id,
+        'guide_id' => $guide->id,
+        'is_approved' => true,
+        'content' => 'This is my original comment',
+    ]);
+
+    $reply = Comment::factory()->create([
+        'user_id' => $commenter->id,
+        'guide_id' => $guide->id,
+        'parent_id' => $parentComment->id,
+        'is_approved' => true,
+        'content' => 'This is a reply to your comment',
+    ]);
+
+    $notification = new CommentReplyNotification($reply, $parentComment, $guide);
+    $mail = $notification->toMail($user);
+
+    expect($mail->subject)->toBe('New Reply to Your Comment - RTFM.guide');
+    expect($mail->viewData)->toHaveKey('url');
+    expect($mail->viewData)->toHaveKey('replyUserName');
+    expect($mail->viewData)->toHaveKey('replyContent');
+    expect($mail->viewData)->toHaveKey('guideTitle');
+    expect($mail->viewData['replyUserName'])->toBe($commenter->name);
+    expect($mail->viewData['replyContent'])->toBe('This is a reply to your comment');
+    expect($mail->viewData['guideTitle'])->toBe($guide->title);
+    expect($mail->viewData['url'])->toContain($guide->slug);
+    expect($mail->viewData['url'])->toContain('#comment-'.$reply->id);
+});

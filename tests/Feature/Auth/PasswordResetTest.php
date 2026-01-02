@@ -57,3 +57,25 @@ test('password can be reset with valid token', function () {
         return true;
     });
 });
+
+test('password reset notification uses custom template', function () {
+    $user = User::factory()->create();
+
+    Notification::fake();
+
+    $user->sendPasswordResetNotification('test-token');
+
+    Notification::assertSentTo(
+        $user,
+        ResetPasswordNotification::class,
+        function ($notification, $channels) use ($user) {
+            $mail = $notification->toMail($user);
+
+            expect($mail->subject)->toBe('Reset Your Password - RTFM.guide');
+            expect($mail->viewData)->toHaveKey('url');
+            expect($mail->viewData['url'])->toContain('reset-password');
+
+            return true;
+        }
+    );
+});
