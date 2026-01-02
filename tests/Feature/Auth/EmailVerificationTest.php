@@ -61,3 +61,22 @@ test('verified users can access verified routes', function () {
 
     $response->assertOk();
 });
+
+test('verification email uses custom template', function () {
+    $user = User::factory()->unverified()->create();
+
+    Illuminate\Support\Facades\Notification::fake();
+
+    $user->sendEmailVerificationNotification();
+
+    Illuminate\Support\Facades\Notification::assertSentTo(
+        $user,
+        \App\Notifications\VerifyEmailNotification::class,
+        function ($notification, $channels) use ($user) {
+            $mail = $notification->toMail($user);
+
+            return $mail->subject === 'Verify Your Email Address - RTFM.guide'
+                && $mail->viewData['url'] !== null;
+        }
+    );
+});

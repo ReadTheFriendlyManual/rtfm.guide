@@ -125,4 +125,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return true;
     }
+
+    /**
+     * Send the email verification notification.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new \App\Notifications\VerifyEmailNotification);
+    }
 }
