@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
+// Custom Email Verification Route (overrides Fortify)
+Route::post('/email/verification-notification', [App\Http\Controllers\Auth\EmailVerificationNotificationController::class, 'store'])
+    ->middleware(['web', 'auth'])
+    ->name('verification.send');
+
 // Public Routes
 Route::get('/', function () {
     return Inertia::render('Public/Home');

@@ -52,10 +52,19 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
+                'info' => $request->session()->get('info'),
             ],
             'preferences' => [
                 'mode' => $request->user()?->preferred_rtfm_mode ?? $request->cookie('rtfm_mode', 'sfw'),
                 'theme' => $request->user()?->preferred_theme ?? $request->cookie('rtfm_theme', 'light'),
+            ],
+            'translations' => [
+                'toast' => [
+                    'arrow' => [
+                        'sfw' => __('toast.arrow.sfw'),
+                        'nsfw' => __('toast.arrow.nsfw'),
+                    ],
+                ],
             ],
         ];
     }

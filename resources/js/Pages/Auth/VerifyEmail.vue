@@ -10,25 +10,21 @@
             </p>
         </div>
 
-        <!-- Success Message -->
-        <div v-if="status === 'verification-link-sent'" class="mb-6 p-4 rounded-xl bg-gold-50 dark:bg-gold-900/20 border-2 border-gold-200 dark:border-gold-800">
-            <p class="text-sm/relaxed text-gold-700 dark:text-gold-400 font-medium">
-                A new verification link has been sent to your email address.
-            </p>
-        </div>
-
         <!-- Resend Verification Email Form -->
         <Form
             action="/email/verification-notification"
             method="post"
             #default="{ processing }"
+            @submit="handleSubmit"
         >
             <button
                 type="submit"
-                :disabled="processing"
+                :disabled="processing || isRateLimited"
                 class="w-full bg-linear-to-r from-wine-600 to-wine-700 hover:from-wine-500 hover:to-wine-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-wine-600/30 dark:shadow-wine-700/40 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                {{ processing ? 'Sending...' : 'Resend Verification Email' }}
+                <span v-if="processing">Sending...</span>
+                <span v-else-if="isRateLimited">Wait {{ remainingSeconds }}s</span>
+                <span v-else>Resend Verification Email</span>
             </button>
         </Form>
 
@@ -53,10 +49,65 @@
 </template>
 
 <script setup>
-import { Form } from '@inertiajs/vue3'
+import { Form, usePage } from '@inertiajs/vue3'
+import { ref, computed, onMounted, watch } from 'vue'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 
-defineProps({
-    status: String,
+const page = usePage()
+const remainingSeconds = ref(0)
+const rateLimitEndTime = ref(null)
+let intervalId = null
+
+const isRateLimited = computed(() => remainingSeconds.value > 0)
+
+const updateRemainingSeconds = () => {
+    if (!rateLimitEndTime.value) {
+        remainingSeconds.value = 0
+        return
+    }
+
+    const now = Date.now()
+    const diff = Math.ceil((rateLimitEndTime.value - now) / 1000)
+
+    if (diff <= 0) {
+        remainingSeconds.value = 0
+        rateLimitEndTime.value = null
+        if (intervalId) {
+            clearInterval(intervalId)
+            intervalId = null
+        }
+    } else {
+        remainingSeconds.value = diff
+    }
+}
+
+const startRateLimitTimer = (seconds = 60) => {
+    rateLimitEndTime.value = Date.now() + (seconds * 1000)
+    updateRemainingSeconds()
+
+    if (intervalId) {
+        clearInterval(intervalId)
+    }
+
+    intervalId = setInterval(updateRemainingSeconds, 1000)
+}
+
+const handleSubmit = () => {
+    startRateLimitTimer()
+}
+
+// Watch for errors in flash messages to extract rate limit time
+watch(() => page.props.flash, (flash) => {
+    if (flash?.error && typeof flash.error === 'string') {
+        const match = flash.error.match(/wait (\d+) seconds/)
+        if (match) {
+            const seconds = parseInt(match[1])
+            startRateLimitTimer(seconds)
+        }
+    }
+}, { deep: true, immediate: true })
+
+onMounted(() => {
+    updateRemainingSeconds()
 })
 </script>
