@@ -56,6 +56,11 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         Gate::define('viewNova', function (User $user) {
             return $user->is_admin;
         });
+
+        Gate::define('impersonateUser', function (User $user) {
+            // @TODO Update when implementing RBAC.
+            return $user->is_admin;
+        });
     }
 
     /**
