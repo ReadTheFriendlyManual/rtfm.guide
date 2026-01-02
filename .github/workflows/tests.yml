@@ -3,16 +3,20 @@ name: tests
 on:
   push:
     branches:
-      - develop
       - main
     paths-ignore:
       - 'docs/**'
+      - 'storage/**'
+      - '.*'
+      - '!.github/workflows/**'
   pull_request:
     branches:
-      - develop
       - main
     paths-ignore:
       - 'docs/**'
+      - 'storage/**'
+      - '.*'
+      - '!.github/workflows/**'
 
 jobs:
   ci:
@@ -56,8 +60,8 @@ jobs:
       - name: Install Node Dependencies
         run: npm ci
 
-      - name: Add Flux Credentials Loaded From ENV
-        run: composer config http-basic.composer.fluxui.dev "${{ secrets.FLUX_USERNAME }}" "${{ secrets.FLUX_LICENSE_KEY }}"
+      - name: Add Nova Credentials Loaded From ENV
+        run: composer config http-basic.nova.laravel.com "${{ secrets.NOVA_USERNAME }}" "${{ secrets.NOVA_LICENSE_KEY }}"
 
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
