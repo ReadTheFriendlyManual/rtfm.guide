@@ -58,12 +58,23 @@
                 &copy; {{ new Date().getFullYear() }} RTFM.guide. All rights reserved.
             </div>
         </footer>
+
+        <!-- Toast Notifications -->
+        <Toast
+            :visible="showToast"
+            :message="toastMessage"
+            :type="toastType"
+            @close="hideToast"
+        />
     </div>
 </template>
 
 <script setup>
 import { Link } from '@inertiajs/vue3'
 import { useTheme } from '@/Composables/useTheme'
+import { useFlash } from '@/Composables/useFlash'
+import Toast from '@/Components/UI/Toast.vue'
 
 const { theme, toggleTheme } = useTheme()
+const { showToast, toastMessage, toastType, hideToast } = useFlash()
 </script>

@@ -40,7 +40,7 @@ class ResendVerificationEmail extends Command
                 $user->sendEmailVerificationNotification();
                 $this->info("Resent verification email to user ID: $user->id");
             } else {
-                $this->error("User not found or already verified.");
+                $this->error('User not found or already verified.');
             }
         }
 
