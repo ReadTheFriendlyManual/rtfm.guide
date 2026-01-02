@@ -4,11 +4,18 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Auth\PasswordValidationRules;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 
 class User extends Resource
 {
@@ -34,7 +41,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'name', 'email', 'github_username', 'gitlab_username',
     ];
 
     /**
@@ -59,10 +66,106 @@ class User extends Resource
                 ->creationRules('unique:users,email')
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
+            DateTime::make('Email Verified At')
+                ->sortable()
+                ->hideWhenCreating()
+                ->readonly()
+                ->onlyOnDetail(),
+
             Password::make('Password')
                 ->onlyOnForms()
                 ->creationRules($this->passwordRules())
                 ->updateRules($this->optionalPasswordRules()),
+
+            Panel::make('Profile', [
+                Image::make('Avatar')
+                    ->disk('public')
+                    ->path('avatars')
+                    ->prunable()
+                    ->maxWidth(100),
+
+                Textarea::make('Bio')
+                    ->rows(3)
+                    ->rules('nullable', 'max:500'),
+
+                Text::make('GitHub Username')
+                    ->rules('nullable', 'max:255'),
+
+                Text::make('GitLab Username')
+                    ->rules('nullable', 'max:255'),
+            ]),
+
+            Panel::make('OAuth Authentication', [
+                Text::make('OAuth Provider')
+                    ->readonly()
+                    ->hideWhenCreating(),
+
+                Text::make('OAuth ID')
+                    ->readonly()
+                    ->hideWhenCreating(),
+            ]),
+
+            Panel::make('Gamification & Status', [
+                Number::make('Reputation Points')
+                    ->default(0)
+                    ->min(0)
+                    ->step(1)
+                    ->sortable(),
+
+                Select::make('Trust Level')
+                    ->options([
+                        0 => 'New User',
+                        1 => 'Basic User',
+                        2 => 'Member',
+                        3 => 'Regular',
+                        4 => 'Leader',
+                    ])
+                    ->default(0)
+                    ->displayUsingLabels()
+                    ->sortable(),
+            ]),
+
+            Panel::make('Preferences', [
+                Select::make('Preferred Locale')
+                    ->options([
+                        'en' => 'English',
+                        'es' => 'Spanish',
+                        'fr' => 'French',
+                        'de' => 'German',
+                    ])
+                    ->default('en')
+                    ->displayUsingLabels(),
+
+                Select::make('Preferred Theme')
+                    ->options([
+                        'light' => 'Light',
+                        'dark' => 'Dark',
+                        'auto' => 'Auto',
+                    ])
+                    ->default('auto')
+                    ->displayUsingLabels(),
+
+                Select::make('Preferred RTFM Mode')
+                    ->options([
+                        'sfw' => 'Safe for Work',
+                        'nsfw' => 'Not Safe for Work',
+                    ])
+                    ->default('sfw')
+                    ->displayUsingLabels(),
+
+                Boolean::make('Newsletter Subscribed')
+                    ->default(false),
+            ]),
+
+            Panel::make('Permissions', [
+                Boolean::make('Trusted Editor')
+                    ->default(false)
+                    ->sortable(),
+
+                Boolean::make('Is Admin')
+                    ->default(false)
+                    ->sortable(),
+            ]),
         ];
     }
 
