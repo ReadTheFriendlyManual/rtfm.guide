@@ -17,7 +17,7 @@ enum SettingType: string
             SettingType::Boolean => $value ? '✅' : '❌',
             SettingType::Integer => str($value)->toInteger(),
             SettingType::Json, SettingType::Text => str($value)->limit(50),
-            default => throw new \RuntimeException('Unsupported setting type: ' . get_class($this)),
+            default => throw new \RuntimeException('Unsupported setting type: '.get_class($this)),
         };
     }
 }
