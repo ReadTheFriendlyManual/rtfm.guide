@@ -45,3 +45,19 @@ test('email is not verified with invalid hash', function () {
 
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });
+
+test('unverified users cannot access verified routes', function () {
+    $user = User::factory()->unverified()->create();
+
+    $response = $this->actingAs($user)->get(route('dashboard'));
+
+    $response->assertRedirect(route('verification.notice'));
+});
+
+test('verified users can access verified routes', function () {
+    $user = User::factory()->create(['email_verified_at' => now()]);
+
+    $response = $this->actingAs($user)->get(route('dashboard'));
+
+    $response->assertOk();
+});
