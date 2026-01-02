@@ -2,11 +2,11 @@
 
 namespace App\Notifications;
 
+use App\Models\EmailVerificationToken;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\URL;
 
 class VerifyEmailNotification extends VerifyEmail implements ShouldQueue
 {
@@ -31,13 +31,8 @@ class VerifyEmailNotification extends VerifyEmail implements ShouldQueue
      */
     protected function verificationUrl($notifiable): string
     {
-        return URL::temporarySignedRoute(
-            'verification.verify',
-            now()->addMinutes(config('auth.verification.expire', 60)),
-            [
-                'id' => $notifiable->getKey(),
-                'hash' => sha1($notifiable->getEmailForVerification()),
-            ]
-        );
+        $token = EmailVerificationToken::generate($notifiable);
+
+        return route('verification.verify', ['token' => $token->token]);
     }
 }

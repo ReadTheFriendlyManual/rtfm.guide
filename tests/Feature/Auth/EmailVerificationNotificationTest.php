@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -79,4 +80,20 @@ it('requires authentication to send verification notification', function () {
     $response = $this->post('/email/verification-notification');
 
     $response->assertRedirect('/login');
+});
+
+it('shows success toast after email verification', function () {
+    Event::fake();
+
+    $user = User::factory()->create(['email_verified_at' => null]);
+
+    $token = \App\Models\EmailVerificationToken::generate($user);
+
+    $response = $this->get(route('verification.verify', ['token' => $token->token]));
+
+    $response->assertRedirect(route('dashboard'));
+    $response->assertSessionHas('success', 'Your email has been verified successfully!');
+
+    $user->refresh();
+    expect($user->hasVerifiedEmail())->toBeTrue();
 });
