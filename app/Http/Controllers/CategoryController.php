@@ -7,16 +7,44 @@ use App\Enums\GuideVisibility;
 use App\Models\Category;
 use App\Models\Guide;
 use Inertia\Inertia;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CategoryController extends Controller
 {
+    /**
+     * Reserved route slugs that should not be used as category slugs
+     */
+    private const RESERVED_SLUGS = [
+        'dashboard',
+        'guides',
+        'settings',
+        'profile',
+        'search',
+        'api',
+        'nova',
+        'login',
+        'register',
+        'logout',
+        'password',
+        'verify-email',
+        'my-guides',
+        'saved-guides',
+        'revisions',
+        'share',
+    ];
+
     public function show(string $slug)
     {
+        // Check for reserved slug conflicts
+        if (in_array($slug, self::RESERVED_SLUGS)) {
+            throw new NotFoundHttpException();
+        }
+
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        // Query featured guides separately to properly apply limit
+        // Query featured guides using the guides relationship with filters
         $featuredGuides = Guide::where('category_id', $category->id)
-            ->where('is_featured', true)
+            ->featured()
             ->where('status', GuideStatus::Published)
             ->where('visibility', GuideVisibility::Public)
             ->with(['user', 'category'])

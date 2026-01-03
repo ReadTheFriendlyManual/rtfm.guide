@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\GuideDifficulty;
 use App\Enums\GuideStatus;
 use App\Enums\GuideVisibility;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -92,7 +93,7 @@ class Guide extends Model
         return $this->revisions()->pending()->exists();
     }
 
-    public function scopeFeatured($query)
+    public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('is_featured', true);
     }
