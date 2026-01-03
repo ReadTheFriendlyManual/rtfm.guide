@@ -59,6 +59,7 @@ class GuideFactory extends Factory
             'os_tags' => $this->faker->randomElements(['windows', 'macos', 'linux'], $this->faker->numberBetween(0, 3)),
             'status' => 'published',
             'visibility' => 'public',
+            'is_featured' => false,
             'view_count' => $this->faker->numberBetween(0, 1000),
             'published_at' => $this->faker->dateTimeBetween('-1 year'),
         ];
@@ -84,6 +85,13 @@ class GuideFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'visibility' => 'private',
+        ]);
+    }
+
+    public function featured(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_featured' => true,
         ]);
     }
 }

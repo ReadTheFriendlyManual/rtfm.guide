@@ -33,6 +33,7 @@ class Guide extends Model
         'template_id',
         'view_count',
         'share_count',
+        'is_featured',
         'published_at',
     ];
 
@@ -47,6 +48,7 @@ class Guide extends Model
             'view_count' => 'integer',
             'share_count' => 'integer',
             'estimated_minutes' => 'integer',
+            'is_featured' => 'boolean',
         ];
     }
 
@@ -88,6 +90,11 @@ class Guide extends Model
     public function hasPendingRevision(): bool
     {
         return $this->revisions()->pending()->exists();
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
     }
 
     public function toSearchableArray(): array
