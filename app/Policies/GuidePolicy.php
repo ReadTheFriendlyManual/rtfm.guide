@@ -9,7 +9,7 @@ class GuidePolicy
 {
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->is_admin;
     }
 
     public function view(?User $user, Guide $guide): bool
