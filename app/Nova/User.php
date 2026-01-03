@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Auth\PasswordValidationRules;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Gravatar;
@@ -41,7 +42,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'name', 'email', 'github_username', 'gitlab_username',
+        'name', 'email', 'github_username', 'gitlab_username', 'twitter_username', 'linkedin_username',
     ];
 
     /**
@@ -86,13 +87,32 @@ class User extends Resource
 
                 Textarea::make('Bio')
                     ->rows(3)
-                    ->rules('nullable', 'max:500'),
+                    ->rules('nullable', 'max:500')
+                    ->help('Short bio shown on profile'),
+
+                Textarea::make('Featured Bio')
+                    ->rows(4)
+                    ->rules('nullable', 'max:1000')
+                    ->help('Extended bio for featured writer cards (falls back to Bio if empty)')
+                    ->hideFromIndex(),
 
                 Text::make('GitHub Username')
                     ->rules('nullable', 'max:255'),
 
                 Text::make('GitLab Username')
                     ->rules('nullable', 'max:255'),
+
+                Text::make('Twitter Username')
+                    ->rules('nullable', 'max:255')
+                    ->help('Username without @ symbol'),
+
+                Text::make('LinkedIn Username')
+                    ->rules('nullable', 'max:255')
+                    ->help('Your LinkedIn profile username'),
+
+                Text::make('Website URL')
+                    ->rules('nullable', 'url', 'max:255')
+                    ->help('Personal website or blog URL'),
             ]),
 
             Panel::make('OAuth Authentication', [
@@ -166,6 +186,19 @@ class User extends Resource
                     ->default(false)
                     ->sortable(),
             ]),
+
+            BelongsToMany::make('Featured In Categories', 'featuredInCategories', Category::class)
+                ->fields(function () {
+                    return [
+                        Number::make('Order')
+                            ->help('Display order on category landing page (lower numbers appear first)')
+                            ->default(0)
+                            ->min(0)
+                            ->step(1)
+                            ->rules('required', 'integer', 'min:0'),
+                    ];
+                })
+                ->searchable(),
         ];
     }
 

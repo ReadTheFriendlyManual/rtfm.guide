@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -32,8 +33,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'oauth_id',
         'avatar',
         'bio',
+        'featured_bio',
         'github_username',
         'gitlab_username',
+        'twitter_username',
+        'linkedin_username',
+        'website_url',
         'reputation_points',
         'trust_level',
         'preferred_locale',
@@ -96,6 +101,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasApprovedComment(): bool
     {
         return $this->comments()->where('is_approved', true)->exists();
+    }
+
+    public function featuredInCategories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'category_user')
+            ->withTimestamps()
+            ->withPivot('order')
+            ->orderBy('order');
     }
 
     /**

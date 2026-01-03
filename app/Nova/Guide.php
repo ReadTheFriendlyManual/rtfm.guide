@@ -6,6 +6,7 @@ use App\Enums\GuideDifficulty;
 use App\Enums\GuideStatus;
 use App\Enums\GuideVisibility;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
@@ -126,6 +127,10 @@ class Guide extends Resource
                     }))
                     ->default(GuideVisibility::Public->value)
                     ->displayUsingLabels()
+                    ->sortable(),
+
+                Boolean::make('Featured', 'is_featured')
+                    ->help('Feature this guide on its category landing page')
                     ->sortable(),
 
                 DateTime::make('Published At')

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\GuideDifficulty;
 use App\Enums\GuideStatus;
 use App\Enums\GuideVisibility;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,6 +34,7 @@ class Guide extends Model
         'template_id',
         'view_count',
         'share_count',
+        'is_featured',
         'published_at',
     ];
 
@@ -47,6 +49,7 @@ class Guide extends Model
             'view_count' => 'integer',
             'share_count' => 'integer',
             'estimated_minutes' => 'integer',
+            'is_featured' => 'boolean',
         ];
     }
 
@@ -90,6 +93,11 @@ class Guide extends Model
         return $this->revisions()->pending()->exists();
     }
 
+    public function scopeFeatured(Builder $query): Builder
+    {
+        return $query->where('is_featured', true);
+    }
+
     public function toSearchableArray(): array
     {
         return [
@@ -115,5 +123,15 @@ class Guide extends Model
     public function shouldBeSearchable(): bool
     {
         return $this->status === GuideStatus::Published && $this->visibility === GuideVisibility::Public;
+    }
+
+    public function team(): BelongsTo
+    {
+        return $this->belongsTo(Team::class);
+    }
+
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(GuideTemplate::class);
     }
 }

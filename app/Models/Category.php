@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
@@ -30,8 +31,21 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    // public function guides(): HasMany
-    // {
-    //     return $this->hasMany(Guide::class);
-    // }
+    public function guides(): HasMany
+    {
+        return $this->hasMany(Guide::class);
+    }
+
+    public function featuredGuides(): HasMany
+    {
+        return $this->hasMany(Guide::class)->where('is_featured', true);
+    }
+
+    public function featuredWriters(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'category_user')
+            ->withTimestamps()
+            ->withPivot('order')
+            ->orderBy('order');
+    }
 }

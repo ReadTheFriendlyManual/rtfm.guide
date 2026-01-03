@@ -27,9 +27,7 @@ Route::get('/categories', function () {
     return response('Categories coming soon...', 200);
 })->name('categories.index');
 
-Route::get('/categories/{category}', function () {
-    return response('Category detail coming soon...', 200);
-})->name('categories.show');
+Route::get('/categories/{category}', [App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
 
 Route::get('/search', [App\Http\Controllers\SearchController::class, 'index'])->name('search.index');
 
@@ -126,3 +124,6 @@ Route::middleware(['auth'])->group(function () {
 
 // Public guide view - must be after authenticated routes to avoid conflicts
 Route::get('/guides/{guide}', [App\Http\Controllers\GuideController::class, 'show'])->name('guides.show');
+
+// Category landing pages - must be last to act as catch-all
+Route::get('/{category}', [App\Http\Controllers\CategoryController::class, 'show'])->name('category.landing');

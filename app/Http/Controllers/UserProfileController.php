@@ -49,7 +49,7 @@ class UserProfileController extends Controller
                     'slug' => $guide->category->slug,
                 ],
                 'view_count' => $guide->view_count,
-                'published_at' => $guide->published_at->diffForHumans(),
+                'published_at' => $guide->published_at?->diffForHumans() ?? 'Not published',
             ]),
             'stats' => $stats,
         ]);
