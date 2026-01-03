@@ -287,16 +287,18 @@ describe('Newsletter Registration Integration', function () {
 
 describe('Edge Cases', function () {
     it('handles case-insensitive email matching for subscriptions', function () {
-        NewsletterSubscriber::factory()->create([
+        // Create a verified subscriber with mixed-case email
+        $subscriber = NewsletterSubscriber::factory()->create([
             'email' => 'Test@Example.com',
+            'email_verified_at' => now(),
         ]);
 
+        // Attempt to subscribe with lowercase version of the same email
         $response = post(route('newsletter.subscribe'), [
             'email' => 'test@example.com',
         ]);
 
-        // Note: This depends on database collation. Most databases are case-insensitive by default
-        // If this test fails, it may need adjustment based on your database configuration
+        // Should be rejected due to case-insensitive duplicate detection
         $response->assertRedirect();
         $response->assertSessionHasErrors(['email' => 'This email is already subscribed to our newsletter.']);
 
