@@ -22,7 +22,7 @@ class GuidePolicy
             return false;
         }
 
-        return $user->id === $guide->user_id;
+        return $user->id === $guide->user_id || $user->is_admin;
     }
 
     public function create(User $user): bool
@@ -32,21 +32,21 @@ class GuidePolicy
 
     public function update(User $user, Guide $guide): bool
     {
-        return $user->id === $guide->user_id;
+        return $user->id === $guide->user_id || $user->is_admin;
     }
 
     public function delete(User $user, Guide $guide): bool
     {
-        return $user->id === $guide->user_id;
+        return $user->is_admin;
     }
 
     public function restore(User $user, Guide $guide): bool
     {
-        return $user->id === $guide->user_id;
+        return $user->is_admin;
     }
 
     public function forceDelete(User $user, Guide $guide): bool
     {
-        return $user->id === $guide->user_id;
+        return $user->is_admin;
     }
 }
