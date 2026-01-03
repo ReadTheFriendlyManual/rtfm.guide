@@ -19,8 +19,8 @@ class NewsletterController extends Controller
     {
         $email = $request->validated()['email'];
 
-        // Check if this is a registered user
-        $user = User::where('email', $email)->first();
+        // Check if this is a registered user (case-insensitive)
+        $user = User::whereRaw('LOWER(email) = ?', [strtolower(trim($email))])->first();
 
         if ($user) {
             // Update the user's newsletter subscription status
@@ -29,8 +29,8 @@ class NewsletterController extends Controller
             return back()->with('success', 'You have been subscribed to our newsletter!');
         }
 
-        // Check if an unverified subscriber already exists
-        $subscriber = NewsletterSubscriber::where('email', $email)
+        // Check if an unverified subscriber already exists (case-insensitive)
+        $subscriber = NewsletterSubscriber::whereRaw('LOWER(email) = ?', [strtolower(trim($email))])
             ->whereNull('email_verified_at')
             ->first();
 
@@ -96,9 +96,14 @@ class NewsletterController extends Controller
 
         // Try to find a user by generating unsubscribe token from user ID
         // This allows users to unsubscribe via a link in their emails
-        $user = User::where('newsletter_subscribed', true)->get()->first(function ($user) use ($token) {
-            return $this->generateUserUnsubscribeToken($user->id) === $token;
-        });
+        // Use cursor() for memory-efficient iteration through potentially large datasets
+        $user = null;
+        foreach (User::where('newsletter_subscribed', true)->cursor() as $potentialUser) {
+            if ($this->generateUserUnsubscribeToken($potentialUser->id) === $token) {
+                $user = $potentialUser;
+                break; // Early exit when match is found
+            }
+        }
 
         if ($user) {
             $user->update(['newsletter_subscribed' => false]);

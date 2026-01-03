@@ -6,7 +6,7 @@ use App\Http\Controllers\NewsletterController;
 use App\Models\NewsletterSubscriber;
 use App\Models\User;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class NewsletterService
@@ -78,7 +78,7 @@ class NewsletterService
                 $sentCount++;
             } catch (\Exception $e) {
                 // Log error but continue with other subscribers
-                \Log::error('Failed to send newsletter to '.$subscriber['email'].': '.$e->getMessage());
+                Log::error('Failed to send newsletter to '.$subscriber['email'].': '.$e->getMessage());
             }
         }
 

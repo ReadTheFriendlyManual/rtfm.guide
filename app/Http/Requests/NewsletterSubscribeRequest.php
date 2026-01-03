@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Models\NewsletterSubscriber;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class NewsletterSubscribeRequest extends FormRequest
 {
@@ -31,8 +30,11 @@ class NewsletterSubscribeRequest extends FormRequest
                 'email',
                 'max:255',
                 function ($attribute, $value, $fail) {
-                    // Check if a verified subscriber already exists
-                    $existingSubscriber = NewsletterSubscriber::where('email', $value)
+                    // Normalize email for case-insensitive comparison
+                    $normalizedEmail = strtolower(trim($value));
+
+                    // Check if a verified subscriber already exists (case-insensitive)
+                    $existingSubscriber = NewsletterSubscriber::whereRaw('LOWER(email) = ?', [$normalizedEmail])
                         ->whereNotNull('email_verified_at')
                         ->first();
 
@@ -42,8 +44,8 @@ class NewsletterSubscribeRequest extends FormRequest
                         return;
                     }
 
-                    // Check if a registered user is already subscribed
-                    $user = User::where('email', $value)
+                    // Check if a registered user is already subscribed (case-insensitive)
+                    $user = User::whereRaw('LOWER(email) = ?', [$normalizedEmail])
                         ->where('newsletter_subscribed', true)
                         ->first();
 

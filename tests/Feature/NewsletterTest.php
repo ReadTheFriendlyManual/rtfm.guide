@@ -6,7 +6,9 @@ use App\Notifications\NewsletterVerificationNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 
-use function Pest\Laravel\{assertDatabaseHas, get, post};
+use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\get;
+use function Pest\Laravel\post;
 
 beforeEach(function () {
     Notification::fake();
@@ -259,6 +261,28 @@ describe('Newsletter Registration Integration', function () {
         expect($user)->not->toBeNull();
         expect($user->newsletter_subscribed)->toBeFalse();
     });
+
+    it('defaults newsletter_subscribed to false when field is completely absent', function () {
+        // Ensure registration is enabled
+        \App\Models\Setting::set('registration_enabled', true);
+
+        // Simulate registration request without newsletter_subscribed field at all
+        $response = post('/register', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            // Intentionally omitting newsletter_subscribed field
+        ]);
+
+        $response->assertRedirect();
+
+        $user = User::where('email', 'test@example.com')->first();
+
+        expect($user)->not->toBeNull();
+        expect($user->newsletter_subscribed)->toBeFalse();
+        expect($user->newsletter_subscribed)->toBe(false); // Explicit false check
+    });
 });
 
 describe('Edge Cases', function () {
@@ -274,6 +298,10 @@ describe('Edge Cases', function () {
         // Note: This depends on database collation. Most databases are case-insensitive by default
         // If this test fails, it may need adjustment based on your database configuration
         $response->assertRedirect();
+        $response->assertSessionHasErrors(['email' => 'This email is already subscribed to our newsletter.']);
+
+        // Verify no duplicate subscriber was created
+        expect(NewsletterSubscriber::count())->toBe(1);
     });
 
     it('trims whitespace from email addresses', function () {
@@ -281,8 +309,16 @@ describe('Edge Cases', function () {
             'email' => '  subscriber@example.com  ',
         ]);
 
-        // Laravel's email validation should handle this
         $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        // Verify email was stored without whitespace
+        assertDatabaseHas('newsletter_subscribers', [
+            'email' => 'subscriber@example.com',
+        ]);
+
+        // Ensure the email with spaces doesn't exist
+        expect(NewsletterSubscriber::where('email', 'like', '%  %')->exists())->toBeFalse();
     });
 
     it('generates unique unsubscribe tokens for each subscriber', function () {
