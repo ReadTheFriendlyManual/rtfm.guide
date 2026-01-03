@@ -5,8 +5,6 @@ use App\Models\User;
 use App\Notifications\NewsletterVerificationNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
-
-use Illuminate\Support\Facades\URL;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\{assertDatabaseHas, get, post};
