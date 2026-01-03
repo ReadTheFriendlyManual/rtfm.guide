@@ -91,8 +91,8 @@ it('shows success toast after email verification', function () {
 
     $response = $this->get(route('verification.verify', ['token' => $token->token]));
 
-    $response->assertRedirect(route('dashboard'));
-    $response->assertSessionHas('success', 'Your email has been verified successfully!');
+    $response->assertRedirect(route('login'));
+    $response->assertSessionHas('success', 'Your email has been verified successfully! Please log in.');
 
     $user->refresh();
     expect($user->hasVerifiedEmail())->toBeTrue();

@@ -10,11 +10,10 @@ Route::get('/email/verify', function () {
 })->middleware(['auth'])->name('verification.notice');
 
 Route::post('/email/verification-notification', [App\Http\Controllers\Auth\EmailVerificationNotificationController::class, 'store'])
-    ->middleware(['web', 'auth'])
+    ->middleware(['auth'])
     ->name('verification.send');
 
 Route::get('/email/verify/{token}', App\Http\Controllers\Auth\EmailVerificationController::class)
-    ->middleware(['web'])
     ->name('verification.verify');
 
 // Public Routes
