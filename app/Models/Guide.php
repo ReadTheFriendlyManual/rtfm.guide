@@ -123,4 +123,14 @@ class Guide extends Model
     {
         return $this->status === GuideStatus::Published && $this->visibility === GuideVisibility::Public;
     }
+
+    public function team(): BelongsTo
+    {
+        return $this->belongsTo(Team::class);
+    }
+
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(GuideTemplate::class);
+    }
 }
