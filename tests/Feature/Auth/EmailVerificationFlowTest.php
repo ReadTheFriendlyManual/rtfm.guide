@@ -13,8 +13,8 @@ it('generates valid verification token that can be verified', function () {
     // Visit the verification URL
     $response = $this->get(route('verification.verify', ['token' => $verificationToken->token]));
 
-    $response->assertRedirect(route('dashboard'));
-    $response->assertSessionHas('success', 'Your email has been verified successfully!');
+    $response->assertRedirect(route('login'));
+    $response->assertSessionHas('success', 'Your email has been verified successfully! Please log in.');
 
     // Verify user is now verified
     $user->refresh();
@@ -99,9 +99,41 @@ it('handles already verified users gracefully', function () {
     // Try to verify
     $response = $this->get(route('verification.verify', ['token' => $token->token]));
 
-    $response->assertRedirect(route('dashboard'));
+    $response->assertRedirect(route('login'));
     $response->assertSessionHas('info', 'Email already verified.');
 
     // Token should be deleted
     expect(EmailVerificationToken::where('token', $token->token)->exists())->toBeFalse();
+});
+
+it('does not auto-login user after successful email verification', function () {
+    $user = User::factory()->create(['email_verified_at' => null]);
+    $token = EmailVerificationToken::generate($user);
+
+    // Visit verification link (not authenticated)
+    $response = $this->get(route('verification.verify', ['token' => $token->token]));
+
+    // Should redirect to login, not dashboard
+    $response->assertRedirect(route('login'));
+
+    // User should NOT be authenticated
+    $this->assertGuest();
+
+    // Email should be verified
+    $user->refresh();
+    expect($user->hasVerifiedEmail())->toBeTrue();
+});
+
+it('does not auto-login already verified user', function () {
+    $user = User::factory()->create(['email_verified_at' => now()]);
+    $token = EmailVerificationToken::generate($user);
+
+    // Visit verification link (not authenticated)
+    $response = $this->get(route('verification.verify', ['token' => $token->token]));
+
+    // Should redirect to login, not dashboard
+    $response->assertRedirect(route('login'));
+
+    // User should NOT be authenticated
+    $this->assertGuest();
 });

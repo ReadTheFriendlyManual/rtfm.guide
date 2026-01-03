@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class EmailVerificationToken extends Model
@@ -33,13 +34,15 @@ class EmailVerificationToken extends Model
 
     public static function generate(User $user): self
     {
-        // Delete any existing tokens for this user
-        self::where('user_id', $user->id)->delete();
+        return DB::transaction(function () use ($user) {
+            // Delete any existing tokens for this user
+            self::where('user_id', $user->id)->delete();
 
-        return self::create([
-            'user_id' => $user->id,
-            'token' => Str::random(64),
-            'expires_at' => now()->addHours(24),
-        ]);
+            return self::create([
+                'user_id' => $user->id,
+                'token' => Str::random(64),
+                'expires_at' => now()->addHours(24),
+            ]);
+        });
     }
 }
