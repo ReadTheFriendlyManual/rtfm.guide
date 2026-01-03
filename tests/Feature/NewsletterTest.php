@@ -6,10 +6,12 @@ use App\Notifications\NewsletterVerificationNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 
-use function Pest\Laravel\assertDatabaseHas;
-use function Pest\Laravel\get;
-use function Pest\Laravel\post;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
+use function Pest\Laravel\{assertDatabaseHas, get, post};
+
+uses(RefreshDatabase::class);
 beforeEach(function () {
     Notification::fake();
 });
