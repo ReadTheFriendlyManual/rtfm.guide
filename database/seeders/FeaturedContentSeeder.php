@@ -39,7 +39,7 @@ class FeaturedContentSeeder extends Seeder
                 'linkedin_username' => 'sarah-chen',
                 'website_url' => 'https://sarahchen.dev',
                 'reputation_points' => 500,
-                'trust_level' => 'leader',
+                'trust_level' => 'moderator',
             ],
             [
                 'name' => 'Marcus Rodriguez',
@@ -52,7 +52,7 @@ class FeaturedContentSeeder extends Seeder
                 'linkedin_username' => 'marcus-rodriguez',
                 'website_url' => 'https://marcus.codes',
                 'reputation_points' => 750,
-                'trust_level' => 'leader',
+                'trust_level' => 'moderator',
             ],
             [
                 'name' => 'Emily Watson',
@@ -63,7 +63,7 @@ class FeaturedContentSeeder extends Seeder
                 'twitter_username' => 'emilywatson',
                 'linkedin_username' => 'emily-watson-security',
                 'reputation_points' => 650,
-                'trust_level' => 'leader',
+                'trust_level' => 'trusted',
             ],
             [
                 'name' => 'Raj Patel',
@@ -76,7 +76,7 @@ class FeaturedContentSeeder extends Seeder
                 'linkedin_username' => 'raj-patel-db',
                 'website_url' => 'https://rajpatel.io',
                 'reputation_points' => 820,
-                'trust_level' => 'leader',
+                'trust_level' => 'moderator',
             ],
         ];
 
