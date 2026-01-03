@@ -44,6 +44,11 @@ Route::get('/api/search/quick', [App\Http\Controllers\Api\SearchController::clas
 Route::get('/share/{token}', [App\Http\Controllers\ShareLinkController::class, 'show'])->name('share.show');
 Route::post('/api/guides/{guide}/share-links', [App\Http\Controllers\ShareLinkController::class, 'store'])->name('api.guides.share-links.store');
 
+// Newsletter
+Route::post('/newsletter/subscribe', [App\Http\Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::get('/newsletter/verify', [App\Http\Controllers\NewsletterController::class, 'verify'])->name('newsletter.verify');
+Route::get('/newsletter/unsubscribe/{token}', [App\Http\Controllers\NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+
 Route::middleware(['auth'])->group(function () {
     // API Routes for preferences
     Route::post('/api/preferences/mode', [App\Http\Controllers\Api\PreferencesController::class, 'updateMode'])->name('api.preferences.mode');

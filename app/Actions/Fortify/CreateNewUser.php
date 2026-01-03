@@ -40,12 +40,14 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
+            'newsletter_subscribed' => ['nullable', 'boolean'],
         ])->validate();
 
         return User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => $input['password'],
+            'newsletter_subscribed' => $input['newsletter_subscribed'] ?? false,
         ]);
     }
 }
