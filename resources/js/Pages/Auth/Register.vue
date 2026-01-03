@@ -37,6 +37,9 @@
 
         <!-- Register Form -->
         <div v-else>
+        <!-- OAuth Buttons -->
+        <OAuthButtons />
+
         <Form
             action="/register"
             method="post"
@@ -139,6 +142,7 @@
 <script setup>
 import { Form, Link } from '@inertiajs/vue3'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
+import OAuthButtons from '@/Components/Auth/OAuthButtons.vue'
 
 const props = defineProps({
     registrationEnabled: {
