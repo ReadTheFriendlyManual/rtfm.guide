@@ -37,7 +37,7 @@ class EmailVerificationToken extends Model
         // Generate a random token for the email
         $rawToken = Str::random(64);
 
-        return \DB::transaction(function () use ($user, $rawToken) {
+        return DB::transaction(function () use ($user, $rawToken) {
             // Delete any existing tokens for this user
             self::where('user_id', $user->id)->delete();
 

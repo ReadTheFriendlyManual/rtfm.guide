@@ -26,7 +26,7 @@
             </div>
 
             <!-- Arrow and Text - Mobile (Above Toast) -->
-            <div class="flex lg:hidden absolute -top-24 left-1/2 pointer-events-none max-w-xs z-10">
+            <div class="flex lg:hidden absolute -top-24 left-1/2 -translate-x-1/2 pointer-events-none max-w-xs z-10">
                 <div class="flex flex-col items-center gap-2 animate-bounce-subtle-vertical">
                     <div class="text-center px-4 py-2 bg-pearl-100/95 dark:bg-pearl-800/95 backdrop-blur-sm rounded-xl border-2 border-pearl-300 dark:border-pearl-600 shadow-lg">
                         <p class="text-xs/tight font-bold text-pearl-800 dark:text-pearl-100">
@@ -157,10 +157,10 @@ const close = () => {
 
 @keyframes bounce-subtle-vertical {
     0%, 100% {
-        transform: translateX(-50%) translateY(0);
+        transform: translateY(0);
     }
     50% {
-        transform: translateX(-50%) translateY(-8px);
+        transform: translateY(-8px);
     }
 }
 
