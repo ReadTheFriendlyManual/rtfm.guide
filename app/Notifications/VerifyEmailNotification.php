@@ -33,6 +33,7 @@ class VerifyEmailNotification extends VerifyEmail implements ShouldQueue
     {
         $token = EmailVerificationToken::generate($notifiable);
 
-        return route('verification.verify', ['token' => $token->token]);
+        // Use the raw token for the URL, not the hashed version
+        return route('verification.verify', ['token' => $token->rawToken]);
     }
 }

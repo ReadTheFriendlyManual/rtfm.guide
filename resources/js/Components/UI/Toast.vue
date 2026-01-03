@@ -26,15 +26,17 @@
             </div>
 
             <!-- Arrow and Text - Mobile (Above Toast) -->
-            <div class="flex lg:hidden absolute -top-24 left-1/2 -translate-x-1/2 flex-col items-center gap-2 animate-bounce-subtle-vertical pointer-events-none max-w-xs z-10">
-                <div class="text-center px-4 py-2 bg-pearl-100/95 dark:bg-pearl-800/95 backdrop-blur-sm rounded-xl border-2 border-pearl-300 dark:border-pearl-600 shadow-lg">
-                    <p class="text-xs/tight font-bold text-pearl-800 dark:text-pearl-100">
-                        {{ arrowText }}
-                    </p>
+            <div class="flex lg:hidden absolute -top-24 left-1/2 pointer-events-none max-w-xs z-10">
+                <div class="flex flex-col items-center gap-2 animate-bounce-subtle-vertical">
+                    <div class="text-center px-4 py-2 bg-pearl-100/95 dark:bg-pearl-800/95 backdrop-blur-sm rounded-xl border-2 border-pearl-300 dark:border-pearl-600 shadow-lg">
+                        <p class="text-xs/tight font-bold text-pearl-800 dark:text-pearl-100">
+                            {{ arrowText }}
+                        </p>
+                    </div>
+                    <svg class="size-8 text-pearl-700 dark:text-pearl-300 drop-shadow-lg shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
                 </div>
-                <svg class="size-8 text-pearl-700 dark:text-pearl-300 drop-shadow-lg shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
             </div>
 
             <!-- Toast -->
@@ -155,10 +157,10 @@ const close = () => {
 
 @keyframes bounce-subtle-vertical {
     0%, 100% {
-        transform: translateY(0);
+        transform: translateX(-50%) translateY(0);
     }
     50% {
-        transform: translateY(-8px);
+        transform: translateX(-50%) translateY(-8px);
     }
 }
 

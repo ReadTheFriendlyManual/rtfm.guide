@@ -17,9 +17,7 @@ class EmailVerificationController extends Controller
      */
     public function __invoke(Request $request, string $token): RedirectResponse
     {
-        $verificationToken = EmailVerificationToken::where('token', $token)
-            ->with('user')
-            ->first();
+        $verificationToken = EmailVerificationToken::findByRawToken($token);
 
         if (! $verificationToken) {
             Toast::error('Invalid verification link.');
@@ -39,11 +37,6 @@ class EmailVerificationController extends Controller
         if ($user->hasVerifiedEmail()) {
             $verificationToken->delete();
             Toast::info('Email already verified.');
-
-            // Log in the user if not already authenticated
-            if (! Auth::check()) {
-                Auth::login($user);
-            }
 
             return redirect()->route('dashboard');
         }

@@ -2,7 +2,7 @@
     <GuestLayout>
         <!-- Header -->
         <div class="mb-8 text-center">
-            <h2 class="font-display text-3xl/tight font-bold bg-linear-to-r from-wine-600 via-wine-500 to-gold-600 bg-clip-text text-transparent mb-2">
+            <h2 class="font-display text-3xl/tight font-bold bg-gradient-to-r from-wine-600 via-wine-500 to-gold-600 bg-clip-text text-transparent mb-2">
                 Verify Your Email
             </h2>
             <p class="text-sm/relaxed text-pearl-600 dark:text-pearl-400">
@@ -20,7 +20,7 @@
             <button
                 type="submit"
                 :disabled="processing || isRateLimited"
-                class="w-full bg-linear-to-r from-wine-600 to-wine-700 hover:from-wine-500 hover:to-wine-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-wine-600/30 dark:shadow-wine-700/40 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="w-full bg-gradient-to-r from-wine-600 to-wine-700 hover:from-wine-500 hover:to-wine-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-wine-600/30 dark:shadow-wine-700/40 disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 <span v-if="processing">Sending...</span>
                 <span v-else-if="isRateLimited">Wait {{ remainingSeconds }}s</span>
@@ -50,7 +50,7 @@
 
 <script setup>
 import { Form, usePage } from '@inertiajs/vue3'
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 
 const page = usePage()
@@ -109,5 +109,12 @@ watch(() => page.props.flash, (flash) => {
 
 onMounted(() => {
     updateRemainingSeconds()
+})
+
+onUnmounted(() => {
+    if (intervalId) {
+        clearInterval(intervalId)
+        intervalId = null
+    }
 })
 </script>

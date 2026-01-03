@@ -8,4 +8,4 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('email-verification:cleanup')->daily();
+Schedule::command('email-verification:cleanup')->dailyAt('01:00');

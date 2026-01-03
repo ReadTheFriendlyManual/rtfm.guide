@@ -1,5 +1,5 @@
 import { usePage } from '@inertiajs/vue3'
-import { computed, watch, ref } from 'vue'
+import { computed, watch, ref, onUnmounted } from 'vue'
 
 export function useFlash() {
     const page = usePage()
@@ -35,6 +35,13 @@ export function useFlash() {
             displayToast(newFlash.info, 'info')
         }
     }, { immediate: true, deep: true })
+
+    onUnmounted(() => {
+        if (timeoutId) {
+            clearTimeout(timeoutId)
+            timeoutId = null
+        }
+    })
 
     return { showToast, toastMessage, toastType, hideToast }
 }

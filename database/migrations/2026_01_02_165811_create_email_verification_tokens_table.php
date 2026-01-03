@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('expires_at');
             $table->timestamps();
 
-            $table->index(['token', 'expires_at']);
+            $table->index('expires_at');
         });
     }
 
