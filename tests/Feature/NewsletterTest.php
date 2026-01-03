@@ -154,13 +154,17 @@ describe('Newsletter Verification', function () {
     });
 
     it('handles verification for already verified subscribers gracefully', function () {
-        $subscriber = NewsletterSubscriber::factory()->create();
+        $subscriber = NewsletterSubscriber::factory()->unverified()->create();
+        $token = $subscriber->verification_token;
 
-        // Generate a valid signed URL with the (now null) verification token
+        // Verify the subscriber first
+        $subscriber->markEmailAsVerified();
+
+        // Try to verify again with the same token
         $url = URL::temporarySignedRoute(
             'newsletter.verify',
             now()->addHours(48),
-            ['token' => null]
+            ['token' => $token]
         );
 
         $response = get($url);
@@ -222,6 +226,9 @@ describe('Newsletter Unsubscribe', function () {
 
 describe('Newsletter Registration Integration', function () {
     it('subscribes user to newsletter when checkbox is checked during registration', function () {
+        // Ensure registration is enabled
+        \App\Models\Setting::set('registration_enabled', true);
+
         $response = post('/register', [
             'name' => 'New User',
             'email' => 'newuser@example.com',
@@ -237,6 +244,9 @@ describe('Newsletter Registration Integration', function () {
     });
 
     it('does not subscribe user to newsletter when checkbox is unchecked', function () {
+        // Ensure registration is enabled
+        \App\Models\Setting::set('registration_enabled', true);
+
         $response = post('/register', [
             'name' => 'New User',
             'email' => 'newuser2@example.com',
