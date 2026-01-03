@@ -1,27 +1,48 @@
 import { usePage } from '@inertiajs/vue3'
-import { computed, watch, ref } from 'vue'
+import { computed, watch, ref, onBeforeUnmount } from 'vue'
 
 export function useFlash() {
     const page = usePage()
     const showToast = ref(false)
     const toastMessage = ref('')
     const toastType = ref('success')
+    let timeoutId = null
 
     const flash = computed(() => page.props.flash)
 
+    const hideToast = () => {
+        showToast.value = false
+        if (timeoutId) {
+            clearTimeout(timeoutId)
+            timeoutId = null
+        }
+    }
+
+    const displayToast = (message, type = 'info') => {
+        hideToast()
+        toastMessage.value = message
+        toastType.value = type
+        showToast.value = true
+        timeoutId = setTimeout(hideToast, 5000)
+    }
+
     watch(flash, (newFlash) => {
         if (newFlash.success) {
-            toastMessage.value = newFlash.success
-            toastType.value = 'success'
-            showToast.value = true
-            setTimeout(() => showToast.value = false, 5000)
+            displayToast(newFlash.success, 'success')
         } else if (newFlash.error) {
-            toastMessage.value = newFlash.error
-            toastType.value = 'error'
-            showToast.value = true
-            setTimeout(() => showToast.value = false, 5000)
+            displayToast(newFlash.error, 'error')
+        } else if (newFlash.info) {
+            displayToast(newFlash.info, 'info')
         }
     }, { immediate: true, deep: true })
 
-    return { showToast, toastMessage, toastType }
+    // Cleanup timeout on component unmount
+    onBeforeUnmount(() => {
+        if (timeoutId) {
+            clearTimeout(timeoutId)
+            timeoutId = null
+        }
+    })
+
+    return { showToast, toastMessage, toastType, hideToast }
 }

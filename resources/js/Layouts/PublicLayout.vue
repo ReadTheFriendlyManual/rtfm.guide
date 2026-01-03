@@ -7,10 +7,22 @@
         </main>
 
         <Footer />
+
+        <!-- Toast Notifications -->
+        <Toast
+            :visible="showToast"
+            :message="toastMessage"
+            :type="toastType"
+            @close="hideToast"
+        />
     </div>
 </template>
 
 <script setup>
 import Navbar from '@/Components/Shared/Navbar.vue'
 import Footer from '@/Components/Shared/Footer.vue'
+import { useFlash } from '@/Composables/useFlash'
+import Toast from '@/Components/UI/Toast.vue'
+
+const { showToast, toastMessage, toastType, hideToast } = useFlash()
 </script>
