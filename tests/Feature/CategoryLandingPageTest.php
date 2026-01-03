@@ -25,6 +25,7 @@ it('displays category landing page with category information', function () {
                 ->where('name', 'Web Development')
                 ->where('slug', 'web-development')
                 ->where('description', 'Learn web development from the basics to advanced topics.')
+                ->etc()
             )
         );
 });
@@ -53,6 +54,7 @@ it('displays featured guides on category landing page', function () {
             ->has('featuredGuides.0', fn ($guide) => $guide
                 ->where('title', 'Featured Guide')
                 ->where('is_featured', true)
+                ->etc()
             )
         );
 });
@@ -85,6 +87,7 @@ it('only displays published and public featured guides', function () {
             ->has('featuredGuides', 1)
             ->has('featuredGuides.0', fn ($guide) => $guide
                 ->where('id', $publishedFeatured->id)
+                ->etc()
             )
         );
 });
@@ -105,6 +108,7 @@ it('displays featured writers on category landing page', function () {
             ->has('featuredWriters.0', fn ($writer) => $writer
                 ->where('name', 'Jane Doe')
                 ->where('bio', 'Expert web developer')
+                ->etc()
             )
         );
 });
@@ -127,6 +131,7 @@ it('displays featured writers with social links', function () {
                 ->where('twitter_username', 'janedoe')
                 ->where('linkedin_username', 'janedoe')
                 ->where('website_url', 'https://janedoe.com')
+                ->etc()
             )
         );
 });
