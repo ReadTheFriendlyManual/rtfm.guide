@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RtfmMessageSeeder::class,
             GuideSeeder::class,
             EnhancedGuideSeeder::class,
+            FeaturedContentSeeder::class,
         ]);
     }
 }
