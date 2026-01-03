@@ -97,3 +97,24 @@ it('shows success toast after email verification', function () {
     $user->refresh();
     expect($user->hasVerifiedEmail())->toBeTrue();
 });
+
+it('rate limits resend immediately after registration', function () {
+    // Create a user (simulating registration)
+    $user = User::factory()->create(['email_verified_at' => null]);
+
+    // Manually hit rate limiter to simulate registration sending email
+    $key = "email-verification:{$user->id}";
+    RateLimiter::hit($key, 60);
+
+    // Try to resend verification email immediately
+    $response = $this->actingAs($user)
+        ->post('/email/verification-notification');
+
+    // Should be rate limited
+    $response->assertRedirect();
+    $response->assertSessionHas('error');
+
+    $errorMessage = session('error');
+    expect($errorMessage)->toContain('Please wait');
+    expect($errorMessage)->toContain('seconds');
+});
