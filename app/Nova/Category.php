@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
@@ -72,6 +73,21 @@ class Category extends Resource
                 ->step(1),
 
             HasMany::make('Subcategories', 'children', Category::class),
+
+            HasMany::make('Guides'),
+
+            BelongsToMany::make('Featured Writers', 'featuredWriters', User::class)
+                ->fields(function () {
+                    return [
+                        Number::make('Order')
+                            ->help('Display order on category landing page (lower numbers appear first)')
+                            ->default(0)
+                            ->min(0)
+                            ->step(1)
+                            ->rules('required', 'integer', 'min:0'),
+                    ];
+                })
+                ->searchable(),
         ];
     }
 
