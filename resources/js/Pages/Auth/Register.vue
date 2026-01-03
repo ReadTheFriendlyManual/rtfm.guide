@@ -101,7 +101,7 @@
             </div>
 
             <!-- Password Confirmation -->
-            <div class="mb-6">
+            <div class="mb-5">
                 <label for="password_confirmation" class="block text-sm/tight font-semibold text-pearl-700 dark:text-pearl-300 mb-2">
                     Confirm Password
                 </label>
@@ -113,6 +113,27 @@
                     autocomplete="new-password"
                     class="w-full px-4 py-2.5 rounded-xl border-2 border-pearl-300 dark:border-pearl-600 bg-white dark:bg-pearl-800 text-pearl-900 dark:text-pearl-50 focus:ring-3 focus:ring-wine-500/30 focus:border-wine-500 transition-all placeholder:text-pearl-400 dark:placeholder:text-pearl-500"
                 />
+            </div>
+
+            <!-- Newsletter Subscription -->
+            <div class="mb-6">
+                <label class="flex items-start gap-3 cursor-pointer group">
+                    <input
+                        id="newsletter_subscribed"
+                        type="checkbox"
+                        name="newsletter_subscribed"
+                        value="1"
+                        class="mt-0.5 size-5 rounded-md border-2 border-pearl-300 dark:border-pearl-600 bg-white dark:bg-pearl-800 text-wine-600 focus:ring-3 focus:ring-wine-500/30 focus:border-wine-500 transition-all cursor-pointer"
+                    />
+                    <span class="flex-1">
+                        <span class="block text-sm/tight font-semibold text-pearl-700 dark:text-pearl-300 group-hover:text-wine-600 dark:group-hover:text-wine-400 transition-colors">
+                            Send me updates and newsletters
+                        </span>
+                        <span class="block text-xs/relaxed text-pearl-600 dark:text-pearl-400 mt-1">
+                            Get weekly highlights, tips, and updates delivered to your inbox
+                        </span>
+                    </span>
+                </label>
             </div>
 
             <!-- Submit Button -->

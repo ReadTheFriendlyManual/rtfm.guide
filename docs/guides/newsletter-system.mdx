@@ -1,0 +1,178 @@
+---
+title: Newsletter System
+description: How to use and manage the RTFM.guide newsletter system
+---
+
+## Overview
+
+The RTFM.guide newsletter system allows both guest users and registered users to subscribe to email updates. The system includes:
+
+- Email-only subscription via footer on every page
+- Optional subscription during user registration
+- Email verification for guest subscribers
+- Unsubscribe functionality for both user types
+- Beautiful, responsive email templates
+
+## User Subscription Methods
+
+### Footer Subscription (All Pages)
+
+Guests can subscribe to the newsletter from the footer of any page by:
+1. Entering their email address
+2. Clicking the "Subscribe" button
+3. Verifying their email via the link sent to their inbox
+
+**For registered users:**
+- If a registered user's email is used, it updates their account preference directly (no verification needed)
+
+### Registration Page Subscription
+
+During account registration, users can check the "Send me updates and newsletters" checkbox to automatically subscribe to the newsletter. Their existing email verification process will suffice.
+
+## Technical Implementation
+
+### Database Tables
+
+**newsletter_subscribers**
+- `id`: Primary key
+- `email`: Subscriber email (unique)
+- `email_verified_at`: Timestamp of email verification
+- `verification_token`: Token for email verification
+- `unsubscribe_token`: Unique token for unsubscribing
+- `created_at` / `updated_at`: Timestamps
+
+**users** (existing fields)
+- `newsletter_subscribed`: Boolean flag for user newsletter subscription
+
+### Models
+
+- **NewsletterSubscriber**: Manages guest newsletter subscriptions
+- **User**: Existing model with `newsletter_subscribed` field
+
+### Routes
+
+```php
+POST   /newsletter/subscribe           # Subscribe to newsletter
+GET    /newsletter/verify              # Verify email subscription
+GET    /newsletter/unsubscribe/{token} # Unsubscribe from newsletter
+```
+
+### Controllers
+
+**NewsletterController**
+- `subscribe()`: Handle newsletter subscriptions
+- `verify()`: Verify email addresses
+- `unsubscribe()`: Handle unsubscribe requests
+
+### Email Templates
+
+**Newsletter Verification** (`emails/newsletter-verification.blade.php`)
+- Sent when a guest subscribes
+- Contains verification link (expires in 48 hours)
+- Includes unsubscribe link
+
+**Newsletter Email** (`emails/newsletter.blade.php`)
+- Template for sending actual newsletter content
+- Supports featured guides, custom content, CTAs
+- Includes unsubscribe link in footer
+
+## Sending Newsletters
+
+### Using the NewsletterService
+
+```php
+use App\Services\NewsletterService;
+
+$service = app(NewsletterService::class);
+
+// Get subscriber count
+$count = $service->getSubscriberCount();
+
+// Get all subscribers
+$subscribers = $service->getAllSubscribers();
+
+// Send a newsletter (example)
+$sentCount = $service->sendNewsletter(YourNewsletterNotification::class, [
+    'title' => 'Weekly Update',
+    'content' => 'Your newsletter content...',
+]);
+```
+
+### Example Newsletter Notification
+
+```php
+namespace App\Notifications;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+
+class WeeklyNewsletterNotification extends Notification
+{
+    use Queueable;
+
+    public function __construct(
+        public string $title,
+        public string $content,
+        public array $featuredGuides = [],
+    ) {}
+
+    public function via($notifiable): array
+    {
+        return ['mail'];
+    }
+
+    public function toMail($notifiable): MailMessage
+    {
+        $unsubscribeUrl = $notifiable instanceof \App\Models\User
+            ? \App\Http\Controllers\NewsletterController::getUserUnsubscribeUrl($notifiable)
+            : route('newsletter.unsubscribe', ['token' => $notifiable->unsubscribe_token]);
+
+        return (new MailMessage)
+            ->subject($this->title . ' - RTFM.guide')
+            ->view('emails.newsletter', [
+                'title' => $this->title,
+                'content' => $this->content,
+                'featuredGuides' => $this->featuredGuides,
+                'unsubscribeUrl' => $unsubscribeUrl,
+            ]);
+    }
+}
+```
+
+## Privacy & Compliance
+
+All newsletter data handling is documented in the [Privacy Policy](/legal/privacy):
+
+- Newsletter emails are never sold or shared with third parties
+- Subscribers can unsubscribe at any time
+- Guest subscriber data is deleted upon unsubscribe
+- User newsletter preferences are stored in their account
+
+## Testing
+
+Comprehensive tests are available in `tests/Feature/NewsletterTest.php`:
+
+- Guest subscription flow
+- User subscription during registration
+- Email verification
+- Duplicate subscription prevention
+- Unsubscribe functionality
+- Edge cases and error handling
+
+Run the tests:
+
+```bash
+php artisan test --filter=NewsletterTest
+```
+
+## Future Enhancements
+
+Planned features for future releases:
+
+- Admin UI for composing and sending newsletters
+- Newsletter templates library
+- Subscriber segmentation
+- Analytics and open rate tracking
+- A/B testing capabilities
+- Scheduled newsletter sending
