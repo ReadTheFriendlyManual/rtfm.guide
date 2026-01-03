@@ -6,6 +6,7 @@ use App\Http\Requests\NewsletterSubscribeRequest;
 use App\Models\NewsletterSubscriber;
 use App\Models\User;
 use App\Notifications\NewsletterVerificationNotification;
+use App\Support\Toast;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
@@ -26,7 +27,9 @@ class NewsletterController extends Controller
             // Update the user's newsletter subscription status
             $user->update(['newsletter_subscribed' => true]);
 
-            return back()->with('success', 'You have been subscribed to our newsletter!');
+            Toast::success('newsletter.subscribed');
+
+            return back();
         }
 
         // Check if an unverified subscriber already exists (case-insensitive)
@@ -38,7 +41,9 @@ class NewsletterController extends Controller
             // Resend verification email
             $subscriber->notify(new NewsletterVerificationNotification);
 
-            return back()->with('success', 'A verification email has been sent to your inbox. Please check your email.');
+            Toast::success('newsletter.verification_resent');
+
+            return back();
         }
 
         // Create new subscriber
@@ -51,7 +56,9 @@ class NewsletterController extends Controller
         // Send verification email
         $subscriber->notify(new NewsletterVerificationNotification);
 
-        return back()->with('success', 'Thanks for subscribing! Please check your email to confirm your subscription.');
+        Toast::success('newsletter.subscribed');
+
+        return back();
     }
 
     /**

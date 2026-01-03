@@ -21,7 +21,7 @@ describe('Newsletter Subscription', function () {
         ]);
 
         $response->assertRedirect();
-        $response->assertSessionHas('success', 'Thanks for subscribing! Please check your email to confirm your subscription.');
+        $response->assertSessionHas('success', 'newsletter.subscribed');
 
         assertDatabaseHas('newsletter_subscribers', [
             'email' => 'subscriber@example.com',
@@ -310,7 +310,7 @@ describe('Edge Cases', function () {
         ]);
 
         $response->assertRedirect();
-        $response->assertSessionHas('success');
+        $response->assertSessionHas('success', 'newsletter.subscribed');
 
         // Verify email was stored without whitespace
         assertDatabaseHas('newsletter_subscribers', [

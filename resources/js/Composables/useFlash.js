@@ -9,6 +9,7 @@ export function useFlash() {
     let timeoutId = null
 
     const flash = computed(() => page.props.flash)
+    const mode = computed(() => page.props.preferences?.mode || 'sfw')
 
     const hideToast = () => {
         showToast.value = false
@@ -18,9 +19,31 @@ export function useFlash() {
         }
     }
 
+    const translateMessage = (message) => {
+        // Newsletter message translations
+        const translations = {
+            'newsletter.subscribed': {
+                sfw: 'Thanks for subscribing! Please check your email to confirm your subscription.',
+                nsfw: "Hell yeah! Check your inbox and confirm your email. Don't fucking ignore it."
+            },
+            'newsletter.verification_resent': {
+                sfw: 'A verification email has been sent to your inbox. Please check your email.',
+                nsfw: 'We sent another email to your inbox. Check your damn email and verify already.'
+            }
+        }
+
+        // Check if message is a translation key
+        if (translations[message]) {
+            return translations[message][mode.value] || translations[message].sfw
+        }
+
+        // Return original message if no translation found
+        return message
+    }
+
     const displayToast = (message, type = 'info') => {
         hideToast()
-        toastMessage.value = message
+        toastMessage.value = translateMessage(message)
         toastType.value = type
         showToast.value = true
         timeoutId = setTimeout(hideToast, 5000)
@@ -44,5 +67,5 @@ export function useFlash() {
         }
     })
 
-    return { showToast, toastMessage, toastType, hideToast }
+    return { showToast, toastMessage, toastType, hideToast, displayToast }
 }
