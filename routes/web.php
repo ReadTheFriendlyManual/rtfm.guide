@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
+// OAuth Routes
+Route::get('/oauth/{provider}/redirect', [App\Http\Controllers\OAuthController::class, 'redirect'])->name('oauth.redirect');
+Route::get('/oauth/{provider}/callback', [App\Http\Controllers\OAuthController::class, 'callback'])->name('oauth.callback');
+
 // Public Routes
 Route::get('/', function () {
     return Inertia::render('Public/Home');
