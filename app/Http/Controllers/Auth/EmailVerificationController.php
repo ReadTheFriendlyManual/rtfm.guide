@@ -8,6 +8,7 @@ use App\Support\Toast;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EmailVerificationController extends Controller
 {
@@ -39,6 +40,11 @@ class EmailVerificationController extends Controller
             $verificationToken->delete();
             Toast::info('Email already verified.');
 
+            // Log in the user if not already authenticated
+            if (! Auth::check()) {
+                Auth::login($user);
+            }
+
             return redirect()->route('dashboard');
         }
 
@@ -49,6 +55,9 @@ class EmailVerificationController extends Controller
         $verificationToken->delete();
 
         Toast::success('Your email has been verified successfully!');
+
+        // Auto-login the user after successful verification
+        Auth::login($user);
 
         return redirect()->route('dashboard');
     }
