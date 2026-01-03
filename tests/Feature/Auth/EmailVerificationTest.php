@@ -3,7 +3,6 @@
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\URL;
 
 test('email verification screen can be rendered', function () {
     $user = User::factory()->unverified()->create();
@@ -18,30 +17,20 @@ test('email can be verified', function () {
 
     Event::fake();
 
-    $verificationUrl = URL::temporarySignedRoute(
-        'verification.verify',
-        now()->addMinutes(60),
-        ['id' => $user->id, 'hash' => sha1($user->email)]
-    );
+    $token = \App\Models\EmailVerificationToken::generate($user);
 
-    $response = $this->actingAs($user)->get($verificationUrl);
+    $response = $this->get(route('verification.verify', ['token' => $token->token]));
 
     Event::assertDispatched(Verified::class);
 
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
-    $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+    $response->assertRedirect(route('dashboard', absolute: false));
 });
 
-test('email is not verified with invalid hash', function () {
+test('email is not verified with invalid token', function () {
     $user = User::factory()->unverified()->create();
 
-    $verificationUrl = URL::temporarySignedRoute(
-        'verification.verify',
-        now()->addMinutes(60),
-        ['id' => $user->id, 'hash' => sha1('wrong-email')]
-    );
-
-    $this->actingAs($user)->get($verificationUrl);
+    $this->get(route('verification.verify', ['token' => 'invalid-token']));
 
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });

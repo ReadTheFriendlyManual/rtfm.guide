@@ -4,20 +4,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
-// Auth Routes (Fortify views disabled, so we define them here)
-Route::get('/login', function () {
-    return Inertia::render('Auth/Login', [
-        'canResetPassword' => true,
-        'loginEnabled' => \App\Models\Setting::get('login_enabled', true),
-        'loginDisabledMessage' => \App\Models\Setting::get('login_disabled_message', 'Login is currently disabled.'),
-    ]);
-})->middleware(['guest'])->name('login');
-
+// Custom Email Verification Routes
 Route::get('/email/verify', function () {
     return Inertia::render('Auth/VerifyEmail');
 })->middleware(['auth'])->name('verification.notice');
 
-// Custom Email Verification Routes (override Fortify)
 Route::post('/email/verification-notification', [App\Http\Controllers\Auth\EmailVerificationNotificationController::class, 'store'])
     ->middleware(['web', 'auth'])
     ->name('verification.send');
