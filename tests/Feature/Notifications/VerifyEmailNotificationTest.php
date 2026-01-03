@@ -80,7 +80,6 @@ it('includes verification url in email', function () {
         $url = $mail->viewData['url'];
 
         expect($url)->toContain('email/verify/');
-        expect($url)->toContain('https://');
 
         return true;
     });

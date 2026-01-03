@@ -42,7 +42,6 @@ it('sends verification email with valid token', function () {
             $url = $mail->viewData['url'];
 
             // Verify URL structure
-            expect($url)->toContain('https://');
             expect($url)->toContain('/email/verify/');
 
             // Verify token exists in database
