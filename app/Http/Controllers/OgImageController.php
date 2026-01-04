@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\GuideStatus;
+use App\Enums\GuideVisibility;
 use App\Models\Category;
 use App\Models\Guide;
 use App\Models\User;
@@ -15,7 +17,7 @@ class OgImageController extends Controller
     public function guide(Guide $guide): Response
     {
         // Only allow OG images for published and public guides
-        if ($guide->status !== \App\Enums\GuideStatus::Published || $guide->visibility !== \App\Enums\GuideVisibility::Public) {
+        if ($guide->status !== GuideStatus::Published || $guide->visibility !== GuideVisibility::Public) {
             abort(404);
         }
 
@@ -38,7 +40,7 @@ class OgImageController extends Controller
         if (!isset($category->guides_count)) {
             $category->loadCount('guides');
         }
-        
+
         $guideCount = $category->guides_count;
 
         $image = (new Image)
