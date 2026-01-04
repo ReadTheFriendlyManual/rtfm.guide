@@ -77,7 +77,7 @@ class GuideController extends Controller
 
     public function show(string $slug, MarkdownRenderer $markdown)
     {
-        $guide = Guide::with(['user', 'category'])
+        $guide = Guide::with(['user', 'category', 'flags'])
             ->where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();
@@ -211,6 +211,7 @@ class GuideController extends Controller
                 'category' => $guide->category,
                 'is_saved' => auth()->check() && auth()->user()->hasSavedGuide($guide->id),
                 'has_pending_revision' => $guide->hasPendingRevision(),
+                'flags' => $guide->flags,
             ],
             'content' => $content,
             'rtfmMessage' => $rtfmMessage?->message ?? "You should've RTFM... but we did it for you.",

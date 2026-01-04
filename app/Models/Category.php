@@ -48,4 +48,12 @@ class Category extends Model
             ->withPivot('order')
             ->orderBy('order');
     }
+
+    public function flags(): BelongsToMany
+    {
+        return $this->belongsToMany(Flag::class)
+            ->withTimestamps()
+            ->withPivot('notes')
+            ->orderBy('order');
+    }
 }

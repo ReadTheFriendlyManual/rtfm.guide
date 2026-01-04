@@ -25,6 +25,11 @@
             <!-- Breadcrumbs -->
             <Breadcrumbs :items="breadcrumbs" />
 
+            <!-- Warning Banners -->
+            <div class="mt-6 mb-8">
+                <WarningBanner :flags="category.flags || []" />
+            </div>
+
             <!-- Featured Guides Section -->
             <section v-if="featuredGuides.length" class="mt-12">
                 <div class="flex items-center justify-between mb-8">
@@ -96,6 +101,7 @@ import PublicLayout from '@/Layouts/PublicLayout.vue'
 import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue'
 import FeaturedGuideCard from '@/Components/Category/FeaturedGuideCard.vue'
 import FeaturedWriterCard from '@/Components/Category/FeaturedWriterCard.vue'
+import WarningBanner from '@/Components/Shared/WarningBanner.vue'
 
 const props = defineProps({
     category: Object,

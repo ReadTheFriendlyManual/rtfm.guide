@@ -38,6 +38,11 @@
             <!-- Breadcrumbs -->
             <Breadcrumbs :items="breadcrumbs" />
 
+            <!-- Warning Banners -->
+            <div class="mt-6 mb-8">
+                <WarningBanner :flags="guide.flags || []" />
+            </div>
+
             <!-- Meta Header -->
             <header class="mb-12">
                 <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
@@ -206,6 +211,7 @@ import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue'
 import GuideReactions from '@/Components/Guide/GuideReactions.vue'
 import CommentList from '@/Components/Comments/CommentList.vue'
 import ShareModal from '@/Components/ShareModal.vue'
+import WarningBanner from '@/Components/Shared/WarningBanner.vue'
 import { usePreferencesStore } from '@/Stores/preferences'
 import { useFathom } from '@/Composables/useFathom'
 import axios from 'axios'
