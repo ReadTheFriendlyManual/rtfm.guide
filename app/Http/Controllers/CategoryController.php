@@ -37,7 +37,7 @@ class CategoryController extends Controller
     {
         // Check for reserved slug conflicts
         if (in_array($slug, self::RESERVED_SLUGS)) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException;
         }
 
         $category = Category::where('slug', $slug)->firstOrFail();
@@ -86,6 +86,6 @@ class CategoryController extends Controller
             ],
             'featuredGuides' => $featuredGuides,
             'featuredWriters' => $featuredWriters,
-        ]);
+        ])->withSeo($category);
     }
 }

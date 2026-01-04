@@ -75,6 +75,9 @@ class SearchController extends Controller
                 'difficulty' => $request->difficulty,
                 'category' => $request->category,
             ],
-        ]);
+        ])->withSeo(
+            title: ! empty($query) ? "Search Results for \"{$query}\"" : 'Search Guides',
+            description: ! empty($query) ? "Search results for {$query} on RTFM." : 'Search for guides and tutorials on RTFM.',
+        );
     }
 }
