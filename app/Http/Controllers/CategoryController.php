@@ -82,6 +82,7 @@ class CategoryController extends Controller
                 'slug' => $category->slug,
                 'description' => $category->description,
                 'icon' => $category->icon,
+                'flags' => $category->flags,
             ],
             'featuredGuides' => $featuredGuides,
             'featuredWriters' => $featuredWriters,

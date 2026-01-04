@@ -12,6 +12,8 @@ class Category extends Model
 {
     use HasFactory;
 
+    protected $with = ['flags'];
+
     protected $fillable = [
         'parent_id',
         'slug',
@@ -46,6 +48,14 @@ class Category extends Model
         return $this->belongsToMany(User::class, 'category_user')
             ->withTimestamps()
             ->withPivot('order')
+            ->orderBy('order');
+    }
+
+    public function flags(): BelongsToMany
+    {
+        return $this->belongsToMany(Flag::class)
+            ->withTimestamps()
+            ->withPivot('notes')
             ->orderBy('order');
     }
 }

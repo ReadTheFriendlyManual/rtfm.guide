@@ -9,12 +9,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
 
 class Guide extends Model
 {
     use HasFactory, Searchable;
+
+    protected $with = ['flags'];
 
     protected $fillable = [
         'user_id',
@@ -133,5 +136,13 @@ class Guide extends Model
     public function template(): BelongsTo
     {
         return $this->belongsTo(GuideTemplate::class);
+    }
+
+    public function flags(): BelongsToMany
+    {
+        return $this->belongsToMany(Flag::class)
+            ->withTimestamps()
+            ->withPivot('notes')
+            ->orderBy('order');
     }
 }

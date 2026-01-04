@@ -6,6 +6,7 @@ use App\Enums\GuideDifficulty;
 use App\Enums\GuideStatus;
 use App\Enums\GuideVisibility;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
@@ -166,6 +167,16 @@ class Guide extends Resource
             HasMany::make('Comments'),
             HasMany::make('Reactions'),
             HasMany::make('Revisions', 'revisions', GuideRevision::class),
+
+            BelongsToMany::make('Moderation Flags', 'flags', Flag::class)
+                ->fields(function () {
+                    return [
+                        Textarea::make('Notes')
+                            ->help('Optional notes about this flag (e.g., "Applies to nginx v1.x only")')
+                            ->nullable(),
+                    ];
+                })
+                ->searchable(),
         ];
     }
 

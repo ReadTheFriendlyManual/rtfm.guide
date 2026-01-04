@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
@@ -11,14 +10,14 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Category extends Resource
+class Flag extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Category>
+     * @var class-string<\App\Models\Flag>
      */
-    public static $model = \App\Models\Category::class;
+    public static $model = \App\Models\Flag::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -46,21 +45,23 @@ class Category extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Parent Category', 'parent', Category::class)
-                ->nullable()
-                ->searchable(),
-
-            Text::make('Slug')
-                ->sortable()
-                ->rules('required', 'max:255', 'unique:categories,slug,{{resourceId}}'),
-
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
+            Text::make('Slug')
+                ->sortable()
+                ->rules('required', 'max:255', 'unique:flags,slug,{{resourceId}}'),
+
             Textarea::make('Description')
                 ->rows(3)
-                ->nullable(),
+                ->nullable()
+                ->help('Brief description of what this flag indicates'),
+
+            Text::make('Color')
+                ->default('red')
+                ->rules('required', 'max:255')
+                ->help('Color for the warning banner (e.g., red, yellow, blue)'),
 
             Text::make('Icon')
                 ->nullable()
@@ -70,34 +71,26 @@ class Category extends Resource
                 ->default(0)
                 ->sortable()
                 ->min(0)
-                ->step(1),
+                ->step(1)
+                ->help('Display order (lower numbers appear first)'),
 
-            HasMany::make('Subcategories', 'children', Category::class),
-
-            HasMany::make('Guides'),
-
-            BelongsToMany::make('Featured Writers', 'featuredWriters', User::class)
+            BelongsToMany::make('Guides')
                 ->fields(function () {
                     return [
-                        Number::make('Order')
-                            ->help('Display order on category landing page (lower numbers appear first)')
-                            ->default(0)
-                            ->min(0)
-                            ->step(1)
-                            ->rules('required', 'integer', 'min:0'),
+                        Textarea::make('Notes')
+                            ->help('Optional notes about this flag (e.g., "Applies to nginx v1.x only")')
+                            ->nullable(),
                     ];
-                })
-                ->searchable(),
+                }),
 
-            BelongsToMany::make('Moderation Flags', 'flags', Flag::class)
+            BelongsToMany::make('Categories')
                 ->fields(function () {
                     return [
                         Textarea::make('Notes')
                             ->help('Optional notes about this flag (e.g., "Applies to all guides in this category")')
                             ->nullable(),
                     ];
-                })
-                ->searchable(),
+                }),
         ];
     }
 
