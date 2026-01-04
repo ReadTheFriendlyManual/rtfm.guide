@@ -47,6 +47,11 @@ Route::post('/newsletter/subscribe', [App\Http\Controllers\NewsletterController:
 Route::get('/newsletter/verify', [App\Http\Controllers\NewsletterController::class, 'verify'])->name('newsletter.verify');
 Route::get('/newsletter/unsubscribe/{token}', [App\Http\Controllers\NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
+// OG Images
+Route::get('/og-images/guide/{guide}', [App\Http\Controllers\OgImageController::class, 'guide'])->name('og-images.guide');
+Route::get('/og-images/category/{category}', [App\Http\Controllers\OgImageController::class, 'category'])->name('og-images.category');
+Route::get('/og-images/user/{user}', [App\Http\Controllers\OgImageController::class, 'user'])->name('og-images.user');
+
 Route::middleware(['auth'])->group(function () {
     // API Routes for preferences
     Route::post('/api/preferences/mode', [App\Http\Controllers\Api\PreferencesController::class, 'updateMode'])->name('api.preferences.mode');
