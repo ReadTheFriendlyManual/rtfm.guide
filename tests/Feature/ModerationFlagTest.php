@@ -91,7 +91,8 @@ it('displays flags on guide show page', function () {
             ->component('Guides/Show')
             ->has('guide.flags', 1)
             ->where('guide.flags.0.name', 'Medical Advice')
-            ->where('guide.flags.0.color', 'red'));
+            ->where('guide.flags.0.color', 'red')
+            ->where('guide.flags.0.pivot.notes', 'For educational purposes only'));
 });
 
 it('displays flags on category show page', function () {
@@ -106,7 +107,8 @@ it('displays flags on category show page', function () {
             ->component('Categories/Show')
             ->has('category.flags', 1)
             ->where('category.flags.0.name', 'Outdated')
-            ->where('category.flags.0.color', 'yellow'));
+            ->where('category.flags.0.color', 'yellow')
+            ->where('category.flags.0.pivot.notes', 'All guides in this category may be outdated'));
 });
 
 it('can detach flags from guides', function () {
