@@ -18,8 +18,7 @@ Route::get('/email/verify/{token}', App\Http\Controllers\Auth\EmailVerificationC
 
 // Public Routes
 Route::get('/', function () {
-    return Inertia::render('Public/Home')
-        ->withSeo();
+    return Inertia::render('Public/Home');
 })->name('home');
 
 Route::get('/guides', [App\Http\Controllers\GuideController::class, 'index'])->name('guides.index');
