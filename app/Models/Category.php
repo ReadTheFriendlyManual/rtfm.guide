@@ -12,6 +12,8 @@ class Category extends Model
 {
     use HasFactory;
 
+    protected $with = ['flags'];
+
     protected $fillable = [
         'parent_id',
         'slug',

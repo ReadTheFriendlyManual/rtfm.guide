@@ -17,6 +17,8 @@ class Guide extends Model
 {
     use HasFactory, Searchable;
 
+    protected $with = ['flags'];
+
     protected $fillable = [
         'user_id',
         'team_id',

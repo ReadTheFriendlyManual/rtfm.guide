@@ -40,7 +40,7 @@ class CategoryController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $category = Category::with('flags')->where('slug', $slug)->firstOrFail();
+        $category = Category::where('slug', $slug)->firstOrFail();
 
         // Query featured guides using the guides relationship with filters
         $featuredGuides = Guide::where('category_id', $category->id)
