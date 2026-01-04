@@ -77,7 +77,7 @@ class GuideController extends Controller
 
     public function show(string $slug, MarkdownRenderer $markdown)
     {
-        $guide = Guide::with(['user', 'category'])
+        $guide = Guide::with(['user', 'category', 'flags'])
             ->where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();

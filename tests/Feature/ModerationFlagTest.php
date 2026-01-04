@@ -91,7 +91,7 @@ it('displays flags on guide show page', function () {
             ->component('Guides/Show')
             ->has('guide.flags', 1)
             ->where('guide.flags.0.name', 'Medical Advice')
-            ->where('guide.flags.0.color', 'red')
+            ->where('guide.flags.0.color', 'red'))
             ->where('guide.flags.0.pivot.notes', 'For educational purposes only'));
 });
 

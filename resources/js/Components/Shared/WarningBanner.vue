@@ -41,6 +41,7 @@
 </template>
 
 <script setup>
+
 const props = defineProps({
     flags: {
         type: Array,
