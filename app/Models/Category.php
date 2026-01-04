@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use RalphJSmit\Laravel\SEO\Support\HasSEO;
+use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSEO;
 
     protected $with = ['flags'];
 
@@ -49,6 +51,18 @@ class Category extends Model
             ->withTimestamps()
             ->withPivot('order')
             ->orderBy('order');
+    }
+
+    public function getDynamicSEOData(): SEOData
+    {
+        $guideCount = $this->guides()->count();
+
+        return new SEOData(
+            title: $this->name,
+            description: $this->description ?? "Browse {$guideCount} guides in {$this->name} category on RTFM.",
+            image: route('og-images.category', $this),
+            url: route('categories.show', $this),
+        );
     }
 
     public function flags(): BelongsToMany
