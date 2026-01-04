@@ -14,11 +14,13 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Nova\Auth\Impersonatable;
 use Laravel\Sanctum\HasApiTokens;
+use RalphJSmit\Laravel\SEO\Support\HasSEO;
+use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Impersonatable, Notifiable, TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, HasSEO, Impersonatable, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -154,5 +156,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendPasswordResetNotification($token): void
     {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    public function getDynamicSEOData(): SEOData
+    {
+        return new SEOData(
+            title: "{$this->name} - RTFM Profile",
+            description: $this->bio ?? "{$this->name}'s profile on RTFM. View guides and contributions.",
+            author: $this->name,
+            image: $this->avatar ?? route('og-images.user', $this),
+            url: route('users.show', $this),
+        );
     }
 }

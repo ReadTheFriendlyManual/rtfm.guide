@@ -11,10 +11,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
+use RalphJSmit\Laravel\SEO\Support\HasSEO;
+use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class Guide extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory, HasSEO, Searchable;
 
     protected $fillable = [
         'user_id',
@@ -133,5 +135,20 @@ class Guide extends Model
     public function template(): BelongsTo
     {
         return $this->belongsTo(GuideTemplate::class);
+    }
+
+    public function getDynamicSEOData(): SEOData
+    {
+        return new SEOData(
+            title: $this->title,
+            description: $this->tldr ?? strip_tags(str($this->content)->limit(160)),
+            author: $this->user->name,
+            image: route('og-images.guide', $this),
+            url: route('guides.show', $this),
+            published_time: $this->published_at,
+            modified_time: $this->updated_at,
+            section: $this->category->name,
+            tags: $this->os_tags,
+        );
     }
 }
