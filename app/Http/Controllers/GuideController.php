@@ -72,10 +72,7 @@ class GuideController extends Controller
                 'os' => $request->os,
                 'sort' => $sortBy,
             ],
-        ])->withSeo(
-            title: 'Browse Guides',
-            description: 'Explore comprehensive guides and tutorials on RTFM. Filter by category, difficulty, and operating system.',
-        );
+        ]);
     }
 
     public function show(string $slug, MarkdownRenderer $markdown)
@@ -200,6 +197,8 @@ class GuideController extends Controller
             ->map(fn ($comment) => $this->formatComment($comment))
             ->toArray();
 
+        seo($guide);
+
         return Inertia::render('Guides/Show', [
             'guide' => [
                 'id' => $guide->id,
@@ -221,7 +220,7 @@ class GuideController extends Controller
             'reactions' => $reactionCounts,
             'userReactions' => $userReactions,
             'comments' => $comments,
-        ])->withSeo($guide);
+        ]);
     }
 
     private function formatComment(Comment $comment): array

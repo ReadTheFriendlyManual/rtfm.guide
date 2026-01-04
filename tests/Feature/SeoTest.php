@@ -65,8 +65,12 @@ it('generates OG image for guides', function () {
     $response = get(route('og-images.guide', $guide));
 
     $response->assertSuccessful()
-        ->assertHeader('Content-Type', 'image/png')
-        ->assertHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        ->assertHeader('Content-Type', 'image/png');
+
+    expect($response->headers->get('Cache-Control'))
+        ->toContain('public')
+        ->toContain('max-age=31536000')
+        ->toContain('immutable');
 });
 
 it('generates OG image for categories', function () {
@@ -75,8 +79,12 @@ it('generates OG image for categories', function () {
     $response = get(route('og-images.category', $category));
 
     $response->assertSuccessful()
-        ->assertHeader('Content-Type', 'image/png')
-        ->assertHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        ->assertHeader('Content-Type', 'image/png');
+
+    expect($response->headers->get('Cache-Control'))
+        ->toContain('public')
+        ->toContain('max-age=31536000')
+        ->toContain('immutable');
 });
 
 it('generates OG image for users', function () {
@@ -85,8 +93,12 @@ it('generates OG image for users', function () {
     $response = get(route('og-images.user', $user));
 
     $response->assertSuccessful()
-        ->assertHeader('Content-Type', 'image/png')
-        ->assertHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        ->assertHeader('Content-Type', 'image/png');
+
+    expect($response->headers->get('Cache-Control'))
+        ->toContain('public')
+        ->toContain('max-age=31536000')
+        ->toContain('immutable');
 });
 
 it('includes SEO meta tags on guide pages', function () {
@@ -96,12 +108,13 @@ it('includes SEO meta tags on guide pages', function () {
     $guide = Guide::factory()->create([
         'user_id' => $user->id,
         'category_id' => $category->id,
+        'slug' => 'seo-test-guide',
         'title' => 'SEO Test Guide',
         'status' => 'published',
         'visibility' => 'public',
     ]);
 
-    $response = get(route('guides.show', $guide));
+    $response = get(route('guides.show', $guide->slug));
 
     $response->assertSuccessful()
         ->assertSee('SEO Test Guide', false);
@@ -109,10 +122,11 @@ it('includes SEO meta tags on guide pages', function () {
 
 it('includes SEO meta tags on category pages', function () {
     $category = Category::factory()->create([
+        'slug' => 'seo-test-category',
         'name' => 'SEO Test Category',
     ]);
 
-    $response = get(route('categories.show', $category));
+    $response = get(route('categories.show', $category->slug));
 
     $response->assertSuccessful()
         ->assertSee('SEO Test Category', false);

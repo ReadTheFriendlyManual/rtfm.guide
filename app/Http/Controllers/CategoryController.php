@@ -75,6 +75,8 @@ class CategoryController extends Controller
             ])
             ->get();
 
+        seo($category);
+
         return Inertia::render('Categories/Show', [
             'category' => [
                 'id' => $category->id,
@@ -85,6 +87,6 @@ class CategoryController extends Controller
             ],
             'featuredGuides' => $featuredGuides,
             'featuredWriters' => $featuredWriters,
-        ])->withSeo($category);
+        ]);
     }
 }
