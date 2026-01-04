@@ -114,45 +114,15 @@ class GenerateSitemapCommand extends Command
 
     private function processGeneralPages(): static
     {
-        $output = new BufferedOutput();
-        $routes = Artisan::call(
-            'route:list',
-            [
-                '--method' => 'GET',
-                '--json' => 'true',
-            ],
-            $output
-        );
+        $sitemap = Sitemap::create()
+            ->add(route('home'))
+            ->add(route('login'))
+            ->add(route('register'))
+            ->add(route('categories.index'))
+            ->add(route('guides.index'))
+            ->add(route('search.index'));
 
-        if ($routes !== 0) {
-            $this->error('Failed to retrieve route list for sitemap generation.');
-
-            $this->error('Error: ' . $output->fetch());
-
-            return $this;
-        }
-
-        dd($output->fetch());
-
-        Collection::fromJson($output->fetch())
-            ->each(function ($route) {
-                // Only process named routes
-                if (empty($route->name)) {
-                    return;
-                }
-
-                $filename = "sitemaps/sitemap-general.xml";
-
-                // Create or append to the general sitemap
-                Sitemap::create()
-                    ->add(route($route->name))
-                    ->writeToFile(public_path($filename));
-
-                // Add this general sitemap to the main Index (only once)
-                if (! $this->sitemapIndex->hasSitemap("/{$filename}")) {
-                    $this->sitemapIndex->add("/{$filename}");
-                }
-            });
+        $sitemap->writeToFile(public_path('sitemaps/sitemap-general.xml'));
 
         return $this;
     }
