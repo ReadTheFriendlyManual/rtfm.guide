@@ -52,6 +52,6 @@ class UserProfileController extends Controller
                 'published_at' => $guide->published_at?->diffForHumans() ?? 'Not published',
             ]),
             'stats' => $stats,
-        ]);
+        ])->withSeo($user);
     }
 }
