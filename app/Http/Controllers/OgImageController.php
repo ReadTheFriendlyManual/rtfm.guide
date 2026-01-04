@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\GuideStatus;
-use App\Enums\GuideVisibility;
 use App\Models\Category;
 use App\Models\Guide;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use SimonHamp\TheOg\Image;
 use SimonHamp\TheOg\Layout\Layouts\GitHubBasic;
 use SimonHamp\TheOg\Theme;
@@ -16,8 +15,8 @@ class OgImageController extends Controller
 {
     public function guide(Guide $guide): Response
     {
-        // Only allow OG images for published and public guides
-        if ($guide->status !== GuideStatus::Published || $guide->visibility !== GuideVisibility::Public) {
+        // Use Gate to check if user can view this guide (allows admins to view unpublished)
+        if (Gate::denies('view', $guide)) {
             abort(404);
         }
 

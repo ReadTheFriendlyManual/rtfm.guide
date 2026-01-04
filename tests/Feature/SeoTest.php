@@ -73,7 +73,7 @@ it('generates OG image for guides', function () {
         ->toContain('immutable');
 });
 
-it('returns 404 for draft guide OG images', function () {
+it('returns 404 for draft guide OG images for non-admin users', function () {
     $category = Category::factory()->create();
     $user = User::factory()->create();
 
@@ -89,7 +89,25 @@ it('returns 404 for draft guide OG images', function () {
     $response->assertNotFound();
 });
 
-it('returns 404 for private guide OG images', function () {
+it('allows admins to view draft guide OG images', function () {
+    $category = Category::factory()->create();
+    $user = User::factory()->create();
+    $admin = User::factory()->create(['is_admin' => true]);
+
+    $guide = Guide::factory()->create([
+        'user_id' => $user->id,
+        'category_id' => $category->id,
+        'status' => 'draft',
+        'visibility' => 'public',
+    ]);
+
+    $response = $this->actingAs($admin)->get(route('og-images.guide', $guide));
+
+    $response->assertSuccessful()
+        ->assertHeader('Content-Type', 'image/png');
+});
+
+it('returns 404 for private guide OG images for non-admin users', function () {
     $category = Category::factory()->create();
     $user = User::factory()->create();
 
@@ -103,6 +121,24 @@ it('returns 404 for private guide OG images', function () {
     $response = get(route('og-images.guide', $guide));
 
     $response->assertNotFound();
+});
+
+it('allows admins to view private guide OG images', function () {
+    $category = Category::factory()->create();
+    $user = User::factory()->create();
+    $admin = User::factory()->create(['is_admin' => true]);
+
+    $guide = Guide::factory()->create([
+        'user_id' => $user->id,
+        'category_id' => $category->id,
+        'status' => 'published',
+        'visibility' => 'private',
+    ]);
+
+    $response = $this->actingAs($admin)->get(route('og-images.guide', $guide));
+
+    $response->assertSuccessful()
+        ->assertHeader('Content-Type', 'image/png');
 });
 
 it('generates OG image for categories', function () {
@@ -122,7 +158,7 @@ it('generates OG image for categories', function () {
 it('generates OG image for users', function () {
     $user = User::factory()->create();
 
-    $response = $this->actingAs($user)->get(route('og-images.user', $user));
+    $response = get(route('og-images.user', $user));
 
     $response->assertSuccessful()
         ->assertHeader('Content-Type', 'image/png');
@@ -131,14 +167,6 @@ it('generates OG image for users', function () {
         ->toContain('public')
         ->toContain('max-age=31536000')
         ->toContain('immutable');
-});
-
-it('requires authentication for user OG images', function () {
-    $user = User::factory()->create();
-
-    $response = get(route('og-images.user', $user));
-
-    $response->assertRedirect(route('login'));
 });
 
 it('includes SEO meta tags on guide pages', function () {

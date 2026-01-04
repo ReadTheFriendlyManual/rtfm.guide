@@ -50,9 +50,7 @@ Route::get('/newsletter/unsubscribe/{token}', [App\Http\Controllers\NewsletterCo
 // OG Images
 Route::get('/og-images/guide/{guide}', [App\Http\Controllers\OgImageController::class, 'guide'])->name('og-images.guide');
 Route::get('/og-images/category/{category}', [App\Http\Controllers\OgImageController::class, 'category'])->name('og-images.category');
-Route::get('/og-images/user/{user}', [App\Http\Controllers\OgImageController::class, 'user'])
-    ->middleware('auth')
-    ->name('og-images.user');
+Route::get('/og-images/user/{user}', [App\Http\Controllers\OgImageController::class, 'user'])->name('og-images.user');
 
 Route::middleware(['auth'])->group(function () {
     // API Routes for preferences
