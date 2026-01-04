@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('email-verification:cleanup')->dailyAt('01:00');
+Schedule::command('sanctum:prune-expired --hours=24')->dailyAt('02:00');
