@@ -35,7 +35,9 @@ class SeoSeeder extends Seeder
         }
 
         // Generate SEO for categories
-        $categoriesWithoutSeo = Category::whereDoesntHave('seo')->get();
+        $categoriesWithoutSeo = Category::whereDoesntHave('seo')
+            ->withCount('guides')
+            ->get();
         $this->command->info("Found {$categoriesWithoutSeo->count()} categories without SEO data");
 
         foreach ($categoriesWithoutSeo as $category) {

@@ -14,6 +14,11 @@ class OgImageController extends Controller
 {
     public function guide(Guide $guide): Response
     {
+        // Only allow OG images for published and public guides
+        if ($guide->status !== \App\Enums\GuideStatus::Published || $guide->visibility !== \App\Enums\GuideVisibility::Public) {
+            abort(404);
+        }
+
         $image = (new Image)
             ->layout(new GitHubBasic)
             ->theme(Theme::Dark)
@@ -29,7 +34,12 @@ class OgImageController extends Controller
 
     public function category(Category $category): Response
     {
-        $guideCount = $category->guides()->count();
+        // Load guides count if not already loaded
+        if (!isset($category->guides_count)) {
+            $category->loadCount('guides');
+        }
+        
+        $guideCount = $category->guides_count;
 
         $image = (new Image)
             ->layout(new GitHubBasic)
