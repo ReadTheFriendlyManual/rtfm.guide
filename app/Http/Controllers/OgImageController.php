@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Guide;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use SimonHamp\TheOg\Image;
 use SimonHamp\TheOg\Layout\Layouts\GitHubBasic;
 use SimonHamp\TheOg\Theme;
@@ -14,6 +15,11 @@ class OgImageController extends Controller
 {
     public function guide(Guide $guide): Response
     {
+        // Use Gate to check if user can view this guide (allows admins to view unpublished)
+        if (Gate::denies('view', $guide)) {
+            abort(404);
+        }
+
         $image = (new Image)
             ->layout(new GitHubBasic)
             ->theme(Theme::Dark)
@@ -29,7 +35,12 @@ class OgImageController extends Controller
 
     public function category(Category $category): Response
     {
-        $guideCount = $category->guides()->count();
+        // Load guides count if not already loaded
+        if (!isset($category->guides_count)) {
+            $category->loadCount('guides');
+        }
+
+        $guideCount = $category->guides_count;
 
         $image = (new Image)
             ->layout(new GitHubBasic)

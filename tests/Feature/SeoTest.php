@@ -73,6 +73,74 @@ it('generates OG image for guides', function () {
         ->toContain('immutable');
 });
 
+it('returns 404 for draft guide OG images for non-admin users', function () {
+    $category = Category::factory()->create();
+    $user = User::factory()->create();
+
+    $guide = Guide::factory()->create([
+        'user_id' => $user->id,
+        'category_id' => $category->id,
+        'status' => 'draft',
+        'visibility' => 'public',
+    ]);
+
+    $response = get(route('og-images.guide', $guide));
+
+    $response->assertNotFound();
+});
+
+it('allows admins to view draft guide OG images', function () {
+    $category = Category::factory()->create();
+    $user = User::factory()->create();
+    $admin = User::factory()->create(['is_admin' => true]);
+
+    $guide = Guide::factory()->create([
+        'user_id' => $user->id,
+        'category_id' => $category->id,
+        'status' => 'draft',
+        'visibility' => 'public',
+    ]);
+
+    $response = $this->actingAs($admin)->get(route('og-images.guide', $guide));
+
+    $response->assertSuccessful()
+        ->assertHeader('Content-Type', 'image/png');
+});
+
+it('returns 404 for private guide OG images for non-admin users', function () {
+    $category = Category::factory()->create();
+    $user = User::factory()->create();
+
+    $guide = Guide::factory()->create([
+        'user_id' => $user->id,
+        'category_id' => $category->id,
+        'status' => 'published',
+        'visibility' => 'private',
+    ]);
+
+    $response = get(route('og-images.guide', $guide));
+
+    $response->assertNotFound();
+});
+
+it('allows admins to view private guide OG images', function () {
+    $category = Category::factory()->create();
+    $user = User::factory()->create();
+    $admin = User::factory()->create(['is_admin' => true]);
+
+    $guide = Guide::factory()->create([
+        'user_id' => $user->id,
+        'category_id' => $category->id,
+        'status' => 'published',
+        'visibility' => 'private',
+    ]);
+
+    $response = $this->actingAs($admin)->get(route('og-images.guide', $guide));
+
+    $response->assertSuccessful()
+        ->assertHeader('Content-Type', 'image/png');
+});
+
 it('generates OG image for categories', function () {
     $category = Category::factory()->create();
 

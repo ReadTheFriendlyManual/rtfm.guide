@@ -53,7 +53,8 @@ class Category extends Model
 
     public function getDynamicSEOData(): SEOData
     {
-        $guideCount = $this->guides()->count();
+        $guideCount = $this->guides_count
+            ?? ($this->relationLoaded('guides') ? $this->guides->count() : $this->guides()->count());
 
         return new SEOData(
             title: $this->name,
