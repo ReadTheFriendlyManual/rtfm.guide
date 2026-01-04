@@ -28,3 +28,5 @@ yarn-error.log
 /.junie/mcp/
 /.cursor/mcp.json
 .gemini-clipboard
+public/sitemap.xml
+public/sitemaps
