@@ -24,6 +24,7 @@
         "league/commonmark": "^2.8",
         "league/flysystem-aws-s3-v3": "^3.0",
         "meilisearch/meilisearch-php": "^1.16",
+        "spatie/laravel-sitemap": "^7.3",
         "symfony/http-client": "^8.0",
         "symfony/postmark-mailer": "^8.0",
         "torchlight/torchlight-laravel": "^0.6.1"
