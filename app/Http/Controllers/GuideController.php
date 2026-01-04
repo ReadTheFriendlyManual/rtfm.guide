@@ -197,6 +197,8 @@ class GuideController extends Controller
             ->map(fn ($comment) => $this->formatComment($comment))
             ->toArray();
 
+        seo($guide);
+
         return Inertia::render('Guides/Show', [
             'guide' => [
                 'id' => $guide->id,

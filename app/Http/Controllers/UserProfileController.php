@@ -31,6 +31,8 @@ class UserProfileController extends Controller
             'member_since' => $user->created_at->format('F Y'),
         ];
 
+        seo($user);
+
         return Inertia::render('Users/Profile', [
             'profileUser' => [
                 'id' => $user->id,

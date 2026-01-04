@@ -14,6 +14,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @inertiaHead
 
+    <!-- SEO -->
+    {!! seo() !!}
+
     @production
     <!-- Fathom - beautiful, simple website analytics -->
     <script src="https://cdn.usefathom.com/script.js" data-spa="auto" data-site="CHRSVKMZ" defer></script>
