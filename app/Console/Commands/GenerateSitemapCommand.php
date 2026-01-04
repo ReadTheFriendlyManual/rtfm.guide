@@ -132,6 +132,8 @@ class GenerateSitemapCommand extends Command
             return $this;
         }
 
+        dd($output->fetch());
+
         Collection::fromJson($output->fetch())
             ->each(function ($route) {
                 // Only process named routes
